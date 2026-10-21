@@ -6,11 +6,7 @@
   <meta name="theme-color" content="#070b14">
   <meta name="description" content="ASVIRO STUDIO builds thoughtful digital products, focus systems and next-generation experiences.">
 
-  <!-- ═══ SEO & Social ══════════════════════════════════════════
-       TODO: Replace asviro.studio with your real domain everywhere.
-       TODO: Create /og-image.png (1200×630). SVG source is in the
-             html-comment block at the bottom of this file.
-       ═══════════════════════════════════════════════════════════ -->
+  <!-- ═══ SEO & Social ═══ -->
   <link rel="canonical" href="https://asviro.studio/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="ASVIRO STUDIO">
@@ -26,7 +22,7 @@
   <meta name="twitter:description" content="Thoughtful digital products, focus systems and next-generation experiences.">
   <meta name="twitter:image" content="https://asviro.studio/og-image.png">
 
-  <!-- ═══ Favicon + Apple touch icon (SVG data URL) ═══ -->
+  <!-- ═══ Favicon ═══ -->
   <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%25" stop-color="%2367e8f9"/><stop offset="55%25" stop-color="%237bb7ff"/><stop offset="100%25" stop-color="%233478f6"/></linearGradient></defs><rect width="64" height="64" rx="17" fill="url(%23g)"/><path d="M17.5 46.5 32 16.5 46.5 46.5M24 37.5h16" stroke="%2306101f" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>'>
   <link rel="apple-touch-icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%25" stop-color="%2367e8f9"/><stop offset="55%25" stop-color="%237bb7ff"/><stop offset="100%25" stop-color="%233478f6"/></linearGradient></defs><rect width="64" height="64" rx="14" fill="url(%23g)"/><path d="M17.5 46.5 32 16.5 46.5 46.5M24 37.5h16" stroke="%2306101f" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>'>
 
@@ -37,7 +33,7 @@
 
   <title>ASVIRO STUDIO — Ideas into Intelligent Experiences</title>
 
-  <!-- ═══ JSON-LD Organization schema ═══ -->
+  <!-- ═══ JSON-LD ═══ -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -94,14 +90,14 @@
     button, a, input, textarea { -webkit-tap-highlight-color: transparent; }
     .container { width: min(var(--max), calc(100% - 40px)); margin-inline: auto; }
 
-    /* ── Accessibility: focus styles ── */
+    /* Focus styles */
     :focus-visible {
       outline: 2px solid var(--cyan);
       outline-offset: 3px;
       border-radius: 6px;
     }
 
-    /* ── Nav ─────────────────────────────── */
+    /* Nav */
     .nav-wrap {
       position: sticky; top: 0; z-index: 50;
       -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px);
@@ -137,7 +133,7 @@
     .nav-links a:hover, .nav-links a.active { color: var(--cyan); }
     .nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
 
-    /* ── Buttons ─────────────────────────── */
+    /* Buttons */
     .nav-cta, .btn {
       display: inline-flex; justify-content: center; align-items: center; gap: 9px;
       border: 1px solid transparent; border-radius: 999px; padding: 12px 18px; font-weight: 700; cursor: pointer;
@@ -162,7 +158,7 @@
     }
     .menu-toggle:hover { border-color: rgba(103,232,249,.6); transform: scale(1.05); }
 
-    /* ── Hero ────────────────────────────── */
+    /* Hero */
     .hero { min-height: 660px; display: grid; grid-template-columns: 1.08fr .92fr; align-items: center; gap: 48px; padding-block: 86px 78px; }
     .eyebrow {
       display: inline-flex; align-items: center; gap: 9px; color: #a7d9ff;
@@ -250,10 +246,9 @@
     @keyframes floaty { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-11px); } }
     .chip-icon { color: var(--cyan); margin-right: 5px; }
 
-    /* ── Pause heavy animations when tab is hidden (saves battery) ── */
     .orbit, .float-chip, .gradient-text, .orbit-dot, .pulse, .core-card::before { animation-play-state: var(--anim-state, running); }
 
-    /* ── Sections ────────────────────────── */
+    /* Sections */
     section { padding-block: 84px; }
     .section-head { display: flex; justify-content: space-between; align-items: end; gap: 25px; margin-bottom: 30px; }
     .kicker { color: var(--cyan); font-size: .75rem; letter-spacing: .17em; text-transform: uppercase; font-weight: 800; }
@@ -324,11 +319,10 @@
     .principle:hover { transform: translateY(-4px); border-color: rgba(103,232,249,.45); background: rgba(13,32,55,.55); }
     .principle span { color: var(--cyan); margin-right: 7px; }
 
-    /* ── Contact ─────────────────────────── */
+    /* Contact */
     .contact-grid { display: grid; grid-template-columns: .85fr 1.15fr; gap: 35px; align-items: start; }
     .contact-copy p { color: var(--muted); max-width: 410px; }
 
-    /* email-with-copy box */
     .email-box {
       display: flex; align-items: center; justify-content: space-between; gap: 10px;
       margin-top: 20px; padding: 12px 14px;
@@ -373,14 +367,14 @@
     @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-5px)} 50%{transform:translateX(5px)} 75%{transform:translateX(-3px)} }
     .form-hint { color: #8193ae; font-size: .74rem; margin: 12px 0 0; }
 
-    /* ── Footer ──────────────────────────── */
+    /* Footer */
     footer { border-top: 1px solid rgba(123,166,255,.12); padding: 25px 0 30px; }
     .footer-inner { display: flex; align-items: center; justify-content: space-between; gap: 18px; color: #8192ad; font-size: .8rem; }
     .footer-links { display: flex; gap: 17px; }
     .footer-links a { transition: color .22s ease; }
     .footer-links a:hover { color: var(--cyan); }
 
-    /* ── Reveal animations ───────────────── */
+    /* Reveal */
     .reveal {
       opacity: 0; transform: translateY(26px) scale(.985); filter: blur(7px);
       transition: opacity .75s ease, transform .75s var(--ease-out), filter .75s ease;
@@ -409,7 +403,6 @@
       .container { width: min(var(--max), calc(100% - 30px)); }
       nav { min-height: 68px; gap: 12px; }
       .menu-toggle { display: inline-grid; place-items: center; }
-      /* Keep CTA visible on mobile (compact) */
       .nav-cta { display: inline-flex; padding: 9px 13px; font-size: .8rem; margin-left: auto; }
       .nav-cta .cta-arrow { display: none; }
       .nav-links {
@@ -433,7 +426,6 @@
       .visual-logo { width: 62px; height: 62px; border-radius: 19px; margin-top: 25px; }
       .visual-logo svg { width: 38px; height: 38px; }
       .core-card h2 { margin-top: 16px; font-size: 1.3rem; }
-      /* Keep chips inside viewport */
       .chip-one { right: 4px; top: 8%; }
       .chip-two { left: 4px; bottom: 5%; }
       .float-chip { padding: 10px 11px; font-size: .7rem; }
@@ -453,7 +445,6 @@
     <nav class="container" aria-label="Main navigation">
       <a class="brand" href="#home" aria-label="ASVIRO STUDIO home">
         <span class="brand-mark" aria-hidden="true">
-          <!-- Logo mark -->
           <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" fill="none">
             <path d="M17.5 46.5 32 16.5 46.5 46.5M24 37.5h16" stroke="#06101f" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
@@ -511,14 +502,13 @@
       </div>
       <div class="products-grid" id="productsGrid">
         <!-- Habit Tracker: LIVE -->
-        <!-- TODO: Move this to a branded subdomain like habits.asviro.studio -->
         <article class="product-card reveal" style="--accent:#4a9aff">
           <div class="product-icon" aria-hidden="true">◷</div>
           <span class="product-tag">Habits · Productivity</span>
           <h3>Habit Tracker</h3>
           <p>A personal system for tracking daily priorities, building streaks, reflecting on progress, and staying consistent over time.</p>
           <div class="product-foot">
-            <a class="text-link" href="https://habittracker-pro-1.vercel.app" target="_blank" rel="noopener noreferrer">Open live demo <span class="arrow" aria-hidden="true">↗</span></a>
+            <a class="text-link" href="./habit-tracker/" target="_blank" rel="noopener noreferrer">Open live demo <span class="arrow" aria-hidden="true">↗</span></a>
             <span class="project-note">Web app</span>
           </div>
         </article>
@@ -560,14 +550,13 @@
         </article>
 
         <!-- Practical Lab: LIVE -->
-        <!-- TODO: Replace the test URL + query string with a branded URL -->
         <article class="product-card reveal" style="--accent:#4ce0b3">
           <div class="product-icon" aria-hidden="true">⌘</div>
           <span class="product-tag">Interactive · Experiments</span>
           <h3>Practical Lab</h3>
           <p>An interactive lab space for exploring practical tools and project experiences inside the existing product ecosystem.</p>
           <div class="product-foot">
-            <a class="text-link" href="https://habit-tracker-test-1-sigma.vercel.app/practical-lab/index.html" target="_blank" rel="noopener noreferrer">Open Practical Lab <span class="arrow" aria-hidden="true">↗</span></a>
+            <a class="text-link" href="./practical-lab/" target="_blank" rel="noopener noreferrer">Open Practical Lab <span class="arrow" aria-hidden="true">↗</span></a>
             <span class="project-note">Live link</span>
           </div>
         </article>
@@ -649,21 +638,12 @@
   <script>
     "use strict";
 
-    /* ═══════════════════════════════════════════════════════════════
-       ⚠️  CONFIGURATION — change this before deploying
-       ═══════════════════════════════════════════════════════════════
-       Uses FormSubmit.co (free, no signup needed).
-       On the FIRST submission, FormSubmit sends an activation email
-       to this address — click the link inside it once.
-       After that, all submissions go straight to your inbox.
-       If fetch fails, the form gracefully falls back to mailto:.
-       ═══════════════════════════════════════════════════════════════ */
-    const CONTACT_EMAIL = "hello@asviro.studio"; // ← CHANGE THIS
+    /* ═══ CONFIGURATION — change this to your real email ═══ */
+    const CONTACT_EMAIL = "hello@asviro.studio";
 
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const $ = id => document.getElementById(id);
 
-    /* ── Cache frequently-used elements ── */
     const menuToggle = $("menuToggle");
     const navLinks = $("navLinks");
     const miniBars = $("miniBars");
@@ -671,25 +651,21 @@
     const submitLabel = $("submitLabel");
     const formStatus = $("formStatus");
 
-    /* ── Mobile menu (with focus trap + focus return) ── */
+    /* ─── Mobile menu with focus trap ─── */
     function setMenu(open) {
       navLinks.classList.toggle("open", open);
       menuToggle.setAttribute("aria-expanded", String(open));
       menuToggle.setAttribute("aria-label", open ? "Close navigation menu" : "Open navigation menu");
       menuToggle.textContent = open ? "✕" : "☰";
-
       if (open) {
-        // Move focus to first link
         setTimeout(() => navLinks.querySelector("a")?.focus(), 100);
       } else if (document.activeElement && navLinks.contains(document.activeElement)) {
-        // Return focus to toggle if it was inside the menu
         menuToggle.focus();
       }
     }
     menuToggle.addEventListener("click", () => setMenu(!navLinks.classList.contains("open")));
     navLinks.querySelectorAll("a").forEach(link => link.addEventListener("click", () => setMenu(false)));
 
-    // Focus trap while menu open on mobile
     document.addEventListener("keydown", e => {
       const isOpen = navLinks.classList.contains("open");
       if (e.key === "Escape" && isOpen) { setMenu(false); return; }
@@ -702,10 +678,9 @@
     });
     window.addEventListener("resize", () => { if (window.innerWidth > 640) setMenu(false); });
 
-    /* ── Year ── */
     $("year").textContent = new Date().getFullYear();
 
-    /* ── Scroll progress + nav shade ── */
+    /* ─── Scroll progress + nav shade ─── */
     const navWrap = $("navWrap");
     const scrollProgress = $("scrollProgress");
     let ticking = false;
@@ -722,7 +697,7 @@
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
 
-    /* ── Active nav highlight ── */
+    /* ─── Active nav highlight ─── */
     const navAnchors = [...navLinks.querySelectorAll("a")];
     const sectionObserver = new IntersectionObserver(entries => {
       entries.forEach(entry => {
@@ -735,7 +710,7 @@
       if (el) sectionObserver.observe(el);
     });
 
-    /* ── Staggered reveal ── */
+    /* ─── Staggered reveal ─── */
     const revealItems = document.querySelectorAll(".reveal");
     document.querySelectorAll("#productsGrid .product-card").forEach((card, i) => {
       card.style.setProperty("--d", (i * 0.09) + "s");
@@ -756,7 +731,7 @@
       miniBars.classList.add("go");
     }
 
-    /* ── Hero 3D tilt ── */
+    /* ─── Hero 3D tilt ─── */
     const heroVisual = $("heroVisual");
     const coreCard = $("coreCard");
     const finePointer = window.matchMedia("(pointer: fine)").matches;
@@ -772,7 +747,7 @@
       });
     }
 
-    /* ── Product card spotlight ── */
+    /* ─── Product card spotlight ─── */
     document.querySelectorAll(".product-card").forEach(card => {
       card.addEventListener("mousemove", e => {
         const rect = card.getBoundingClientRect();
@@ -781,7 +756,7 @@
       });
     });
 
-    /* ── Copy-email button ── */
+    /* ─── Copy email ─── */
     $("copyEmailBtn").addEventListener("click", async () => {
       const btn = $("copyEmailBtn");
       try {
@@ -790,7 +765,6 @@
         btn.classList.add("copied");
         setTimeout(() => { btn.textContent = "Copy"; btn.classList.remove("copied"); }, 1800);
       } catch {
-        // Fallback for insecure contexts
         const ta = document.createElement("textarea");
         ta.value = CONTACT_EMAIL;
         document.body.appendChild(ta);
@@ -803,12 +777,11 @@
       }
     });
 
-    /* ── Contact form: FormSubmit.co → mailto fallback ── */
+    /* ─── Contact form ─── */
     $("contactForm").addEventListener("submit", async event => {
       event.preventDefault();
       formStatus.classList.remove("error", "success");
 
-      // Guard: don't ship with placeholder email
       if (!CONTACT_EMAIL || !CONTACT_EMAIL.includes("@") || CONTACT_EMAIL === "hello@asviro.studio") {
         formStatus.textContent = "⚠️ Contact email not configured. Please email the site admin.";
         formStatus.classList.add("error");
@@ -847,11 +820,10 @@
         formStatus.classList.add("success");
         form.reset();
       } catch (err) {
-        // Graceful fallback: open user's mail client
         console.warn("FormSubmit failed — falling back to mailto:", err);
         const body = `Name: ${name}\nReply email: ${email}\n\n${message}`;
         window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("[ASVIRO STUDIO] " + subject)}&body=${encodeURIComponent(body)}`;
-        formStatus.textContent = "Opened your email app — please send the message from there.";
+        formStatus.textContent = "Opened your email app — please send from there.";
         formStatus.classList.add("success");
       } finally {
         submitBtn.classList.remove("loading");
@@ -860,61 +832,13 @@
       }
     });
 
-    /* ── Pause heavy animations when tab is hidden ── */
+    /* ─── Pause heavy animations when tab is hidden ─── */
     document.addEventListener("visibilitychange", () => {
       document.body.style.setProperty("--anim-state", document.hidden ? "paused" : "running");
     });
 
-    /* ── Sync visible contact email with config ── */
+    /* ─── Sync email display ─── */
     $("emailDisplay").textContent = CONTACT_EMAIL;
   </script>
-
-  <!-- ══════════════════════════════════════════════════════════════
-       🎨 OG IMAGE (1200×630) — SVG source
-       Save the SVG below as `og-image.svg`, then convert to PNG with:
-         - https://cloudconvert.com/svg-to-png   (choose 1200×630)
-         - or CLI:  rsvg-convert -w 1200 -h 630 og-image.svg > og-image.png
-       Then place `og-image.png` at the site root (/og-image.png).
-       ══════════════════════════════════════════════════════════════
-       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630">
-         <defs>
-           <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-             <stop offset="0%" stop-color="#070b14"/>
-             <stop offset="100%" stop-color="#0d1a33"/>
-           </linearGradient>
-           <linearGradient id="mark" x1="0" y1="0" x2="1" y2="1">
-             <stop offset="0%" stop-color="#67e8f9"/>
-             <stop offset="100%" stop-color="#3478f6"/>
-           </linearGradient>
-           <linearGradient id="txt" x1="0" y1="0" x2="1" y2="0">
-             <stop offset="0%" stop-color="#ffffff"/>
-             <stop offset="100%" stop-color="#8ac8ff"/>
-           </linearGradient>
-         </defs>
-         <rect width="1200" height="630" fill="url(#bg)"/>
-         <circle cx="1050" cy="120" r="220" fill="#3478f6" opacity="0.12"/>
-         <circle cx="150" cy="540" r="180" fill="#67e8f9" opacity="0.08"/>
-         <rect x="80" y="90" width="96" height="96" rx="24" fill="url(#mark)"/>
-         <path d="M106 156 128 100 150 156M116 140h24"
-               stroke="#06101f" stroke-width="9" stroke-linecap="round"
-               stroke-linejoin="round" fill="none"/>
-         <text x="200" y="160" font-family="Inter, Arial, sans-serif"
-               font-size="56" font-weight="900" fill="#ffffff"
-               letter-spacing="-2">ASVIRO</text>
-         <text x="200" y="196" font-family="Inter, Arial, sans-serif"
-               font-size="18" font-weight="600" fill="#67e8f9"
-               letter-spacing="8">STUDIO</text>
-         <text x="80" y="330" font-family="Inter, Arial, sans-serif"
-               font-size="76" font-weight="900" fill="url(#txt)"
-               letter-spacing="-3">Ideas into</text>
-         <text x="80" y="420" font-family="Inter, Arial, sans-serif"
-               font-size="76" font-weight="900" fill="url(#txt)"
-               letter-spacing="-3">Intelligent Experiences.</text>
-         <text x="80" y="520" font-family="Inter, Arial, sans-serif"
-               font-size="26" font-weight="500" fill="#9baac3">
-           Thoughtful digital products, focus systems &amp; next-gen experiences.
-         </text>
-       </svg>
-       ══════════════════════════════════════════════════════════════ -->
 </body>
-            </html>
+  </html>
