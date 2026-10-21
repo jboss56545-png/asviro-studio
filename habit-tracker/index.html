@@ -1,0 +1,1859 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>HabitTracker Pro</title>
+
+    <meta name="theme-color" content="#030712">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="HabitTracker">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%2310b981'/><text x='50' y='70' font-size='58' text-anchor='middle' fill='%23030712' font-weight='900' font-family='Arial'>H</text></svg>">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <script>
+        const THEMES = {
+            emerald: { t400: '52 211 153', t500: '16 185 129', s300: '94 234 212', s400: '45 212 191' },
+            cyan:    { t400: '34 211 238', t500: '6 182 212',  s300: '147 197 253', s400: '96 165 250' },
+            blue:    { t400: '96 165 250', t500: '59 130 246', s300: '165 180 252', s400: '129 140 248' },
+            purple:  { t400: '192 132 252', t500: '168 85 247', s300: '240 171 252', s400: '232 121 249' },
+            violet:  { t400: '167 139 250', t500: '139 92 246', s300: '216 180 254', s400: '192 132 252' },
+            rose:    { t400: '251 113 133', t500: '244 63 94',  s300: '253 164 175', s400: '251 113 133' },
+            amber:   { t400: '251 191 36',  t500: '245 158 11', s300: '253 230 138', s400: '252 211 77' },
+            slate:   { t400: '148 163 184', t500: '100 116 139', s300: '203 213 225', s400: '148 163 184' }
+        };
+        const _t = THEMES.emerald;
+        document.write(`<style id="dynamic-theme-vars">:root{--theme-400:${_t.t400};--theme-500:${_t.t500};--themesecond-300:${_t.s300};--themesecond-400:${_t.s400};}</style>`);
+
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: { 50: '#f0fdf4', 500: '#22c55e', 600: '#16a34a', 700: '#15803d' },
+                        theme: { 400: 'rgb(var(--theme-400) / <alpha-value>)', 500: 'rgb(var(--theme-500) / <alpha-value>)' },
+                        themesecond: { 300: 'rgb(var(--themesecond-300) / <alpha-value>)', 400: 'rgb(var(--themesecond-400) / <alpha-value>)' }
+                    },
+                    keyframes: {
+                        float: { '0%, 100%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-5px)' } },
+                        pulseGlow: { '0%, 100%': { opacity: 1 }, '50%': { opacity: 0.7 } },
+                        modalPop: { '0%': { opacity: 0, transform: 'scale(0.95) translateY(10px)' }, '100%': { opacity: 1, transform: 'scale(1) translateY(0)' } },
+                        checkPop: { '0%': { transform: 'scale(0.8)' }, '50%': { transform: 'scale(1.2)' }, '100%': { transform: 'scale(1)' } }
+                    },
+                    animation: {
+                        float: 'float 4s ease-in-out infinite',
+                        pulseGlow: 'pulseGlow 2s ease-in-out infinite',
+                        modalPop: 'modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        checkPop: 'checkPop 0.3s ease-in-out'
+                    }
+                }
+            }
+        };
+    </script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #030712; color: #f3f4f6; -webkit-tap-highlight-color: transparent; transition: background-color 0.3s ease, color 0.3s ease; }
+        h1, h2, h3, h4, h5, h6, .font-extrabold, .font-black, .timer-display, .habit-streak-pill, .date-num { font-family: 'Outfit', sans-serif !important; }
+        button, input, select, textarea, .habit-card-premium, .water-glass-item { touch-action: manipulation; }
+
+        .glass { background: rgba(17, 24, 39, 0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .glass-card { background: linear-gradient(135deg, rgba(31, 41, 55, 0.7) 0%, rgba(17, 24, 39, 0.9) 100%); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 2rem; }
+        .glass-hover:hover { border-color: rgba(var(--theme-500), 0.45); transform: translateY(-3px); box-shadow: 0 14px 30px -5px rgba(0, 0, 0, 0.6); }
+
+        html:not(.dark) body { background-color: #f8fafc; color: #0f172a; }
+        html:not(.dark) .glass { background: rgba(255, 255, 255, 0.95); border-color: rgba(0,0,0,0.1); box-shadow: 0 10px 40px -10px rgba(0,0,0,0.1); }
+        html:not(.dark) .glass-card { background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(241, 245, 249, 0.9) 100%); border-color: rgba(0,0,0,0.1); }
+        html:not(.dark) .bg-slate-950, html:not(.dark) .bg-slate-900 { background-color: #ffffff; border-color: #e2e8f0; }
+        html:not(.dark) .bg-slate-950\/60, html:not(.dark) .bg-slate-950\/80, html:not(.dark) .bg-slate-950\/90 { background-color: rgba(241, 245, 249, 0.85); }
+        html:not(.dark) .text-slate-100 { color: #0f172a; }
+        html:not(.dark) .text-slate-200 { color: #1e293b; }
+        html:not(.dark) .text-slate-300 { color: #334155; }
+        html:not(.dark) .text-slate-400, html:not(.dark) .text-slate-500 { color: #475569; }
+        html:not(.dark) .border-slate-800, html:not(.dark) .border-slate-700, html:not(.dark) .border-slate-700\/60 { border-color: #cbd5e1; }
+        html:not(.dark) .text-slate-950 { color: #f8fafc; }
+        html:not(.dark) .bg-slate-800 { background-color: #e2e8f0; color: #0f172a; }
+
+        .circle-bg { fill: none; stroke: rgba(55, 65, 81, 0.4); stroke-width: 3.8; }
+        .circle-progress { fill: none; stroke-width: 3.8; stroke-linecap: round; transition: stroke-dasharray 0.7s ease; transform-origin: center; }
+        .rotate-360 { animation: spinRing 20s linear infinite; }
+        @keyframes spinRing { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        .water-glass-item { transition: all 0.2s ease; border-radius: 1.25rem; }
+        .water-glass-item:active { transform: scale(0.95); }
+
+        .badge-unlocked { background: radial-gradient(circle at top left, rgba(245, 158, 11, 0.25), rgba(17, 24, 39, 0.95)); border-color: rgba(245, 158, 11, 0.5); box-shadow: 0 6px 25px -5px rgba(245, 158, 11, 0.3); border-radius: 1.5rem; }
+        .badge-locked { background: rgba(17, 24, 39, 0.6); border-color: rgba(55, 65, 81, 0.4); opacity: 0.6; border-radius: 1.5rem; }
+        html:not(.dark) .badge-locked { background: #f1f5f9; border-color: #cbd5e1; opacity: 1; }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(17, 24, 39, 0.8); }
+        ::-webkit-scrollbar-thumb { background: rgba(55, 65, 81, 0.8); border-radius: 6px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(var(--theme-500), 0.6); }
+
+        .habit-color-indicator { width:7px; min-width:7px; align-self:stretch; min-height:44px; border-radius:999px; background:var(--habit-gradient,linear-gradient(180deg,#8b5cf6,#06b6d4)); transition:transform .3s ease,box-shadow .3s ease,opacity .3s ease; }
+        .habit-card-premium { position:relative; overflow:hidden; contain:layout paint; }
+        .habit-card-premium:active { transform: scale(0.98); }
+        .habit-card-premium::before { content:""; position:absolute; left:0;top:0;bottom:0;width:2px; background:var(--habit-gradient,linear-gradient(180deg,#8b5cf6,#06b6d4)); opacity:.55; transition:opacity .3s ease; }
+        .habit-card-premium:hover::before{opacity:1}
+        .habit-card-premium.habit-completed { box-shadow:0 10px 32px rgba(var(--theme-500),.08), inset 0 0 0 1px rgba(var(--theme-400),.10); }
+
+        .habit-week { display:flex; align-items:center; gap:4px; margin-top:7px; }
+        .habit-week-day { width:18px;height:18px; border-radius:6px; border:1px solid rgba(100,116,139,.25); background:rgba(15,23,42,.72); color:#64748b; display:flex; align-items:center; justify-content:center; font-size:8px; font-weight:700; line-height:1; transition:all .28s ease; }
+        .habit-week-day.done { border-color:transparent; color:#08111f; background:var(--habit-gradient,linear-gradient(135deg,#8b5cf6,#06b6d4)); box-shadow:0 3px 10px rgba(99,102,241,.18); transform:translateY(-1px); }
+        .habit-week-day.today { outline:1px solid rgba(226,232,240,.35); outline-offset:1px; }
+        .habit-streak-pill { display:inline-flex; align-items:center; gap:4px; margin-left:7px; padding:3px 7px; border-radius:999px; background:rgba(15,23,42,.72); border:1px solid rgba(100,116,139,.20); color:#94a3b8; font-size:9px; letter-spacing:.02em; }
+        .habit-streak-pill.active { color:#c4b5fd; border-color:rgba(139,92,246,.22); background:linear-gradient(90deg,rgba(139,92,246,.10),rgba(6,182,212,.07)); }
+
+        .timer-panel { padding: .75rem 1rem !important; border-radius: 1.5rem !important; position: relative; overflow: hidden; background: linear-gradient(135deg, rgba(17,24,39,.94), rgba(var(--theme-500),.08)); }
+        html:not(.dark) .timer-panel { background: linear-gradient(135deg, #ffffff, #ecfdf5); }
+        .timer-panel > div:first-child { gap: .75rem !important; }
+        .timer-panel .w-11.h-11 { width: 2.25rem !important; height: 2.25rem !important; border-radius: .8rem !important; }
+        .timer-panel .relative.w-28.h-28 { width: 4.5rem !important; height: 4.5rem !important; }
+        .timer-panel .relative.w-28.h-28 .timer-display { font-size: 1rem !important; }
+        .timer-panel .relative.w-28.h-28 svg circle { stroke-width: 7 !important; }
+        .timer-panel .flex.flex-wrap.justify-center.gap-2 { gap: .35rem !important; }
+        .timer-panel button { padding: .45rem .7rem !important; border-radius: .8rem !important; }
+        .timer-panel > div:last-child { margin-top: .5rem !important; padding-top: .5rem !important; }
+        .timer-panel .timer-preset { padding: .3rem .55rem !important; }
+        @media (min-width: 1024px) { .timer-panel > div:first-child { flex-direction: row !important; } .timer-panel > div:last-child { margin-top: .35rem !important; } #vipFocusTimer { min-height: 100%; } }
+        @media (max-width: 640px) { .timer-panel { padding: .7rem !important; } .timer-panel > div:first-child { flex-direction: column !important; align-items: stretch !important; } .timer-panel > div:first-child > div:first-child { justify-content: center; } .timer-panel > div:first-child > div:last-child { justify-content: center; } .timer-panel .relative.w-28.h-28 { width: 4.25rem !important; height: 4.25rem !important; } }
+        .timer-display { font-variant-numeric: tabular-nums; letter-spacing: .04em; text-shadow: 0 0 22px rgba(var(--theme-500),.18); }
+        .timer-progress { transition: stroke-dasharray .35s ease, stroke .35s ease; }
+        .timer-running { animation: timerGlow 2s ease-in-out infinite; }
+        @keyframes timerGlow { 0%,100% { box-shadow: 0 0 0 rgba(var(--theme-500),0); } 50% { box-shadow: 0 0 28px rgba(var(--theme-500),.12); } }
+        .timer-preset { transition: all .2s ease; }
+        .timer-preset:active { transform: translateY(1px); }
+        .timer-sound-on { color: rgb(var(--theme-400)); }
+
+        .theme-swatch { transition: transform 0.2s ease; }
+        .theme-swatch:hover { transform: scale(1.15); }
+        .theme-swatch.active { border-color: #f8fafc; transform: scale(1.1); box-shadow: 0 0 10px rgba(255,255,255,0.2); }
+
+        .fixed.inset-0 { position: fixed !important; }
+        #settingsModal, #graphSettingsModal, #timerSettingsModal, #dayInspectorModal, #welcomeModal {
+            position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important;
+        }
+        .header-action-group { display: flex; align-items: center; gap: 6px; flex-wrap: nowrap; flex: 0 0 auto; }
+        .hdr-square-btn {
+            width: 34px; height: 34px;
+            display: inline-flex; align-items: center; justify-content: center;
+            border-radius: 10px; font-size: 12px;
+            transition: transform 0.15s ease, background-color 0.2s ease, border-color 0.2s ease;
+        }
+        .hdr-square-btn:active { transform: scale(0.92); }
+        @media (min-width: 640px) {
+            .hdr-square-btn { width: 40px; height: 40px; font-size: 14px; border-radius: 12px; }
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-16 selection:bg-theme-500 selection:text-slate-950">
+
+<!-- Welcome modal (shown once per session) -->
+<div id="welcomeModal" class="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md hidden">
+    <div class="glass max-w-md w-full p-6 rounded-[2.5rem] border-theme-500/30 text-center space-y-5 shadow-2xl relative overflow-hidden bg-gradient-to-b from-slate-900 to-slate-950 animate-modalPop">
+        <div class="absolute -top-12 -left-12 w-32 h-32 bg-theme-500/20 rounded-full blur-2xl"></div>
+        <div class="absolute -bottom-12 -right-12 w-32 h-32 bg-themesecond-400/20 rounded-full blur-2xl"></div>
+        <div class="w-16 h-16 bg-gradient-to-tr from-theme-500 to-themesecond-400 rounded-2xl flex items-center justify-center mx-auto text-slate-950 text-2xl shadow-lg shadow-theme-500/30 animate-bounce">
+            <i class="fa-solid fa-fire"></i>
+        </div>
+        <div class="space-y-2">
+            <h3 class="text-xl font-extrabold text-slate-100">Welcome to HabitTracker Pro 🔥</h3>
+            <p class="text-sm text-slate-300 leading-relaxed font-medium">Explore all features freely — add habits, log water, track focus, customize theme.</p>
+            <p class="text-xs text-slate-400">Your data stays only in this tab. Close it and everything resets fresh.</p>
+        </div>
+        <div class="pt-2">
+            <button type="button" onclick="window.closeWelcomeModal()" class="w-full bg-gradient-to-r from-theme-500 to-themesecond-400 hover:from-theme-400 hover:to-themesecond-300 text-slate-950 font-extrabold py-3.5 px-6 rounded-2xl shadow-lg shadow-theme-500/20 transition transform hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-2">
+                <span>Let's Get Started</span><i class="fa-solid fa-arrow-right text-xs"></i>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Settings Modal -->
+<div id="settingsModal" class="fixed inset-0 z-[99999] flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md hidden overflow-y-auto">
+    <div class="glass max-w-lg w-full p-6 rounded-[2.5rem] border-slate-700 text-left space-y-4 shadow-2xl relative overflow-hidden bg-slate-900 animate-modalPop my-4">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <h3 class="text-base font-bold text-slate-100 flex items-center gap-2"><i class="fa-solid fa-sliders text-theme-400"></i> Settings & Backup</h3>
+            <button type="button" onclick="window.closeSettingsModal()" class="text-slate-400 hover:text-slate-200 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+        </div>
+
+        <form id="settingsForm" class="space-y-4 text-xs">
+            <div class="grid grid-cols-2 gap-3">
+                <div><label class="block font-semibold text-slate-300 mb-1">Your Name</label><input type="text" id="userNameInput" placeholder="e.g. VIP" class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-3.5 py-3 text-slate-200 focus:outline-none focus:ring-1 focus:ring-theme-500"></div>
+                <div><label class="block font-semibold text-slate-300 mb-1">Select Goal</label>
+                    <select id="goalTypeSelect" class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-3.5 py-3 text-slate-200 focus:outline-none focus:ring-1 focus:ring-theme-500">
+                        <option value="NEET">NEET UG</option><option value="JEE">JEE Main / Advanced</option><option value="UPSC">UPSC CSE</option><option value="BOARDS">Class 10/12 Boards</option><option value="CUSTOM">Custom Goal Target</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div><label class="block font-semibold text-slate-300 mb-1">Goal Title</label><input type="text" id="goalTitleInput" class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-3.5 py-3 text-slate-200 focus:outline-none focus:ring-1 focus:ring-theme-500" required></div>
+                <div><label class="block font-semibold text-slate-300 mb-1">Target Deadline</label><input type="date" id="goalDateInput" class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-3.5 py-3 text-slate-200 focus:outline-none focus:ring-1 focus:ring-theme-500" required></div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+                <div><label class="block font-semibold text-slate-300 mb-1">Daily Water (Glasses)</label><input type="number" id="waterTargetInput" min="1" max="16" class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-3.5 py-3 text-slate-200 focus:outline-none focus:ring-1 focus:ring-cyan-500" required></div>
+                <div><label class="block font-semibold text-slate-300 mb-1">Day Reset (Night Owl)</label>
+                    <select id="resetHourInput" class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-3.5 py-3 text-slate-200 focus:outline-none focus:ring-1 focus:ring-theme-500">
+                        <option value="0">12:00 AM (Midnight)</option><option value="3">3:00 AM</option><option value="4" selected>4:00 AM (Recommended)</option><option value="5">5:00 AM</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="border-t border-slate-800/80 pt-3 mt-1 space-y-3">
+                <h4 class="font-bold text-amber-400 flex items-center gap-1.5"><i class="fa-solid fa-crosshairs"></i> Today's Mission Targets</h4>
+                <div class="grid grid-cols-2 gap-3">
+                    <div><label class="block font-semibold text-slate-300 mb-1">Tasks to Complete</label><input type="number" id="missionTaskCountInput" min="1" max="50" class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-3.5 py-3 text-slate-200 focus:outline-none focus:ring-1 focus:ring-amber-500" required></div>
+                    <div><label class="block font-semibold text-slate-300 mb-1">Focus Target (mins)</label><input type="number" id="missionFocusMinutesInput" min="1" max="600" class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-3.5 py-3 text-slate-200 focus:outline-none focus:ring-1 focus:ring-amber-500" required></div>
+                </div>
+            </div>
+
+            <div class="border-t border-slate-800/80 pt-3 mt-1 space-y-4">
+                <h4 class="font-bold text-theme-400 flex items-center gap-1.5"><i class="fa-solid fa-palette"></i> Appearance & Experience</h4>
+                <div class="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                    <span class="text-xs font-semibold text-slate-300">Theme Color</span>
+                    <div class="flex gap-1.5 overflow-x-auto pb-1" id="themeColorOptions"></div>
+                </div>
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-semibold text-slate-300">Dark / Light Mode</span>
+                    <button type="button" onclick="window.toggleTheme()" class="flex items-center gap-2 bg-slate-950 border border-slate-800 text-slate-300 px-3 py-2 rounded-xl text-xs font-bold transition active:scale-95 hover:border-theme-500/40"><i class="fa-solid fa-moon" id="themeIconSettings"></i><span>Toggle</span></button>
+                </div>
+            </div>
+
+            <div class="pt-3 flex gap-2">
+                <button type="submit" class="w-full bg-gradient-to-r from-theme-500 to-themesecond-400 hover:from-theme-400 hover:to-themesecond-300 text-slate-950 font-bold py-3.5 rounded-2xl transition shadow-lg shadow-theme-500/20 active:scale-[0.98]">Save Configuration</button>
+            </div>
+        </form>
+
+        <div class="border-t border-slate-800 pt-4 mt-4 space-y-3">
+            <h4 class="text-sm font-bold text-slate-100"><i class="fa-solid fa-cloud-arrow-down text-blue-400 mr-1"></i> Backup & Restore</h4>
+            <p class="text-[10px] text-slate-400">Download your current session as JSON, or restore from a file.</p>
+            <div class="flex gap-2">
+                <button type="button" onclick="window.downloadBackup()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2 active:scale-[0.98]"><i class="fa-solid fa-download"></i> Backup</button>
+                <button type="button" onclick="window.triggerRestore()" class="flex-1 bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 font-bold py-2.5 rounded-xl text-xs transition flex items-center justify-center gap-2 active:scale-[0.98]"><i class="fa-solid fa-upload"></i> Restore</button>
+                <input type="file" id="backupFileInput" accept=".json" class="hidden" onchange="window.restoreBackup(event)">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Graph Settings Modal -->
+<div id="graphSettingsModal" class="fixed inset-0 z-[100000] flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md hidden">
+    <div class="glass max-w-sm w-full p-6 rounded-[2.5rem] border-theme-500/25 shadow-2xl relative overflow-hidden bg-slate-900 animate-modalPop">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+            <h3 class="text-base font-bold text-slate-100 flex items-center gap-2"><i class="fa-solid fa-chart-column text-theme-400"></i> Graph Customization</h3>
+            <button type="button" onclick="window.closeGraphSettings()" class="text-slate-400 hover:text-slate-200 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+        </div>
+        <div class="space-y-5 text-xs">
+            <div>
+                <label class="block font-semibold text-slate-300 mb-2">7-Day Graph Color Style</label>
+                <div class="flex bg-slate-950 border border-slate-800 rounded-xl p-1 gap-1">
+                    <button type="button" class="flex-1 py-2.5 rounded-lg font-bold transition" id="graphStyleMulti" onclick="window.setGraphStyle('multi')">Multi-Color</button>
+                    <button type="button" class="flex-1 py-2.5 rounded-lg font-bold transition" id="graphStyleMono" onclick="window.setGraphStyle('mono')">Monochrome</button>
+                </div>
+            </div>
+            <div id="monoColorSection" class="hidden">
+                <label class="block font-semibold text-slate-300 mb-2">Monochrome Base Color</label>
+                <div class="flex flex-wrap gap-2" id="monoColorSelector"></div>
+            </div>
+            <button type="button" onclick="window.saveGraphSettings()" class="w-full bg-gradient-to-r from-theme-500 to-themesecond-400 text-slate-950 font-extrabold py-3.5 rounded-2xl transition hover:scale-[1.01] active:scale-[.99]">Apply Changes</button>
+        </div>
+    </div>
+</div>
+
+<!-- Timer Settings Modal -->
+<div id="timerSettingsModal" class="fixed inset-0 z-[100000] flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md hidden">
+    <div class="glass max-w-md w-full p-6 rounded-[2.5rem] border-theme-500/25 shadow-2xl relative overflow-hidden bg-slate-900 animate-modalPop">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+            <h3 class="text-base font-bold text-slate-100 flex items-center gap-2"><i class="fa-solid fa-stopwatch text-theme-400"></i> Timer Customization</h3>
+            <button type="button" onclick="window.closeTimerSettings()" class="text-slate-400 hover:text-slate-200 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+        </div>
+        <form id="timerSettingsForm" class="space-y-4 text-xs">
+            <div class="grid grid-cols-2 gap-3">
+                <div><label class="block font-semibold text-slate-300 mb-1">Focus (min)</label><input id="timerFocusInput" type="number" min="1" max="180" class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-3.5 py-3 text-slate-200 focus:outline-none focus:ring-1 focus:ring-theme-500" required></div>
+                <div><label class="block font-semibold text-slate-300 mb-1">Break (min)</label><input id="timerBreakInput" type="number" min="1" max="60" class="w-full bg-slate-950 border border-slate-800 rounded-2xl px-3.5 py-3 text-slate-200 focus:outline-none focus:ring-1 focus:ring-cyan-500" required></div>
+            </div>
+            <div><label class="block font-semibold text-slate-300 mb-1">Alert Volume: <span id="timerVolumeValue">70%</span></label><input id="timerVolumeInput" type="range" min="10" max="100" step="5" class="w-full accent-theme-500" value="70"></div>
+            <label class="flex items-center justify-between gap-3 bg-slate-950/80 border border-slate-800 rounded-2xl p-3 cursor-pointer">
+                <span><span class="block font-bold text-slate-200">Soft Sound Alerts</span><span class="text-[10px] text-slate-500">Pleasant sine-wave notification</span></span>
+                <input id="timerSoundInput" type="checkbox" class="w-4 h-4 accent-theme-500">
+            </label>
+            <label class="flex items-center justify-between gap-3 bg-slate-950/80 border border-slate-800 rounded-2xl p-3 cursor-pointer">
+                <span><span class="block font-bold text-slate-200">Completion Melody</span><span class="text-[10px] text-slate-500">Gentle harmonic chime</span></span>
+                <input id="timerRepeatInput" type="checkbox" class="w-4 h-4 accent-theme-500">
+            </label>
+            <button type="submit" class="w-full bg-gradient-to-r from-theme-500 to-themesecond-400 text-slate-950 font-extrabold py-3.5 rounded-2xl transition hover:scale-[1.01] active:scale-[.99]">Save Timer Settings</button>
+        </form>
+    </div>
+</div>
+
+<!-- Day Inspector Modal -->
+<div id="dayInspectorModal" class="fixed inset-0 z-[100000] flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md hidden">
+    <div class="glass max-w-md w-full p-6 rounded-[2.5rem] border-theme-500/30 text-left space-y-4 shadow-2xl relative overflow-hidden bg-slate-900 animate-modalPop">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <div>
+                <h3 class="text-sm sm:text-base font-extrabold text-slate-100 flex items-center gap-2"><i class="fa-solid fa-calendar-check text-theme-400"></i> <span id="inspectorDateTitle">Day Performance</span></h3>
+                <p class="text-[10px] text-slate-400" id="inspectorDateSubtitle">Task Completion Log</p>
+            </div>
+            <button type="button" onclick="window.closeDayInspector()" class="text-slate-400 hover:text-slate-200 p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+        </div>
+        <div class="grid grid-cols-3 gap-2 bg-slate-950/60 p-3 rounded-2xl border border-slate-800/80 text-center">
+            <div><div class="text-[8px] uppercase tracking-wider text-slate-500 font-bold">Tasks</div><div id="inspectorTaskStat" class="text-xs font-black text-slate-100 mt-0.5">0 Done</div></div>
+            <div><div class="text-[8px] uppercase tracking-wider text-slate-500 font-bold">Focus Time</div><div id="inspectorFocusStat" class="text-xs font-black text-cyan-400 mt-0.5">0m</div></div>
+            <div><div class="text-[8px] uppercase tracking-wider text-slate-500 font-bold">Hydration</div><div id="inspectorWaterStat" class="text-xs font-black text-teal-400 mt-0.5">0 Gl</div></div>
+        </div>
+        <div>
+            <h4 class="text-xs font-bold text-slate-300 mb-2 flex items-center gap-1.5"><i class="fa-solid fa-list text-theme-400 text-[10px]"></i> Logged Tasks:</h4>
+            <div id="inspectorTasksList" class="space-y-2 max-h-56 overflow-y-auto pr-1 text-xs"></div>
+        </div>
+        <div class="pt-1"><button type="button" onclick="window.closeDayInspector()" class="w-full bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold py-2.5 rounded-xl text-xs transition">Close Inspector</button></div>
+    </div>
+</div>
+
+<!-- Header -->
+<header class="border-b border-slate-800/80 bg-slate-900/95 sticky top-0 z-50 backdrop-blur-xl">
+    <div class="max-w-6xl mx-auto px-3 sm:px-4 py-2.5 space-y-2.5">
+        <div class="flex items-center gap-2">
+            <div class="flex items-center gap-2 flex-1 min-w-0">
+                <div class="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-tr from-theme-500 to-themesecond-400 rounded-xl flex items-center justify-center text-slate-950 shadow-md shadow-theme-500/20 shrink-0">
+                    <i class="fa-solid fa-fire text-base"></i>
+                </div>
+                <div class="flex flex-col justify-center min-w-0 flex-1">
+                    <h1 class="text-sm sm:text-base font-extrabold bg-gradient-to-r from-theme-400 via-themesecond-300 to-cyan-200 bg-clip-text text-transparent leading-tight truncate">HabitTracker Pro</h1>
+                    <div class="text-[9px] sm:text-[10px] font-bold text-slate-400 flex items-center gap-1 mt-0.5">
+                        <i class="fa-regular fa-clock text-[8px] text-theme-400"></i>
+                        <span id="headerLiveTime">--:--</span>
+                        <span class="text-slate-600">·</span>
+                        <span id="headerLiveDate">---</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-action-group">
+                <button type="button" onclick="window.toggleTheme()" title="Toggle Theme" class="hdr-square-btn bg-slate-950 hover:bg-slate-800 border border-slate-800 text-slate-300 shadow-md">
+                    <i class="fa-solid fa-moon" id="themeIcon"></i>
+                </button>
+                <button type="button" onclick="window.openSettingsModal()" title="Settings" class="hdr-square-btn bg-slate-950 hover:bg-slate-800 border border-slate-800 hover:border-theme-500/50 text-slate-300 hover:text-theme-300 shadow-md">
+                    <i class="fa-solid fa-gear"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="bg-slate-950/80 border border-slate-700/60 rounded-[1.25rem] px-3.5 py-2 shadow-inner">
+            <div class="flex justify-between items-end mb-1.5">
+                <div>
+                    <div class="flex items-center gap-1.5 mb-0.5">
+                        <i class="fa-solid fa-crosshairs text-amber-400 animate-pulse text-[9px]"></i>
+                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-widest" id="goalTargetDateText">Target: May 2027</span>
+                    </div>
+                    <div id="headerGoalTitle" class="text-sm font-black text-amber-400 leading-none truncate max-w-[180px] sm:max-w-md">Target Goal</div>
+                </div>
+                <div class="text-right">
+                    <div class="text-[9px] font-bold text-slate-400 uppercase tracking-widest mb-0.5">Time Left</div>
+                    <div id="headerDaysRemaining" class="text-sm font-black text-slate-100 leading-none">0 Days</div>
+                </div>
+            </div>
+            <div class="flex items-center gap-2.5">
+                <div class="w-full bg-slate-900 rounded-full h-2 overflow-hidden border border-slate-700">
+                    <div id="deadlineProgressBar" class="bg-gradient-to-r from-amber-500 via-orange-400 to-amber-500 h-full rounded-full transition-all duration-700 relative overflow-hidden" style="width: 0%">
+                        <div class="absolute inset-0 bg-white/20 w-full animate-[pulseGlow_2s_ease-in-out_infinite]"></div>
+                    </div>
+                </div>
+                <span class="text-[11px] font-black text-amber-400 min-w-[2.5rem] text-right" id="deadlinePercent">0%</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main id="appMain" class="max-w-6xl mx-auto mt-6">
+    <div id="slideTrack" class="flex flex-col gap-6 w-full pb-4 px-4">
+
+        <!-- PANEL 1 -->
+        <div class="slide-panel flex flex-col gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="glass-card p-5 sm:p-6 rounded-[2.5rem] relative overflow-hidden border-theme-500/25 animate-float shadow-xl flex flex-col justify-center">
+                    <div class="absolute -right-6 -bottom-6 w-32 h-32 bg-theme-500/10 rounded-full blur-2xl"></div>
+                    <div class="absolute -bottom-12 -right-12 w-32 h-32 bg-themesecond-400/20 rounded-full blur-2xl"></div>
+                    <div class="relative z-10 space-y-1">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[10px] font-bold bg-theme-500/10 text-theme-400 border border-theme-500/20 uppercase tracking-wider" id="greetingTimeBadge">
+                                <i class="fa-regular fa-sun text-[9px]"></i> Good Morning
+                            </span>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-black text-slate-100 leading-tight">Ready to excel, <span id="dashboardUserName" class="text-theme-400">VIP</span>?</h2>
+                        <p class="text-xs sm:text-sm text-slate-400 font-medium">Your schedule is loaded and streaks are safe.</p>
+                    </div>
+                </div>
+
+                <div class="glass-card p-5 sm:p-6 rounded-[2.5rem] border-amber-500/20 shadow-xl flex flex-col justify-center">
+                    <div class="flex items-center justify-between mb-3.5">
+                        <div class="flex items-center gap-2">
+                            <div class="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 shadow-inner"><i class="fa-solid fa-crosshairs animate-pulse text-[11px]"></i></div>
+                            <h3 class="text-sm sm:text-base font-extrabold text-slate-100">Today's Mission</h3>
+                        </div>
+                        <button type="button" onclick="window.openSettingsModal()" class="text-slate-500 hover:text-amber-400 transition text-[11px]" title="Customize Targets"><i class="fa-solid fa-gear"></i></button>
+                    </div>
+                    <div id="dailyMissionList" class="space-y-1.5 text-[11px] sm:text-xs font-medium"></div>
+                </div>
+            </div>
+
+            <div class="glass-card p-5 sm:p-6 rounded-[2.5rem] border-slate-800 shadow-xl space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                        <h2 class="text-base font-extrabold text-slate-100 flex items-center gap-2"><i class="fa-solid fa-list-check text-theme-400"></i> Daily Checklist</h2>
+                        <p class="text-[10px] sm:text-xs text-slate-400 mt-0.5">Focus on these primary targets first.</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-xs font-bold text-amber-400 bg-amber-500/10 px-3 py-1.5 rounded-xl border border-amber-500/20 shadow-inner"><i class="fa-solid fa-bolt"></i> <span id="currentStreak">0 Days</span></span>
+                        <span class="text-xs font-bold text-slate-300 bg-slate-950 px-4 py-1.5 rounded-xl border border-slate-800 shadow-inner" id="taskCountText">0/0 Completed</span>
+                    </div>
+                </div>
+
+                <form id="addHabitForm" class="bg-slate-950/60 p-2 sm:p-3 rounded-[2rem] flex flex-col gap-2.5 border border-theme-500/20 shadow-inner">
+                    <div class="flex flex-col sm:flex-row gap-2 items-stretch sm:items-center">
+                        <div class="flex items-center flex-1 min-w-0 bg-slate-900 rounded-2xl border border-slate-800 px-3">
+                            <div class="text-theme-400 pr-2"><i class="fa-solid fa-rocket text-base animate-pulse"></i></div>
+                            <input type="text" id="habitInput" placeholder="Add class or habit (e.g., Physics Rev)..." class="bg-transparent text-xs sm:text-sm py-3 w-full text-slate-100 placeholder-slate-500 font-semibold tracking-wide focus:outline-none" required />
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <select id="habitTypeSelect" class="bg-slate-900 border border-slate-800 text-[11px] font-bold text-slate-300 rounded-2xl px-3 py-3 focus:outline-none focus:ring-1 focus:ring-theme-500 cursor-pointer">
+                                <option value="today">Today's Target</option><option value="daily">Daily Habit</option>
+                            </select>
+                            <button type="submit" class="bg-gradient-to-r from-theme-500 to-themesecond-400 hover:from-theme-400 hover:to-themesecond-300 text-slate-950 font-extrabold px-5 py-3 rounded-2xl text-xs flex items-center justify-center gap-2 transition-all shadow-lg shadow-theme-500/20 active:scale-95 whitespace-nowrap">
+                                <span>Add</span><i class="fa-solid fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <div id="habitList" class="space-y-3 mt-2"></div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="glass-card p-5 sm:p-6 rounded-[2.5rem] border-purple-500/20 shadow-xl flex flex-col">
+                    <div class="flex items-center gap-2 mb-3">
+                        <i class="fa-solid fa-wand-magic-sparkles text-purple-400"></i>
+                        <h3 class="text-sm font-extrabold text-slate-100">Next Best Action</h3>
+                    </div>
+                    <p class="text-[11px] text-slate-400 mb-4">Algorithmically suggested based on your targets.</p>
+                    <div id="nbaContainer" class="mt-auto bg-purple-500/10 border border-purple-500/20 rounded-2xl p-4 flex items-center gap-4">
+                        <div class="w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-lg shrink-0 shadow-inner" id="nbaIcon"><i class="fa-solid fa-check-double"></i></div>
+                        <div>
+                            <div class="text-[10px] uppercase font-bold text-purple-400 tracking-wider mb-0.5" id="nbaLabel">Smart Suggestion</div>
+                            <div class="text-sm font-black text-slate-100 leading-tight" id="nbaText">Loading action...</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-5 sm:p-6 rounded-[2.5rem] flex flex-col justify-between border-cyan-500/25 relative overflow-hidden glass-hover shadow-xl">
+                    <div class="absolute top-2 right-3 text-cyan-500/5 text-8xl font-black pointer-events-none"><i class="fa-solid fa-droplet"></i></div>
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-extrabold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5"><i class="fa-solid fa-glass-water"></i> Hydration (<span id="waterGlassesCountText">0/8</span>)</span>
+                            <span class="text-[10px] bg-cyan-500/10 text-cyan-300 px-3 py-0.5 rounded-full border border-cyan-500/20 font-bold shadow-inner" id="waterVolumeText">0.0 L</span>
+                        </div>
+                        <p class="text-[11px] text-slate-400 mb-3">Tap individual glasses to log hydration:</p>
+                        <div id="waterGlassesGrid" class="grid grid-cols-4 sm:grid-cols-8 gap-2 max-h-28 overflow-y-auto p-1 pr-2 relative z-10"></div>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-800">
+                        <div class="flex justify-between text-xs mb-1 font-semibold">
+                            <span class="text-slate-400">Daily Water Progress</span>
+                            <span class="text-cyan-400 font-extrabold" id="waterPercentText">0%</span>
+                        </div>
+                        <div class="w-full bg-slate-950 rounded-full h-2.5 overflow-hidden p-0.5 border border-slate-800">
+                            <div id="waterProgressBar" class="bg-gradient-to-r from-cyan-500 to-blue-500 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <section id="timerPanel" class="glass-card timer-panel p-5 sm:p-6 rounded-[2.5rem] border-theme-500/20 shadow-xl animate-float">
+                <div class="flex flex-col lg:flex-row items-center justify-between gap-5">
+                    <div class="flex items-center gap-3 min-w-0">
+                        <div class="w-12 h-12 rounded-2xl bg-theme-500/10 border border-theme-500/20 text-theme-400 flex items-center justify-center shadow-lg text-xl"><i class="fa-solid fa-stopwatch"></i></div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2">
+                                <h2 class="text-sm font-extrabold text-slate-100">VIP Focus Timer</h2>
+                                <span id="timerStatusBadge" class="text-[9px] px-2 py-0.5 rounded-full bg-slate-950 text-slate-500 border border-slate-800 font-bold">READY</span>
+                            </div>
+                            <p id="timerModeText" class="text-[10px] text-slate-400 mt-0.5">Custom focus session • Notifications & Audio ON</p>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row items-center gap-4">
+                        <div class="relative w-28 h-28 flex items-center justify-center shrink-0">
+                            <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                                <circle cx="50" cy="50" r="43" fill="none" stroke="rgba(55,65,81,.45)" stroke-width="6"/>
+                                <circle id="timerProgressRing" class="timer-progress" cx="50" cy="50" r="43" fill="none" stroke="rgb(var(--theme-500))" stroke-width="6" stroke-linecap="round" stroke-dasharray="0 270.18"/>
+                            </svg>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                <div id="timerDisplay" class="timer-display text-xl font-black text-slate-100">25:00</div>
+                                <div id="timerSessionLabel" class="text-[8px] uppercase tracking-widest text-slate-500 font-bold">FOCUS</div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap justify-center gap-2">
+                            <button type="button" onclick="window.timerStartPause()" id="timerStartBtn" class="bg-gradient-to-r from-theme-500 to-themesecond-400 text-slate-950 font-extrabold px-4 py-2.5 rounded-2xl text-xs transition hover:scale-[1.02] active:scale-95 shadow-lg shadow-theme-500/20"><i class="fa-solid fa-play mr-1"></i> Start</button>
+                            <button type="button" onclick="window.timerReset()" class="bg-slate-950 border border-slate-800 text-slate-300 hover:text-theme-400 font-bold px-4 py-2.5 rounded-2xl text-xs transition active:scale-95"><i class="fa-solid fa-rotate-left mr-1"></i> Reset</button>
+                            <button type="button" onclick="window.openTimerSettings()" class="bg-slate-950 border border-slate-800 text-slate-300 hover:text-theme-400 font-bold px-4 py-2.5 rounded-2xl text-xs transition active:scale-95" title="Timer customization"><i class="fa-solid fa-sliders"></i></button>
+                            <button type="button" onclick="window.testTimerSound()" id="timerSoundBtn" class="bg-slate-950 border border-slate-800 text-theme-400 font-bold px-3 py-2.5 rounded-2xl text-xs transition active:scale-95" title="Test sound"><i class="fa-solid fa-volume-high"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 flex flex-wrap items-center justify-center lg:justify-start gap-2 border-t border-slate-800/70 pt-3">
+                    <button type="button" onclick="window.setTimerPreset(5)" class="timer-preset px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-[10px] font-bold text-slate-400 hover:text-theme-400">5m</button>
+                    <button type="button" onclick="window.setTimerPreset(15)" class="timer-preset px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-[10px] font-bold text-slate-400 hover:text-theme-400">15m</button>
+                    <button type="button" onclick="window.setTimerPreset(25)" class="timer-preset px-3 py-1.5 rounded-xl bg-theme-500/10 border border-theme-500/20 text-[10px] font-extrabold text-theme-400">25m</button>
+                    <button type="button" onclick="window.setTimerPreset(45)" class="timer-preset px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-[10px] font-bold text-slate-400 hover:text-theme-400">45m</button>
+                    <button type="button" onclick="window.setTimerPreset(60)" class="timer-preset px-3 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-[10px] font-bold text-slate-400 hover:text-theme-400">60m</button>
+                </div>
+            </section>
+        </div>
+
+        <!-- PANEL 2 -->
+        <div class="slide-panel flex flex-col gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="glass-card p-6 rounded-[2.5rem] flex flex-col justify-between border-teal-500/20 bg-gradient-to-br from-slate-900/90 via-slate-900/60 to-slate-950 glass-hover animate-float shadow-xl">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-xs font-extrabold uppercase tracking-wider text-theme-400 flex items-center gap-1.5"><i class="fa-solid fa-chart-pie"></i> 360° Performance</span>
+                        <span class="text-[10px] bg-theme-500/10 text-theme-300 px-2.5 py-0.5 rounded-xl border border-theme-500/20 font-bold">LIVE</span>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2 py-4 my-auto">
+                        <div class="flex flex-col items-center">
+                            <div class="relative w-16 h-16 flex items-center justify-center rotate-360">
+                                <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                                    <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    <path id="ringDaily" class="circle-progress" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                </svg>
+                                <span class="absolute text-[11px] font-black text-theme-400 pointer-events-none" id="ringDailyText">0%</span>
+                            </div>
+                            <span class="text-[11px] font-bold text-slate-300 mt-2">Daily</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="relative w-16 h-16 flex items-center justify-center rotate-360" style="animation-direction: reverse; animation-duration: 22s;">
+                                <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                                    <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    <path id="ringWeekly" class="circle-progress" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                </svg>
+                                <span class="absolute text-[11px] font-black text-themesecond-400 pointer-events-none" id="ringWeeklyText">0%</span>
+                            </div>
+                            <span class="text-[11px] font-bold text-slate-300 mt-2">Weekly</span>
+                        </div>
+                        <div class="flex flex-col items-center">
+                            <div class="relative w-16 h-16 flex items-center justify-center rotate-360" style="animation-duration: 25s;">
+                                <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                                    <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                    <path id="ringMonthly" class="circle-progress" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                                </svg>
+                                <span class="absolute text-[11px] font-black text-cyan-400 pointer-events-none" id="ringMonthlyText">0%</span>
+                            </div>
+                            <span class="text-[11px] font-bold text-slate-300 mt-2">Monthly</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card p-5 sm:p-6 rounded-[2.5rem] border-theme-500/20 shadow-xl flex flex-col justify-between">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-7 h-7 rounded-lg bg-theme-500/10 border border-theme-500/20 flex items-center justify-center text-theme-400"><i class="fa-solid fa-bolt text-[11px]"></i></div>
+                            <h3 class="text-sm font-extrabold text-slate-100">Productivity Snapshot</h3>
+                        </div>
+                        <span id="focusScoreBadge" class="text-[9px] font-extrabold px-1.5 py-0.5 rounded-md bg-theme-500/10 text-theme-400 border border-theme-500/20">Focus 0%</span>
+                    </div>
+                    <div class="grid grid-cols-4 gap-2 mb-4">
+                        <div class="bg-slate-950/60 rounded-xl p-2 sm:p-2.5 border border-slate-800/70 flex flex-col items-center sm:items-start text-center sm:text-left"><div class="text-[8px] sm:text-[9px] text-slate-500 uppercase font-bold tracking-wider">Tasks</div><div id="glanceTasks" class="text-sm font-black text-slate-100 mt-1">0/0</div></div>
+                        <div class="bg-slate-950/60 rounded-xl p-2 sm:p-2.5 border border-slate-800/70 flex flex-col items-center sm:items-start text-center sm:text-left"><div class="text-[8px] sm:text-[9px] text-slate-500 uppercase font-bold tracking-wider">Focus</div><div id="glanceFocus" class="text-sm font-black text-cyan-300 mt-1">0m</div></div>
+                        <div class="bg-slate-950/60 rounded-xl p-2 sm:p-2.5 border border-slate-800/70 flex flex-col items-center sm:items-start text-center sm:text-left"><div class="text-[8px] sm:text-[9px] text-slate-500 uppercase font-bold tracking-wider">Lvl XP</div><div id="glanceXP" class="text-sm font-black text-amber-300 mt-1">0 XP</div></div>
+                        <div class="bg-slate-950/60 rounded-xl p-2 sm:p-2.5 border border-slate-800/70 flex flex-col items-center sm:items-start text-center sm:text-left"><div class="text-[8px] sm:text-[9px] text-slate-500 uppercase font-bold tracking-wider">Water</div><div id="glanceWater" class="text-sm font-black text-teal-300 mt-1">0/0</div></div>
+                    </div>
+                    <div class="bg-slate-950/40 rounded-xl p-3 border border-slate-800 mt-auto">
+                        <div class="flex items-center gap-1.5 mb-1.5"><i class="fa-solid fa-lightbulb text-amber-400 text-[10px]"></i><span class="text-[10px] font-bold text-slate-200">Smart Insights</span></div>
+                        <div id="smartInsightsText" class="text-[11px] text-slate-400 leading-relaxed">Habit Health: <span class="text-theme-400 font-bold">Calibrating...</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="glass-card p-5 sm:p-6 rounded-[2.5rem] space-y-6 border-slate-800 shadow-xl">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-800/80 pb-4">
+                    <div>
+                        <h2 class="text-base font-extrabold text-slate-100 flex items-center gap-2"><i class="fa-solid fa-chart-simple text-theme-400"></i> Advanced Analytics</h2>
+                        <p class="text-xs text-slate-400 mt-0.5">Click on any bar or calendar block to inspect completed tasks.</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="window.openGraphSettings()" class="px-3.5 py-1.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-400 hover:text-theme-400 font-bold text-xs transition flex items-center gap-1 active:scale-95 shadow-inner" title="Customize Graph"><i class="fa-solid fa-sliders"></i> Custom</button>
+                        <div class="flex items-center gap-1 bg-slate-950 p-1 rounded-2xl border border-slate-800 text-xs font-bold">
+                            <button type="button" onclick="window.switchGraphView('weekly')" id="tabWeekly" class="px-3.5 py-1.5 rounded-xl bg-theme-500 text-slate-950 transition">7-Day Graph</button>
+                            <button type="button" onclick="window.switchGraphView('heatmap')" id="tabHeatmap" class="px-3.5 py-1.5 rounded-xl text-slate-400 hover:text-slate-200 transition">Monthly Grid</button>
+                        </div>
+                    </div>
+                </div>
+                <div id="weeklyGraphView"><div class="flex items-end justify-between gap-2 sm:gap-4 h-56 pt-6 px-2 sm:px-6 bg-slate-950/60 rounded-3xl border border-slate-800/80" id="weeklyBarsContainer"></div></div>
+                <div id="heatmapGraphView" class="hidden"><div class="grid grid-cols-7 sm:grid-cols-10 gap-2 p-4 bg-slate-950/60 rounded-3xl border border-slate-800/80" id="monthlyHeatmapContainer"></div></div>
+            </div>
+        </div>
+
+        <!-- PANEL 3 -->
+        <div class="slide-panel flex flex-col gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div class="glass-card p-6 rounded-[2.5rem] space-y-4 border-slate-800 shadow-xl">
+                    <div class="flex items-center justify-between border-b border-slate-800/80 pb-3">
+                        <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-100 flex items-center gap-2"><i class="fa-solid fa-trophy text-amber-400"></i> Achievements</h3>
+                        <span class="text-xs bg-amber-500/10 text-amber-400 px-3 py-0.5 rounded-full border border-amber-500/20 font-mono font-bold" id="badgeCountText">0/8</span>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[17rem] overflow-y-auto pr-1" id="badgesContainer"></div>
+                </div>
+
+                <div class="glass-card p-6 rounded-[2.5rem] flex flex-col border-indigo-500/20 shadow-xl">
+                    <div class="flex items-center justify-between border-b border-slate-800/80 pb-3 mb-4">
+                        <h3 class="text-xs font-extrabold uppercase tracking-wider text-slate-100 flex items-center gap-2"><i class="fa-solid fa-book-journal-whills text-indigo-400"></i> Daily Reflection</h3>
+                    </div>
+                    <textarea id="journalInput" oninput="window.saveJournalDebounced(this.value)" placeholder="How did you perform today? What did you learn? Type here..." class="w-full flex-1 min-h-[140px] bg-slate-950/60 border border-slate-800 rounded-2xl p-4 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 resize-none"></textarea>
+                    <div class="text-right mt-2"><span id="journalSaveStatus" class="text-[9px] text-slate-500 font-bold transition-opacity">Auto-saved</span></div>
+                </div>
+            </div>
+
+            <div class="glass-card p-4 sm:p-5 rounded-[2.5rem] relative overflow-hidden border-theme-500/25 shadow-xl">
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-3 relative z-10">
+                    <div class="space-y-1 text-center sm:text-left">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-[10px] font-bold bg-theme-500/10 text-theme-400 border border-theme-500/20 uppercase tracking-wider"><i class="fa-solid fa-quote-left text-[9px]"></i> Daily Inspiration</span>
+                        <p id="quoteText" class="text-xs sm:text-sm font-semibold text-slate-200 italic transition-opacity duration-300">"Small daily habits lead to monumental long-term results."</p>
+                    </div>
+                    <button type="button" onclick="window.changeQuote()" class="text-xs text-slate-400 hover:text-theme-400 transition flex items-center gap-1.5 bg-slate-900/90 hover:bg-slate-900 px-3.5 py-2 rounded-2xl border border-slate-800 whitespace-nowrap active:scale-95 shadow"><i class="fa-solid fa-rotate"></i> Refresh</button>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="button" onclick="window.openDayInspector(window.getDateString(window.getAdjustedDate(0)))" class="px-5 py-2.5 bg-slate-900 border border-slate-800 rounded-2xl text-xs font-bold text-slate-400 hover:text-theme-400 transition hover:bg-slate-800"><i class="fa-solid fa-clock-rotate-left mr-1.5"></i> View Today's Detailed Log</button>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<!-- Toast -->
+<div id="vipRewardToast" class="fixed left-1/2 -translate-x-1/2 bottom-5 z-[100000] hidden">
+    <div class="glass-card px-5 py-3 rounded-2xl border-theme-400/40 shadow-2xl flex items-center gap-3 animate-modalPop">
+        <div class="w-9 h-9 rounded-xl bg-theme-500/15 flex items-center justify-center text-theme-400"><i class="fa-solid fa-gift"></i></div>
+        <div>
+            <div id="vipRewardTitle" class="text-xs font-black text-slate-100">Reward Unlocked</div>
+            <div id="vipRewardText" class="text-[10px] text-slate-400">+10 XP</div>
+        </div>
+    </div>
+</div>
+
+<script>
+"use strict";
+
+/* ══════════════════════════════════════════════════════════════════
+   HABITTRACKER PRO — SESSION-ONLY DEMO MODE
+   Data is stored in sessionStorage → clears when tab is closed.
+   All features fully functional for the visitor during their visit.
+   ══════════════════════════════════════════════════════════════════ */
+
+const MONO_COLORS = ['#10b981', '#06b6d4', '#a855f7', '#3b82f6', '#f59e0b', '#f43f5e', '#6366f1'];
+const VIP_COLORS = ['#ef4444','#3b82f6','#10b981','#f59e0b','#8b5cf6','#ec4899','#06b6d4','#84cc16','#6366f1','#f97316','#14b8a6','#d946ef'];
+
+const BADGES = [
+    { id:'first_step', name:'First Step', desc:'Complete 1st habit', icon:'fa-shoe-prints', category:'xp', reqType:'xp', reqVal:10 },
+    { id:'streak_3', name:'3-Day Fire', desc:'Maintain a 3-day streak', icon:'fa-fire-flame-curved', category:'streak', reqType:'streak', reqVal:3 },
+    { id:'streak_7', name:'7-Day Unstoppable', desc:'Achieve 7-day streak', icon:'fa-bolt', category:'streak', reqType:'streak', reqVal:7 },
+    { id:'streak_14', name:'14-Day Warrior', desc:'Achieve 14-day streak', icon:'fa-shield-halved', category:'streak', reqType:'streak', reqVal:14 },
+    { id:'streak_30', name:'30-Day Legend', desc:'Master 30-day streak', icon:'fa-crown', category:'streak', reqType:'streak', reqVal:30 },
+    { id:'level_2', name:'XP Warrior', desc:'Earn 100 XP Points', icon:'fa-medal', category:'xp', reqType:'xp', reqVal:100 },
+    { id:'habit_collector', name:'Habit Creator', desc:'Create 5 active habits', icon:'fa-layer-group', category:'special', reqType:'habits', reqVal:5 },
+    { id:'master_500', name:'Grand Master', desc:'Reach 500 XP', icon:'fa-gem', category:'special', reqType:'xp', reqVal:500 }
+];
+
+const quotes = [
+    "Small daily habits lead to monumental long-term results.",
+    "Discipline is choosing between what you want now and what you want most.",
+    "You do not rise to the level of your goals. You fall to the level of your systems.",
+    "Success is the sum of small efforts, repeated day in and day out.",
+    "Focus on the process, and the results will naturally follow."
+];
+
+const DEFAULT_STATE = {
+    habits: [], xp: 20, level: 1, streak: 0,
+    createdAt: null, lastActive: null,
+    lastActiveDate: '', history: {}, timestamps: {}, taskArchives: {}, waterLogs: {}, focusLogs: {}, journal: {},
+    settings: {
+        userName: 'VIP',
+        goalType: 'CUSTOM', goalTitle: 'My Target Goal', goalDate: '2027-05-02', resetHour: 4, waterTarget: 8,
+        missionTaskCount: 3, missionFocusMinutes: 60,
+        timer: { focusMinutes: 25, breakMinutes: 5, volume: 0.70, soundEnabled: true, repeatEndAlert: true },
+        appearance: { theme: 'emerald', graphColorMode: 'multi', graphMonochromeColor: '#10b981' },
+        navigation: { mode: 'scroll' }
+    },
+    welcomeShown: false,
+    winterArcUnlocked: false,
+    mainUnlocked: true
+};
+
+function safeMerge(defaultObj, savedObj) {
+    if (!savedObj) return JSON.parse(JSON.stringify(defaultObj));
+    const merged = { ...JSON.parse(JSON.stringify(defaultObj)), ...savedObj };
+    merged.settings = { ...defaultObj.settings, ...(savedObj.settings || {}) };
+    merged.settings.timer = { ...defaultObj.settings.timer, ...(savedObj.settings?.timer || {}) };
+    if (!merged.settings.appearance) merged.settings.appearance = { theme: 'emerald', graphColorMode: 'multi', graphMonochromeColor: '#10b981' };
+    if (!merged.settings.navigation) merged.settings.navigation = { mode: 'scroll' };
+    if (!merged.settings.userName) merged.settings.userName = 'VIP';
+    if (!Array.isArray(merged.habits)) merged.habits = [];
+    if (!merged.history) merged.history = {};
+    if (!merged.timestamps) merged.timestamps = {};
+    if (!merged.taskArchives) merged.taskArchives = {};
+    if (!merged.waterLogs) merged.waterLogs = {};
+    if (!merged.focusLogs) merged.focusLogs = {};
+    if (!merged.journal) merged.journal = {};
+    if (!merged.settings.missionTaskCount) merged.settings.missionTaskCount = 3;
+    if (!merged.settings.missionFocusMinutes) merged.settings.missionFocusMinutes = 60;
+    if (typeof merged.winterArcUnlocked !== 'boolean') merged.winterArcUnlocked = false;
+    if (typeof merged.mainUnlocked !== 'boolean') merged.mainUnlocked = true;
+    return merged;
+}
+
+/* ─── Date helpers ─── */
+window.getAdjustedDate = function(offsetDays = 0) {
+    const now = new Date();
+    const resetHour = (window._appState?.settings?.resetHour) ?? 4;
+    if (now.getHours() < resetHour) now.setDate(now.getDate() - 1);
+    now.setDate(now.getDate() + offsetDays);
+    return now;
+};
+window.getDateString = function(d) {
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+};
+function getAdjustedTodayDateString() {
+    return window.getDateString(window.getAdjustedDate(0));
+}
+
+/* ─── Session state ─── */
+let state = null;
+window._appState = null;
+let currentBadgeFilter = 'all';
+
+function loadStateFromSession() {
+    try {
+        const saved = sessionStorage.getItem('habitTrackerState');
+        if (saved) {
+            state = safeMerge(DEFAULT_STATE, JSON.parse(saved));
+        } else {
+            state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+        }
+    } catch (e) {
+        state = JSON.parse(JSON.stringify(DEFAULT_STATE));
+    }
+    window._appState = state;
+}
+
+function saveState() {
+    syncTodayArchive();
+    if (!state.createdAt) state.createdAt = Date.now();
+    state.lastActive = Date.now();
+    try { sessionStorage.setItem('habitTrackerState', JSON.stringify(state)); } catch (e) {}
+    window._appState = state;
+    render();
+}
+
+function getUniqueColor() {
+    const used = state.habits.map(h => h.color);
+    for (const c of VIP_COLORS) if (!used.includes(c)) return c;
+    return VIP_COLORS[state.habits.length % VIP_COLORS.length];
+}
+
+function syncTodayArchive() {
+    const today = getAdjustedTodayDateString();
+    const todayRecord = state.history[today] || {};
+    const todayTs = state.timestamps[today] || {};
+    if (!state.taskArchives) state.taskArchives = {};
+    let archiveMap = {};
+    (state.taskArchives[today] || []).forEach(item => { archiveMap[item.id] = item; });
+    state.habits.forEach(h => {
+        archiveMap[h.id] = {
+            id: h.id, name: h.name, color: h.color || '#10b981',
+            type: h.type || 'today', completed: !!todayRecord[h.id], time: todayTs[h.id] || ''
+        };
+    });
+    state.taskArchives[today] = Object.values(archiveMap);
+}
+
+function autoRecoverStreak() {
+    let currentStreak = 0, offset = 0, missed = false;
+    const isGood = (ds) => {
+        if (state.taskArchives?.[ds]?.length) return state.taskArchives[ds].filter(i => i.completed).length >= 1;
+        const r = state.history[ds] || {};
+        return Object.keys(r).filter(k => r[k]).length >= 1;
+    };
+    if (!isGood(window.getDateString(window.getAdjustedDate(0)))) offset = -1;
+    while (!missed && currentStreak < 365) {
+        if (isGood(window.getDateString(window.getAdjustedDate(offset)))) { currentStreak++; offset--; }
+        else missed = true;
+    }
+    state.streak = currentStreak;
+}
+
+function postStateLoadSetup() {
+    const todayStr = getAdjustedTodayDateString();
+    if (state.lastActiveDate && state.lastActiveDate !== todayStr) {
+        state.habits = state.habits.filter(h => h.type !== 'today');
+    }
+    state.lastActiveDate = todayStr;
+    autoRecoverStreak();
+    applyThemeColor(state.settings.appearance.theme || 'emerald');
+    render();
+    if (!state.welcomeShown) {
+        const modal = document.getElementById('welcomeModal');
+        if (modal) { modal.classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
+    }
+}
+
+function applyThemeColor(themeKey) {
+    const t = THEMES[themeKey] || THEMES.emerald;
+    const el = document.getElementById('dynamic-theme-vars');
+    if (el) el.innerHTML = `:root{--theme-400:${t.t400};--theme-500:${t.t500};--themesecond-300:${t.s300};--themesecond-400:${t.s400};}`;
+}
+
+/* ─── Welcome & Theme ─── */
+window.closeWelcomeModal = function() {
+    state.welcomeShown = true;
+    const m = document.getElementById('welcomeModal');
+    if (m) m.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+    saveState();
+    triggerConfetti();
+};
+
+window.toggleTheme = function() {
+    const html = document.documentElement;
+    const icons = [document.getElementById('themeIcon'), document.getElementById('themeIconSettings')];
+    if (html.classList.contains('dark')) {
+        html.classList.remove('dark');
+        icons.forEach(i => { if (i) { i.classList.remove('fa-moon'); i.classList.add('fa-sun'); } });
+    } else {
+        html.classList.add('dark');
+        icons.forEach(i => { if (i) { i.classList.remove('fa-sun'); i.classList.add('fa-moon'); } });
+    }
+};
+
+/* ─── Audio ─── */
+let audioCtx = null;
+function ensureAudio() {
+    try {
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return null;
+        if (!audioCtx) audioCtx = new AC();
+        if (audioCtx.state === 'suspended') audioCtx.resume().catch(() => {});
+        return audioCtx;
+    } catch (e) { return null; }
+}
+function playHarmonicTone(freq, startAt, duration, volume) {
+    const ctx = ensureAudio(); if (!ctx) return;
+    const osc = ctx.createOscillator(), gain = ctx.createGain();
+    osc.type = 'sine'; osc.frequency.setValueAtTime(freq, startAt);
+    gain.gain.setValueAtTime(0.0001, startAt);
+    gain.gain.exponentialRampToValueAtTime(Math.max(0.001, volume), startAt + 0.03);
+    gain.gain.exponentialRampToValueAtTime(0.0001, startAt + duration);
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start(startAt); osc.stop(startAt + duration + 0.05);
+}
+function playTaskCompleteSound() {
+    const s = state.settings.timer || {};
+    if (s.soundEnabled === false) return;
+    const ctx = ensureAudio(); if (!ctx) return;
+    const now = ctx.currentTime, v = Math.min(0.75, Math.max(0.05, Number(s.volume) || 0.7));
+    playHarmonicTone(1046.5, now, 0.12, v * 0.7);
+    playHarmonicTone(1318.51, now + 0.09, 0.14, v * 0.85);
+    playHarmonicTone(1567.98, now + 0.18, 0.22, v);
+}
+function playTimerEndSound() {
+    const s = state.settings.timer || {};
+    if (s.soundEnabled === false) return;
+    const ctx = ensureAudio(); if (!ctx) return;
+    const now = ctx.currentTime, v = Math.min(0.85, Math.max(0.05, Number(s.volume) || 0.7));
+    const reps = s.repeatEndAlert ? 3 : 1;
+    for (let r = 0; r < reps; r++) {
+        const base = now + r * 0.65;
+        playHarmonicTone(523.25, base, 0.35, v * 0.7);
+        playHarmonicTone(659.25, base + 0.12, 0.35, v * 0.8);
+        playHarmonicTone(783.99, base + 0.24, 0.45, v);
+    }
+}
+
+/* ─── Timer ─── */
+let timerInterval = null, timerRemaining = 25 * 60, timerTotal = 25 * 60;
+let timerRunning = false, timerMode = 'focus', timerEndTimestamp = null, timerPausedRemainingMs = null;
+
+function getTimerSettings() {
+    const fb = { focusMinutes: 25, breakMinutes: 5, volume: 0.70, soundEnabled: true, repeatEndAlert: true };
+    if (!state.settings) state.settings = {};
+    if (!state.settings.timer) state.settings.timer = {};
+    state.settings.timer = { ...fb, ...state.settings.timer };
+    return state.settings.timer;
+}
+function formatTimerTime(seconds) {
+    const safe = Math.max(0, Math.floor(Number(seconds) || 0));
+    const h = Math.floor(safe / 3600), m = Math.floor((safe % 3600) / 60), s = safe % 60;
+    return h > 0
+        ? `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
+        : `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+function renderTimer() {
+    const d = document.getElementById('timerDisplay'); if (!d) return;
+    d.textContent = formatTimerTime(timerRemaining);
+    const ring = document.getElementById('timerProgressRing');
+    const pct = timerTotal > 0 ? Math.max(0, Math.min(1, timerRemaining / timerTotal)) : 0;
+    if (ring) ring.setAttribute('stroke-dasharray', `${2 * Math.PI * 43 * pct} ${2 * Math.PI * 43}`);
+    const lbl = document.getElementById('timerSessionLabel');
+    if (lbl) lbl.textContent = timerMode === 'focus' ? 'FOCUS' : 'BREAK';
+    const soundOn = !!getTimerSettings().soundEnabled;
+    const soundBtn = document.getElementById('timerSoundBtn');
+    if (soundBtn) {
+        soundBtn.classList.toggle('timer-sound-on', soundOn);
+        soundBtn.innerHTML = soundOn ? '<i class="fa-solid fa-volume-high"></i>' : '<i class="fa-solid fa-volume-xmark"></i>';
+    }
+    const badge = document.getElementById('timerStatusBadge');
+    if (badge) {
+        badge.textContent = timerRunning ? 'RUNNING' : (timerRemaining === 0 ? 'DONE' : 'READY');
+        badge.className = `text-[9px] px-2 py-0.5 rounded-full border font-bold ${timerRunning ? 'bg-theme-500/10 text-theme-400 border-theme-500/20' : timerRemaining === 0 ? 'bg-amber-500/10 text-amber-400 border-amber-500/20' : 'bg-slate-950 text-slate-500 border-slate-800'}`;
+    }
+    const btn = document.getElementById('timerStartBtn');
+    if (btn) btn.innerHTML = timerRunning ? '<i class="fa-solid fa-pause mr-1"></i> Pause' : '<i class="fa-solid fa-play mr-1"></i> Start';
+    const panel = document.getElementById('timerPanel');
+    if (panel) panel.classList.toggle('timer-running', timerRunning);
+}
+function syncTimerWithWallClock() {
+    if (!timerRunning || timerEndTimestamp == null) return;
+    const rem = timerEndTimestamp - Date.now();
+    if (rem <= 0) { timerRemaining = 0; finishTimer(); }
+    else { timerRemaining = Math.round(rem / 1000); renderTimer(); }
+}
+function startTimerInterval() {
+    if (timerInterval) clearInterval(timerInterval);
+    timerInterval = setInterval(syncTimerWithWallClock, 500);
+}
+function finishTimer() {
+    if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+    timerRunning = false; timerEndTimestamp = null; timerPausedRemainingMs = null; timerRemaining = 0;
+    renderTimer();
+    playTimerEndSound();
+    triggerConfetti();
+    if ('Notification' in window && Notification.permission === 'granted') {
+        try {
+            new Notification(timerMode === 'focus' ? "Focus Complete! 🚀" : "Break Over! 📚", {
+                body: timerMode === 'focus' ? "You earned +15 XP." : "Back to focus mode!"
+            });
+        } catch(e) {}
+    }
+    const s = getTimerSettings();
+    if (timerMode === 'focus') {
+        const today = getAdjustedTodayDateString();
+        if (!state.focusLogs) state.focusLogs = {};
+        state.focusLogs[today] = (state.focusLogs[today] || 0) + s.focusMinutes;
+        state.xp += 15; state.level = Math.floor(state.xp / 50) + 1;
+        saveState();
+        window.showVipReward('Focus Session Complete!', '+15 XP');
+    }
+    timerMode = timerMode === 'focus' ? 'break' : 'focus';
+    timerTotal = Math.max(60, Number(timerMode === 'focus' ? s.focusMinutes : s.breakMinutes) * 60);
+    timerRemaining = timerTotal;
+    renderTimer();
+}
+window.timerStartPause = function() {
+    ensureAudio();
+    if ('Notification' in window && Notification.permission === 'default') {
+        Notification.requestPermission().catch(() => {});
+    }
+    if (timerRunning) {
+        timerPausedRemainingMs = Math.max(0, (timerEndTimestamp || Date.now()) - Date.now());
+        timerRunning = false; timerEndTimestamp = null;
+        if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+        renderTimer();
+        return;
+    }
+    if (timerRemaining <= 0) {
+        const s = getTimerSettings();
+        timerTotal = Math.max(60, Number(timerMode === 'focus' ? s.focusMinutes : s.breakMinutes) * 60);
+        timerRemaining = timerTotal; timerPausedRemainingMs = null;
+    }
+    const remMs = timerPausedRemainingMs != null ? timerPausedRemainingMs : timerRemaining * 1000;
+    timerEndTimestamp = Date.now() + remMs;
+    timerPausedRemainingMs = null;
+    timerRunning = true;
+    renderTimer();
+    startTimerInterval();
+};
+window.timerReset = function() {
+    if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+    timerRunning = false; timerEndTimestamp = null; timerPausedRemainingMs = null;
+    timerMode = 'focus';
+    timerTotal = Math.max(60, Number(getTimerSettings().focusMinutes) * 60);
+    timerRemaining = timerTotal;
+    renderTimer();
+};
+window.setTimerPreset = function(min) {
+    if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
+    timerRunning = false; timerEndTimestamp = null; timerPausedRemainingMs = null;
+    const s = getTimerSettings();
+    s.focusMinutes = Math.max(1, Math.min(180, Number(min) || 25));
+    timerMode = 'focus'; timerTotal = s.focusMinutes * 60; timerRemaining = timerTotal;
+    renderTimer();
+    saveState();
+};
+window.testTimerSound = function() { ensureAudio(); playTimerEndSound(); };
+
+document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && timerRunning) { syncTimerWithWallClock(); startTimerInterval(); }
+});
+window.addEventListener('focus', () => {
+    if (timerRunning) { syncTimerWithWallClock(); startTimerInterval(); }
+});
+window.addEventListener('pageshow', () => {
+    if (timerRunning) { syncTimerWithWallClock(); startTimerInterval(); }
+});
+
+window.openTimerSettings = function() {
+    const s = getTimerSettings();
+    document.getElementById('timerFocusInput').value = s.focusMinutes;
+    document.getElementById('timerBreakInput').value = s.breakMinutes;
+    document.getElementById('timerVolumeInput').value = Math.round(s.volume * 100);
+    document.getElementById('timerVolumeValue').textContent = `${Math.round(s.volume * 100)}%`;
+    document.getElementById('timerSoundInput').checked = !!s.soundEnabled;
+    document.getElementById('timerRepeatInput').checked = !!s.repeatEndAlert;
+    document.getElementById('timerSettingsModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+};
+window.closeTimerSettings = function() {
+    document.getElementById('timerSettingsModal').classList.add('hidden');
+    if (!document.getElementById('settingsModal')?.classList.contains('hidden')) return;
+    document.body.style.overflow = 'auto';
+};
+function saveTimerSettings(e) {
+    e.preventDefault();
+    const f = Math.max(1, Math.min(180, parseInt(document.getElementById('timerFocusInput')?.value, 10) || 25));
+    const b = Math.max(1, Math.min(60, parseInt(document.getElementById('timerBreakInput')?.value, 10) || 5));
+    const volPct = Math.max(10, Math.min(100, parseInt(document.getElementById('timerVolumeInput')?.value, 10) || 70));
+    state.settings.timer = {
+        focusMinutes: f, breakMinutes: b, volume: volPct / 100,
+        soundEnabled: !!document.getElementById('timerSoundInput')?.checked,
+        repeatEndAlert: !!document.getElementById('timerRepeatInput')?.checked
+    };
+    window.timerReset();
+    saveState();
+    window.closeTimerSettings();
+    ensureAudio();
+}
+
+/* ─── Graph settings ─── */
+window.openGraphSettings = function() {
+    window.setGraphStyle(state.settings.appearance.graphColorMode || 'multi', true);
+    document.getElementById('graphSettingsModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+};
+window.closeGraphSettings = function() {
+    document.getElementById('graphSettingsModal').classList.add('hidden');
+    document.body.style.overflow = 'auto';
+};
+window.setGraphStyle = function(mode, initOnly = false) {
+    const bM = document.getElementById('graphStyleMulti');
+    const bMo = document.getElementById('graphStyleMono');
+    const sect = document.getElementById('monoColorSection');
+    if (!initOnly) state.settings.appearance.graphColorMode = mode;
+    const active = initOnly ? mode : (state.settings.appearance.graphColorMode || mode);
+    if (bM && bMo) {
+        bM.className = `flex-1 py-2.5 rounded-lg font-bold transition ${active === 'multi' ? 'bg-theme-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-slate-200'}`;
+        bMo.className = `flex-1 py-2.5 rounded-lg font-bold transition ${active === 'mono' ? 'bg-theme-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-slate-200'}`;
+    }
+    if (sect) {
+        if (active === 'mono') {
+            sect.classList.remove('hidden');
+            const sel = document.getElementById('monoColorSelector');
+            if (sel) {
+                sel.innerHTML = '';
+                const cur = state.settings.appearance.graphMonochromeColor || '#10b981';
+                MONO_COLORS.forEach(c => {
+                    sel.innerHTML += `<button type="button" onclick="window.setGraphMonoColor('${c}')" class="w-8 h-8 rounded-full border-2 ${cur === c ? 'border-slate-200 scale-110' : 'border-transparent scale-100'} transition transform hover:scale-110" style="background:${c}"></button>`;
+                });
+            }
+        } else sect.classList.add('hidden');
+    }
+};
+window.setGraphMonoColor = function(c) {
+    state.settings.appearance.graphMonochromeColor = c;
+    window.setGraphStyle('mono', true);
+};
+window.saveGraphSettings = function() {
+    saveState();
+    window.closeGraphSettings();
+};
+
+/* ─── Analytics ─── */
+window.switchGraphView = function(view) {
+    const tw = document.getElementById('tabWeekly'), th = document.getElementById('tabHeatmap');
+    const wv = document.getElementById('weeklyGraphView'), hv = document.getElementById('heatmapGraphView');
+    if (view === 'weekly') {
+        tw.className = 'px-3.5 py-1.5 rounded-xl bg-theme-500 text-slate-950 transition';
+        th.className = 'px-3.5 py-1.5 rounded-xl text-slate-400 hover:text-slate-200 transition';
+        wv.classList.remove('hidden'); hv.classList.add('hidden');
+    } else {
+        th.className = 'px-3.5 py-1.5 rounded-xl bg-theme-500 text-slate-950 transition';
+        tw.className = 'px-3.5 py-1.5 rounded-xl text-slate-400 hover:text-slate-200 transition';
+        hv.classList.remove('hidden'); wv.classList.add('hidden');
+    }
+    renderAnalyticsGraphs();
+};
+
+function calculateAnalytics() {
+    const today = getAdjustedTodayDateString();
+    let tc = 0, th = 0;
+    if (state.taskArchives?.[today]?.length) {
+        th = state.taskArchives[today].length;
+        tc = state.taskArchives[today].filter(x => x.completed).length;
+    } else {
+        th = state.habits.length;
+        const rec = state.history[today] || {};
+        state.habits.forEach(h => { if (rec[h.id]) tc++; });
+    }
+    const todayPct = th === 0 ? 0 : Math.round((tc / th) * 100);
+    function avg(days, off = 0) {
+        let done = 0;
+        for (let i = off; i < days + off; i++) {
+            const ds = window.getDateString(window.getAdjustedDate(-i));
+            const a = state.taskArchives?.[ds];
+            if (a?.length) {
+                const d = a.filter(x => x.completed).length;
+                if (d > 0 && d / a.length >= 0.5) done++;
+            } else {
+                let c = 0;
+                state.habits.forEach(h => { if ((state.history[ds] || {})[h.id]) c++; });
+                if (c > 0 && c / (state.habits.length || 1) >= 0.5) done++;
+            }
+        }
+        return Math.round((done / days) * 100);
+    }
+    return { todayPct, weeklyPct: avg(7), prevWeeklyPct: avg(7, 7), monthlyPct: avg(30), todayCompleted: tc };
+}
+
+function updatePerformanceRings(d, w, m) {
+    const set = (id, p) => {
+        const r = document.getElementById(id);
+        if (r) { r.setAttribute('stroke-dasharray', `${p}, 100`); r.style.stroke = p >= 75 ? '#22c55e' : p >= 40 ? '#06b6d4' : p > 0 ? '#a855f7' : '#374151'; }
+    };
+    set('ringDaily', d); set('ringWeekly', w); set('ringMonthly', m);
+    const t1 = document.getElementById('ringDailyText'); if (t1) t1.textContent = `${d}%`;
+    const t2 = document.getElementById('ringWeeklyText'); if (t2) t2.textContent = `${w}%`;
+    const t3 = document.getElementById('ringMonthlyText'); if (t3) t3.textContent = `${m}%`;
+}
+
+function updateSmartInsights(a) {
+    const el = document.getElementById('smartInsightsText'); if (!el) return;
+    const hs = Math.round(a.weeklyPct * 0.7 + a.monthlyPct * 0.3);
+    let trend = '';
+    if (a.weeklyPct > a.prevWeeklyPct) trend = '<i class="fa-solid fa-arrow-trend-up text-emerald-400"></i> UP';
+    else if (a.weeklyPct < a.prevWeeklyPct) trend = '<i class="fa-solid fa-arrow-trend-down text-rose-400"></i> DOWN';
+    else trend = '<i class="fa-solid fa-minus text-slate-400"></i> FLAT';
+    el.innerHTML = `Habit Health: <span class="text-theme-400 font-bold">${hs}%</span> • Trend: ${trend}`;
+}
+
+function updateNextBestAction() {
+    const c = document.getElementById('nbaContainer'), ic = document.getElementById('nbaIcon'),
+          l = document.getElementById('nbaLabel'), t = document.getElementById('nbaText');
+    if (!c) return;
+    const today = getAdjustedTodayDateString();
+    const rec = state.history[today] || {};
+    let pending = null;
+    for (const h of state.habits) { if (!rec[h.id]) { pending = h; break; } }
+    const waterT = state.settings.waterTarget || 8;
+    const waterD = state.waterLogs[today] || 0;
+    const focusM = state.focusLogs[today] || 0;
+
+    if (pending) {
+        ic.innerHTML = '<i class="fa-solid fa-list-check"></i>';
+        l.textContent = 'Highest Priority'; t.textContent = `Complete: ${pending.name}`;
+        c.className = 'mt-auto bg-purple-500/10 border border-purple-500/20 rounded-2xl p-4 flex items-center gap-4 transition-all';
+        ic.className = 'w-10 h-10 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-lg shrink-0';
+        l.className = 'text-[10px] uppercase font-bold text-purple-400 tracking-wider mb-0.5';
+    } else if (waterD < waterT) {
+        ic.innerHTML = '<i class="fa-solid fa-glass-water"></i>';
+        l.textContent = 'Hydration Needed'; t.textContent = `Drink next glass (${waterD}/${waterT})`;
+        c.className = 'mt-auto bg-cyan-500/10 border border-cyan-500/20 rounded-2xl p-4 flex items-center gap-4 transition-all';
+        ic.className = 'w-10 h-10 rounded-xl bg-cyan-500/20 text-cyan-400 flex items-center justify-center text-lg shrink-0 animate-pulse';
+        l.className = 'text-[10px] uppercase font-bold text-cyan-400 tracking-wider mb-0.5';
+    } else if (focusM < 25) {
+        ic.innerHTML = '<i class="fa-solid fa-stopwatch"></i>';
+        l.textContent = 'Focus Time'; t.textContent = 'Complete a 25m Focus Session';
+        c.className = 'mt-auto bg-theme-500/10 border border-theme-500/20 rounded-2xl p-4 flex items-center gap-4 transition-all';
+        ic.className = 'w-10 h-10 rounded-xl bg-theme-500/20 text-theme-400 flex items-center justify-center text-lg shrink-0';
+        l.className = 'text-[10px] uppercase font-bold text-theme-400 tracking-wider mb-0.5';
+    } else {
+        ic.innerHTML = '<i class="fa-solid fa-crown"></i>';
+        l.textContent = 'All Clear'; t.textContent = "You crushed today's goals!";
+        c.className = 'mt-auto bg-amber-500/10 border border-amber-500/20 rounded-2xl p-4 flex items-center gap-4 transition-all';
+        ic.className = 'w-10 h-10 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-lg shrink-0';
+        l.className = 'text-[10px] uppercase font-bold text-amber-400 tracking-wider mb-0.5';
+    }
+}
+
+/* ─── Rendering ─── */
+function getHabitVisualData(habit) {
+    const c = habit.color || '#8b5cf6';
+    return { colors: { a: c, css: `linear-gradient(135deg, ${c}, color-mix(in srgb, ${c} 30%, black))` } };
+}
+
+function renderHabitWeek(habit, colors) {
+    let html = '<div class="habit-week">';
+    const days = ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+    for (let i = 6; i >= 0; i--) {
+        const d = window.getAdjustedDate(-i);
+        const isDone = !!(state.history[window.getDateString(d)] || {})[habit.id];
+        html += `<div class="habit-week-day ${isDone ? 'done' : ''} ${i === 0 ? 'today' : ''}" style="${isDone ? `background: ${colors.css}; border-color: transparent; color: #08111f;` : ''}">${days[d.getDay()]}</div>`;
+    }
+    let ps = 0;
+    for (let i = 0; i < 30; i++) {
+        const ds = window.getDateString(window.getAdjustedDate(-i));
+        if (state.history[ds]?.[habit.id]) ps++;
+        else if (i !== 0) break;
+    }
+    html += `<div class="habit-streak-pill ${ps > 0 ? 'active' : ''}"><i class="fa-solid fa-fire ${ps > 0 ? 'text-orange-400' : 'text-slate-600'} text-[8px]"></i> ${ps}</div></div>`;
+    return html;
+}
+
+window.showVipReward = function(title, text) {
+    const toast = document.getElementById('vipRewardToast');
+    const t = document.getElementById('vipRewardTitle'), x = document.getElementById('vipRewardText');
+    if (t) t.textContent = title || 'Reward Unlocked';
+    if (x) x.textContent = text || '+10 XP';
+    if (toast) {
+        toast.classList.remove('hidden');
+        clearTimeout(window.__vipToastTimer);
+        window.__vipToastTimer = setTimeout(() => toast.classList.add('hidden'), 2200);
+    }
+};
+
+function triggerConfetti() {
+    if (typeof window.confetti === 'function') {
+        window.confetti({ particleCount: 40, spread: 50, origin: { y: 0.8 } });
+    }
+}
+
+window.openSettingsModal = function() {
+    document.getElementById('userNameInput').value = state.settings.userName || 'VIP';
+    document.getElementById('goalTypeSelect').value = state.settings.goalType || 'CUSTOM';
+    document.getElementById('goalTitleInput').value = state.settings.goalTitle || '';
+    document.getElementById('goalDateInput').value = state.settings.goalDate || '';
+    document.getElementById('resetHourInput').value = String(state.settings.resetHour ?? 4);
+    document.getElementById('waterTargetInput').value = String(state.settings.waterTarget ?? 8);
+    document.getElementById('missionTaskCountInput').value = String(state.settings.missionTaskCount ?? 3);
+    document.getElementById('missionFocusMinutesInput').value = String(state.settings.missionFocusMinutes ?? 60);
+
+    const tc = document.getElementById('themeColorOptions');
+    if (tc) {
+        tc.innerHTML = '';
+        const cur = state.settings.appearance?.theme || 'emerald';
+        Object.keys(THEMES).forEach(k => {
+            tc.innerHTML += `<button type="button" onclick="window.setThemeChoice('${k}')" class="theme-swatch w-7 h-7 min-w-[1.75rem] rounded-full border-2 ${cur === k ? 'border-slate-200 active' : 'border-transparent'} shadow-sm" style="background-color: rgb(${THEMES[k].t500})" title="${k.charAt(0).toUpperCase() + k.slice(1)}"></button>`;
+        });
+    }
+
+    const si = document.getElementById('themeIconSettings');
+    if (si) {
+        if (document.documentElement.classList.contains('dark')) {
+            si.classList.remove('fa-sun'); si.classList.add('fa-moon');
+        } else {
+            si.classList.remove('fa-moon'); si.classList.add('fa-sun');
+        }
+    }
+
+    document.getElementById('settingsModal').classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+};
+
+window.setThemeChoice = function(themeKey) {
+    state.settings.appearance.theme = themeKey;
+    applyThemeColor(themeKey);
+    saveState();
+    window.openSettingsModal();
+};
+
+window.closeSettingsModal = function() {
+    document.getElementById('settingsModal').classList.add('hidden');
+    document.body.style.overflow = 'auto';
+};
+
+function saveSettings(e) {
+    e.preventDefault();
+    state.settings.userName = document.getElementById('userNameInput')?.value || 'VIP';
+    state.settings.goalType = document.getElementById('goalTypeSelect')?.value || 'CUSTOM';
+    state.settings.goalTitle = document.getElementById('goalTitleInput')?.value || 'Target Goal';
+    state.settings.goalDate = document.getElementById('goalDateInput')?.value || '2027-05-02';
+    state.settings.resetHour = parseInt(document.getElementById('resetHourInput')?.value, 10) || 4;
+    state.settings.waterTarget = Math.max(1, parseInt(document.getElementById('waterTargetInput')?.value, 10)) || 8;
+    state.settings.missionTaskCount = Math.max(1, parseInt(document.getElementById('missionTaskCountInput')?.value, 10)) || 3;
+    state.settings.missionFocusMinutes = Math.max(1, parseInt(document.getElementById('missionFocusMinutesInput')?.value, 10)) || 60;
+    saveState();
+    window.closeSettingsModal();
+    triggerConfetti();
+}
+
+/* ─── Backup ─── */
+window.downloadBackup = function() {
+    syncTodayArchive();
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
+    const dl = document.createElement('a');
+    dl.setAttribute("href", dataStr);
+    dl.setAttribute("download", "HabitTracker_" + getAdjustedTodayDateString() + ".json");
+    document.body.appendChild(dl); dl.click(); dl.remove();
+};
+
+window.triggerRestore = function() {
+    document.getElementById('backupFileInput').click();
+};
+
+window.restoreBackup = function(event) {
+    const file = event.target.files[0]; if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const imported = JSON.parse(e.target.result);
+            if (imported && (imported.habits || imported.taskArchives)) {
+                state = safeMerge(DEFAULT_STATE, imported);
+                window._appState = state;
+                state.mainUnlocked = true;
+                autoRecoverStreak();
+                saveState();
+                window.showVipReward('Data Restored!', 'Your schedule is restored 🎉');
+                window.closeSettingsModal();
+            } else {
+                window.showVipReward('Error!', 'Invalid backup file.');
+            }
+        } catch (err) { window.showVipReward('Error!', 'File may be corrupted.'); }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
+};
+
+/* ─── Water ─── */
+window.toggleWaterGlass = function(glassIndex) {
+    const today = getAdjustedTodayDateString();
+    const current = state.waterLogs[today] || 0;
+    const target = state.settings.waterTarget || 8;
+    let newVal = glassIndex + 1;
+    if (current === newVal) newVal = glassIndex;
+    state.waterLogs[today] = Math.max(0, Math.min(target, newVal));
+    if (newVal === target && current < target) {
+        triggerConfetti();
+        state.xp += 15;
+        state.level = Math.floor(state.xp / 50) + 1;
+        window.showVipReward('Hydration Complete!', '+15 XP');
+    }
+    updateNextBestAction();
+    saveState();
+};
+
+/* ─── Habits ─── */
+window.addHabit = function(name, type = 'today') {
+    state.habits.push({
+        id: 'task_' + Date.now(),
+        name: name,
+        color: getUniqueColor(),
+        type: type,
+        createdAt: getAdjustedTodayDateString()
+    });
+    autoRecoverStreak();
+    saveState();
+    triggerConfetti();
+};
+
+window.deleteHabit = function(id) {
+    const today = getAdjustedTodayDateString();
+    state.habits = state.habits.filter(h => h.id !== id);
+    if (state.taskArchives?.[today]) state.taskArchives[today] = state.taskArchives[today].filter(h => h.id !== id);
+    autoRecoverStreak();
+    saveState();
+};
+
+window.toggleHabit = function(id) {
+    const today = getAdjustedTodayDateString();
+    if (!state.history[today]) state.history[today] = {};
+    if (!state.timestamps[today]) state.timestamps[today] = {};
+    const habit = state.habits.find(h => h.id === id);
+    if (!habit) return;
+    const isCompleted = !state.history[today][id];
+
+    const card = document.getElementById(`habit-card-${id}`);
+    const tickIcon = document.getElementById(`tick-icon-${id}`);
+    if (card) {
+        if (isCompleted) {
+            card.classList.add('habit-completed', 'border-theme-500/40', 'bg-theme-950/20');
+            card.classList.remove('border-slate-800');
+            if (tickIcon) { tickIcon.classList.remove('opacity-0'); tickIcon.classList.add('opacity-100', 'text-slate-950'); }
+        } else {
+            card.classList.remove('habit-completed', 'border-theme-500/40', 'bg-theme-950/20');
+            card.classList.add('border-slate-800');
+            if (tickIcon) { tickIcon.classList.add('opacity-0'); tickIcon.classList.remove('opacity-100', 'text-slate-950'); }
+        }
+    }
+
+    state.history[today][id] = isCompleted;
+
+    if (isCompleted) {
+        state.timestamps[today][id] = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+        state.xp += 10;
+        triggerConfetti();
+        playTaskCompleteSound();
+        window.showVipReward('Task Completed!', '+10 XP');
+        if (habit.type === 'today') {
+            syncTodayArchive();
+            if (card) {
+                card.style.pointerEvents = 'none';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                    card.style.opacity = '0';
+                    card.style.transform = 'translateX(100px) scale(0.9)';
+                    setTimeout(() => {
+                        state.habits = state.habits.filter(h => h.id !== id);
+                        state.level = Math.floor(state.xp / 50) + 1;
+                        autoRecoverStreak();
+                        saveState();
+                    }, 500);
+                }, 400);
+                return;
+            }
+            state.habits = state.habits.filter(h => h.id !== id);
+        }
+    } else {
+        delete state.timestamps[today][id];
+        state.xp = Math.max(0, state.xp - 10);
+    }
+
+    state.level = Math.floor(state.xp / 50) + 1;
+    autoRecoverStreak();
+    requestAnimationFrame(() => saveState());
+};
+
+/* ─── Journal ─── */
+let journalTimeout;
+window.saveJournalDebounced = function(val) {
+    clearTimeout(journalTimeout);
+    const status = document.getElementById('journalSaveStatus');
+    if (status) { status.textContent = 'Saving...'; status.classList.remove('opacity-0'); }
+    journalTimeout = setTimeout(() => {
+        const today = getAdjustedTodayDateString();
+        if (!state.journal) state.journal = {};
+        state.journal[today] = val;
+        saveState();
+        if (status) {
+            status.textContent = 'Auto-saved ✓';
+            setTimeout(() => status.classList.add('opacity-0'), 2000);
+        }
+    }, 800);
+};
+
+/* ─── Deadline ─── */
+function updateDeadlineTracker() {
+    const now = new Date();
+    const tStr = state.settings.goalDate || `${now.getFullYear() + 1}-05-02`;
+    let target = new Date(tStr);
+    if (isNaN(target.getTime())) target = new Date(now.getFullYear() + 1, 4, 2);
+
+    const titleEl = document.getElementById('headerGoalTitle');
+    if (titleEl) titleEl.textContent = state.settings.goalTitle || 'Target Goal';
+
+    const dateTextEl = document.getElementById('goalTargetDateText');
+    if (dateTextEl) dateTextEl.textContent = `Deadline: ${target.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+
+    const diffDays = Math.ceil((target - now) / (1000 * 60 * 60 * 24));
+    const daysEl = document.getElementById('headerDaysRemaining');
+    if (daysEl) daysEl.textContent = diffDays > 0 ? `${diffDays} Days` : '0 Days';
+
+    const elapsed = 365 - Math.max(0, diffDays);
+    const pct = Math.min(100, Math.max(0, Math.round((elapsed / 365) * 100)));
+    const pctEl = document.getElementById('deadlinePercent');
+    if (pctEl) pctEl.textContent = `${pct}%`;
+    const barEl = document.getElementById('deadlineProgressBar');
+    if (barEl) barEl.style.width = `${pct}%`;
+}
+
+window.changeQuote = function() {
+    const q = document.getElementById('quoteText'); if (!q) return;
+    q.style.opacity = '0';
+    setTimeout(() => {
+        q.textContent = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
+        q.style.opacity = '1';
+    }, 200);
+};
+
+/* ─── Day Inspector ─── */
+window.openDayInspector = function(dateStr) {
+    const modal = document.getElementById('dayInspectorModal'); if (!modal) return;
+    const [y, m, dd] = dateStr.split('-').map(Number);
+    const dObj = new Date(y, m - 1, dd);
+    const titleEl = document.getElementById('inspectorDateTitle');
+    if (titleEl) titleEl.textContent = dObj.toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' });
+    const sub = document.getElementById('inspectorDateSubtitle');
+    if (sub) sub.textContent = `Full Schedule Log for ${dateStr}`;
+    const wEl = document.getElementById('inspectorWaterStat');
+    if (wEl) wEl.textContent = `${state.waterLogs[dateStr] || 0} Gl`;
+    const fEl = document.getElementById('inspectorFocusStat');
+    if (fEl) fEl.textContent = `${state.focusLogs[dateStr] || 0}m`;
+
+    let dayTasks = [];
+    if (state.taskArchives?.[dateStr]?.length) dayTasks = state.taskArchives[dateStr];
+    else dayTasks = state.habits.map(h => ({
+        id: h.id, name: h.name, color: h.color || '#10b981',
+        completed: !!(state.history[dateStr] || {})[h.id],
+        time: (state.timestamps[dateStr] || {})[h.id] || ''
+    }));
+
+    const tEl = document.getElementById('inspectorTaskStat');
+    if (tEl) tEl.textContent = `${dayTasks.filter(t => t.completed).length}/${dayTasks.length} Done`;
+
+    const listEl = document.getElementById('inspectorTasksList');
+    if (listEl) {
+        listEl.innerHTML = '';
+        if (dayTasks.length === 0) {
+            listEl.innerHTML = `<div class="p-3 text-center text-slate-500 italic bg-slate-950/40 rounded-xl">No tasks logged on this date.</div>`;
+        } else {
+            dayTasks.forEach(item => {
+                listEl.innerHTML += `
+                    <div class="p-2.5 rounded-xl border flex items-center justify-between ${item.completed ? 'bg-theme-950/20 border-theme-500/30 text-slate-200' : 'bg-slate-950/40 border-slate-800/80 text-slate-400'}">
+                        <div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full" style="background-color: ${item.color || '#10b981'}"></div><span class="font-semibold ${item.completed ? 'text-slate-100' : 'line-through text-slate-500'}">${item.name}</span></div>
+                        <div class="text-[10px] flex items-center gap-1.5 font-mono">${item.completed ? `<span class="text-theme-400 font-bold"><i class="fa-solid fa-check"></i> ${item.time || 'Completed'}</span>` : `<span class="text-slate-500">Pending</span>`}</div>
+                    </div>`;
+            });
+        }
+    }
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+};
+
+window.closeDayInspector = function() {
+    const m = document.getElementById('dayInspectorModal');
+    if (m) m.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+};
+
+/* ─── Analytics graphs ─── */
+function renderAnalyticsGraphs() {
+    const wrap = document.getElementById('weeklyBarsContainer');
+    const isMono = state.settings.appearance?.graphColorMode === 'mono';
+    const monoColor = state.settings.appearance?.graphMonochromeColor || '#10b981';
+
+    if (wrap) {
+        wrap.innerHTML = '';
+        const daysArr = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        for (let i = 6; i >= 0; i--) {
+            const d = window.getAdjustedDate(-i);
+            const ds = window.getDateString(d);
+            const dn = daysArr[d.getDay()];
+            let colors = [], total = 0;
+            if (state.taskArchives?.[ds]?.length) {
+                const a = state.taskArchives[ds];
+                total = a.length;
+                a.forEach(x => { if (x.completed) colors.push(x.color || '#10b981'); });
+            } else {
+                total = state.habits.length;
+                const rec = state.history[ds] || {};
+                state.habits.forEach(h => { if (rec[h.id]) colors.push(h.color || '#10b981'); });
+            }
+            const pct = total > 0 ? Math.round((colors.length / total) * 100) : 0;
+            const isToday = i === 0;
+            let segs = '';
+            colors.forEach((c, idx) => {
+                const op = Math.max(30, 100 - idx * 20);
+                const col = isMono ? `color-mix(in srgb, ${monoColor} ${op}%, transparent)` : c;
+                segs += `<div class="w-full flex-1" style="background-color: ${col}"></div>`;
+            });
+            wrap.innerHTML += `
+                <div class="flex-1 flex flex-col items-center gap-2 h-full justify-end cursor-pointer group relative" onclick="window.openDayInspector('${ds}')">
+                    <div class="text-[10px] text-slate-400 font-extrabold">${pct}%</div>
+                    <div class="w-full bg-slate-950 rounded-t-2xl h-36 flex flex-col justify-end p-[2px] border border-slate-800">
+                        <div class="w-full rounded-xl overflow-hidden flex flex-col-reverse gap-[1px]" style="height:${Math.max(4, pct)}%">${segs || '<div class="w-full h-full bg-transparent"></div>'}</div>
+                    </div>
+                    <span class="text-xs ${isToday ? 'text-theme-400 font-extrabold underline' : 'text-slate-400 font-medium'}">${dn}</span>
+                </div>`;
+        }
+    }
+
+    const grid = document.getElementById('monthlyHeatmapContainer');
+    if (grid) {
+        grid.innerHTML = '';
+        for (let i = 29; i >= 0; i--) {
+            const d = window.getAdjustedDate(-i);
+            const dateNum = d.getDate();
+            const ds = window.getDateString(d);
+            let c = 0, t = 0;
+            if (state.taskArchives?.[ds]?.length) {
+                const a = state.taskArchives[ds];
+                t = a.length;
+                c = a.filter(x => x.completed).length;
+            } else {
+                t = state.habits.length;
+                const rec = state.history[ds] || {};
+                state.habits.forEach(h => { if (rec[h.id]) c++; });
+            }
+            const pct = t > 0 ? Math.round((c / t) * 100) : 0;
+            let cls = 'bg-slate-900/40 border-slate-800/60 text-slate-500';
+            if (pct === 100) cls = 'bg-gradient-to-br from-theme-500 to-themesecond-400 border-theme-400 text-slate-950 shadow-[0_0_10px_rgba(var(--theme-500),0.3)] font-black';
+            else if (pct >= 50) cls = 'bg-theme-600/70 border-theme-500 text-white font-bold';
+            else if (pct > 0) cls = 'bg-theme-900/40 border-theme-800/60 text-theme-300 font-semibold';
+            grid.innerHTML += `
+                <div class="date-num aspect-square rounded-xl border ${cls} flex flex-col items-center justify-center text-xs transition-all cursor-pointer hover:scale-105 active:scale-95" onclick="window.openDayInspector('${ds}')">
+                    <span>${dateNum}</span>
+                </div>`;
+        }
+    }
+}
+
+/* ─── Badges ─── */
+function renderBadges() {
+    const c = document.getElementById('badgesContainer'); if (!c) return;
+    c.innerHTML = '';
+    let unlockedCount = 0;
+    BADGES.forEach(badge => {
+        let u = false, p = 0;
+        if (badge.reqType === 'xp') { u = state.xp >= badge.reqVal; p = Math.min(100, Math.round((state.xp / badge.reqVal) * 100)); }
+        else if (badge.reqType === 'streak') { u = state.streak >= badge.reqVal; p = Math.min(100, Math.round((state.streak / badge.reqVal) * 100)); }
+        else if (badge.reqType === 'habits') { u = state.habits.length >= badge.reqVal; p = Math.min(100, Math.round((state.habits.length / badge.reqVal) * 100)); }
+        if (u) unlockedCount++;
+        if (currentBadgeFilter !== 'all' && badge.category !== currentBadgeFilter) return;
+        c.innerHTML += `
+            <div class="p-3.5 rounded-[1.5rem] border ${u ? 'badge-unlocked' : 'badge-locked'}">
+                <div class="flex items-start justify-between gap-2 mb-2">
+                    <div class="w-9 h-9 rounded-2xl flex items-center justify-center ${u ? 'bg-amber-500 text-slate-950 shadow-md' : 'bg-slate-800 text-slate-500'}"><i class="fa-solid ${badge.icon} text-sm"></i></div>
+                    <span class="text-[9px] px-2.5 py-0.5 rounded-full font-bold uppercase ${u ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'bg-slate-800 text-slate-500'}">${u ? 'Unlocked' : 'Locked'}</span>
+                </div>
+                <div>
+                    <div class="text-xs font-extrabold ${u ? 'text-amber-300' : 'text-slate-300'}">${badge.name}</div>
+                    <div class="text-[10px] text-slate-400 mt-0.5">${badge.desc}</div>
+                </div>
+                <div class="mt-2.5 pt-2 border-t border-slate-800/60">
+                    <div class="flex justify-between text-[9px] text-slate-400 mb-1"><span>Progress</span><span>${p}%</span></div>
+                    <div class="w-full bg-slate-950 rounded-full h-1.5 overflow-hidden"><div class="${u ? 'bg-amber-400' : 'bg-theme-500/60'} h-1.5" style="width:${p}%"></div></div>
+                </div>
+            </div>`;
+    });
+    const bc = document.getElementById('badgeCountText');
+    if (bc) bc.textContent = `${unlockedCount}/${BADGES.length}`;
+}
+
+/* ─── Water & addons ─── */
+function renderWaterTracker() {
+    const today = getAdjustedTodayDateString();
+    const done = state.waterLogs[today] || 0;
+    const tgt = state.settings.waterTarget || 8;
+    const pct = Math.min(100, Math.round((done / tgt) * 100));
+    const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+    set('waterGlassesCountText', `${done}/${tgt}`);
+    set('waterVolumeText', `${(done * 0.25).toFixed(2)} L`);
+    set('waterPercentText', `${pct}%`);
+    const bar = document.getElementById('waterProgressBar'); if (bar) bar.style.width = `${pct}%`;
+    const grid = document.getElementById('waterGlassesGrid');
+    if (grid) {
+        grid.innerHTML = '';
+        for (let i = 0; i < tgt; i++) {
+            const filled = i < done;
+            grid.innerHTML += `
+                <button type="button" onclick="window.toggleWaterGlass(${i})" class="water-glass-item flex flex-col items-center p-2 rounded-2xl border transition cursor-pointer select-none ${filled ? 'bg-cyan-500/20 border-cyan-400/60 text-cyan-300 shadow-md shadow-cyan-500/20' : 'bg-slate-950/70 border-slate-800 text-slate-500'}">
+                    <i class="fa-solid fa-glass-water text-sm ${filled ? 'text-cyan-400 animate-bounce' : 'text-slate-600'}"></i>
+                    <span class="text-[9px] font-mono mt-1 font-bold">${i + 1}</span>
+                </button>`;
+        }
+    }
+}
+
+function renderVipAddons() {
+    const today = getAdjustedTodayDateString();
+    let done = 0, total = 0;
+    if (state.taskArchives?.[today]?.length) {
+        total = state.taskArchives[today].length;
+        done = state.taskArchives[today].filter(x => x.completed).length;
+    } else {
+        total = state.habits.length;
+        const rec = state.history[today] || {};
+        done = state.habits.filter(h => rec[h.id]).length;
+    }
+    const water = state.waterLogs[today] || 0;
+    const wT = state.settings.waterTarget || 8;
+    const fm = state.focusLogs[today] || 0;
+    const tp = total > 0 ? Math.round((done / total) * 100) : 0;
+    const fs = Math.min(100, Math.round(tp * 0.65 + Math.min(100, (fm / 60) * 100) * 0.35));
+    const set = (id, v) => { const e = document.getElementById(id); if (e) e.textContent = v; };
+    set('glanceTasks', `${done}/${total}`);
+    set('glanceFocus', `${fm}m`);
+    set('glanceXP', `${state.xp} XP`);
+    set('glanceWater', `${water}/${wT}`);
+    set('focusScoreBadge', `Focus ${fs}%`);
+
+    const mT = state.settings.missionTaskCount || 3;
+    const mF = state.settings.missionFocusMinutes || 60;
+    const missions = [
+        ['fa-check-circle', `Complete ${mT} targets`, done >= mT],
+        ['fa-stopwatch', `Focus for ${mF} mins`, fm >= mF],
+        ['fa-droplet', `Hydration goal (${wT})`, water >= wT && wT > 0]
+    ];
+    const ml = document.getElementById('dailyMissionList');
+    if (ml) {
+        ml.innerHTML = missions.map(m => `
+            <div class="flex items-center gap-2 ${m[2] ? 'text-theme-400' : 'text-slate-400'}">
+                <i class="fa-solid ${m[0]} w-4 text-center"></i>
+                <span class="flex-1">${m[1]}</span>
+                <span class="text-[9px] font-black">${m[2] ? 'DONE' : 'NEXT'}</span>
+            </div>`).join('');
+    }
+}
+
+/* ─── Main render ─── */
+function render() {
+    const today = getAdjustedTodayDateString();
+    const todayRecord = state.history[today] || {};
+    const todayTs = state.timestamps[today] || {};
+
+    const csEl = document.getElementById('currentStreak');
+    if (csEl) csEl.textContent = `${state.streak} Days`;
+    const unEl = document.getElementById('dashboardUserName');
+    if (unEl) unEl.textContent = state.settings.userName || 'VIP';
+
+    const jEl = document.getElementById('journalInput');
+    if (jEl && document.activeElement !== jEl) jEl.value = state.journal?.[today] || '';
+
+    const a = calculateAnalytics();
+    updatePerformanceRings(a.todayPct, a.weeklyPct, a.monthlyPct);
+    updateSmartInsights(a);
+    updateNextBestAction();
+    renderWaterTracker();
+    renderVipAddons();
+
+    const tcEl = document.getElementById('taskCountText');
+    if (tcEl) {
+        let totalToday = state.habits.length;
+        if (state.taskArchives?.[today]) totalToday = state.taskArchives[today].length;
+        tcEl.textContent = `${a.todayCompleted}/${totalToday} Completed`;
+    }
+
+    const hl = document.getElementById('habitList');
+    if (hl) {
+        hl.innerHTML = '';
+        if (state.habits.length === 0) {
+            hl.innerHTML = `
+                <div class="text-center py-8 glass-card rounded-[2rem] border-dashed border-slate-800">
+                    <i class="fa-solid fa-rocket text-2xl text-slate-600 mb-2"></i>
+                    <p class="text-xs font-semibold text-slate-400 mt-2">All systems ready. Add your first dynamic target!</p>
+                </div>`;
+        } else {
+            state.habits.forEach(habit => {
+                const isDone = !!todayRecord[habit.id];
+                const timestamp = todayTs[habit.id] || '';
+                const visual = getHabitVisualData(habit);
+                hl.innerHTML += `
+                    <div id="habit-card-${habit.id}" class="glass-card habit-card-premium p-4 rounded-[2rem] flex items-center justify-between border transition shadow-lg ${isDone ? 'habit-completed border-theme-500/40 bg-theme-950/20' : 'border-slate-800'}" style="--habit-color: ${visual.colors.a}; --habit-gradient: ${visual.colors.css}">
+                        <div class="flex items-center gap-3.5 cursor-pointer select-none flex-1 min-w-0" onclick="window.toggleHabit('${habit.id}')">
+                            <div class="habit-color-indicator" aria-hidden="true"></div>
+                            <div class="w-7 h-7 rounded-xl border flex items-center justify-center transition-colors ${isDone ? 'bg-theme-500 border-theme-400 shadow-md shadow-theme-500/40 animate-checkPop' : 'border-slate-600 hover:border-theme-400 bg-slate-950'}">
+                                <svg id="tick-icon-${habit.id}" class="w-3.5 h-3.5 ${isDone ? 'opacity-100 text-slate-950' : 'opacity-0'} transition-opacity" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5" d="M5 13l4 4L19 7"></path></svg>
+                            </div>
+                            <div class="min-w-0">
+                                <div class="flex items-center flex-wrap gap-1">
+                                    <span class="text-xs sm:text-sm font-semibold ${isDone ? 'line-through text-slate-500' : 'text-slate-200'}">${habit.name}</span>
+                                    <span class="text-[8px] uppercase tracking-wider bg-slate-800/80 ${habit.type === 'daily' ? 'text-cyan-300' : 'text-amber-300'} px-2 py-0.5 rounded-full border border-slate-700 ml-2">${habit.type === 'daily' ? 'Daily' : "Today's Class"}</span>
+                                </div>
+                                ${isDone && timestamp ? `<div class="text-[9px] text-theme-400 font-mono mt-0.5"><i class="fa-regular fa-clock"></i> Completed at ${timestamp}</div>` : ''}
+                                ${renderHabitWeek(habit, visual.colors)}
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                            <span class="text-[9px] px-2.5 py-1 rounded-xl font-bold ${isDone ? 'bg-theme-500/10 text-theme-400 border border-theme-500/20' : 'bg-slate-950 text-slate-500 border border-slate-800'}">${isDone ? '+10 XP' : 'Pending'}</span>
+                            <button type="button" onclick="event.stopPropagation(); window.deleteHabit('${habit.id}')" class="text-slate-500 hover:text-rose-400 text-xs p-1.5 transition rounded-xl hover:bg-rose-500/10 active:scale-95" title="Remove"><i class="fa-solid fa-trash"></i></button>
+                        </div>
+                    </div>`;
+            });
+        }
+    }
+
+    renderBadges();
+    renderAnalyticsGraphs();
+    updateDeadlineTracker();
+}
+
+/* ─── Live clock ─── */
+function updateLiveClock() {
+    const now = new Date();
+    const isMorning = now.getHours() >= 5 && now.getHours() < 12;
+    const isAfternoon = now.getHours() >= 12 && now.getHours() < 18;
+    const badgeStr = isMorning
+        ? '<i class="fa-regular fa-sun text-[9px]"></i> Good Morning'
+        : isAfternoon
+        ? '<i class="fa-solid fa-sun text-[9px]"></i> Good Afternoon'
+        : '<i class="fa-regular fa-moon text-[9px]"></i> Good Evening';
+    const b = document.getElementById('greetingTimeBadge');
+    if (b) b.innerHTML = badgeStr;
+
+    const t = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+    const d = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const tEl = document.getElementById('headerLiveTime'); if (tEl) tEl.textContent = t;
+    const dEl = document.getElementById('headerLiveDate'); if (dEl) dEl.textContent = d;
+}
+
+/* ─── Init ─── */
+function initializeAppUI() {
+    // Force dark mode on every load
+    document.documentElement.classList.add('dark');
+    try { localStorage.removeItem('habitTheme'); } catch (e) {}
+
+    // Load state from session (empty = fresh start)
+    loadStateFromSession();
+    postStateLoadSetup();
+
+    // Event listeners
+    const form = document.getElementById('addHabitForm');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const input = document.getElementById('habitInput');
+            const select = document.getElementById('habitTypeSelect');
+            if (input && input.value.trim()) {
+                window.addHabit(input.value.trim(), select ? select.value : 'today');
+                input.value = '';
+            }
+        });
+    }
+
+    const settingsForm = document.getElementById('settingsForm');
+    if (settingsForm) settingsForm.addEventListener('submit', saveSettings);
+
+    const timerForm = document.getElementById('timerSettingsForm');
+    if (timerForm) timerForm.addEventListener('submit', saveTimerSettings);
+
+    const timerVolume = document.getElementById('timerVolumeInput');
+    if (timerVolume) {
+        timerVolume.addEventListener('input', function() {
+            const v = document.getElementById('timerVolumeValue');
+            if (v) v.textContent = `${this.value}%`;
+        });
+    }
+
+    const cfg = getTimerSettings();
+    timerTotal = Math.max(60, Number(cfg.focusMinutes) * 60);
+    timerRemaining = timerTotal;
+    renderTimer();
+
+    updateLiveClock();
+    updateDeadlineTracker();
+    setInterval(updateLiveClock, 1000);
+    setInterval(updateDeadlineTracker, 60000);
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initializeAppUI);
+else initializeAppUI();
+</script>
+
+</body>
+  </html>
