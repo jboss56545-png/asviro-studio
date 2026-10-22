@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0a0f1c">
+<title>Ekagrata — Advanced Focus System</title>
+<script src="https://www.youtube.com/iframe_api" async></script>
+<style>
+:root{--bg:#0a0f1c;--ink:#fff;--muted:#94a3b8;--line:rgba(255,255,255,.11);--glass:rgba(15,23,42,.88);--indigo:#6d7cff;--cyan:#2ee6d6;--violet:#b06bff;--shadow:0 18px 40px -15px #000a;--radius:24px;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;min-height:100vh;min-height:100dvh;background:radial-gradient(circle at 50% 0,#1e293b 0,#0a0f1c 60%,#020308 100%);color:var(--ink);line-height:1.45;padding-bottom:calc(20px + env(safe-area-inset-bottom));overflow-x:hidden}button,input,select,textarea{font:inherit}button{touch-action:manipulation}.bg-orbs{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none}.bg-orbs span{position:absolute;width:300px;height:300px;border-radius:50%;filter:blur(80px);opacity:.2;animation:float 24s ease-in-out infinite}.bg-orbs span:first-child{background:var(--indigo);top:-100px;left:-100px}.bg-orbs span:last-child{background:var(--cyan);bottom:-100px;right:-100px;animation-delay:-10s}@keyframes float{50%{transform:translate(30px,25px) scale(1.1)}}@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+.topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;background:#0a0f1cf2;border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}.brand{display:flex;align-items:center;gap:10px;min-width:0}.brand-mark{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--indigo),var(--cyan));display:grid;place-items:center;font-weight:900;color:#06101c}.brand h1{font-size:1.05rem;margin:0;font-weight:850}.brand p{font-size:.65rem;color:var(--muted);margin:1px 0 0}.top-actions{display:flex;align-items:center;gap:6px}.status{font-size:.68rem;font-weight:800;padding:6px 12px;border:1px solid var(--line);border-radius:99px;white-space:nowrap}.status.live{background:var(--cyan);color:#06101c}.icon-btn{width:38px;height:38px;border:1px solid var(--line);background:#ffffff09;color:white;border-radius:50%;cursor:pointer;transition:all .2s}.icon-btn:hover,.btn:hover{filter:brightness(1.12);transform:translateY(-1px)}.nav-wrap{position:sticky;top:60px;z-index:20;background:#0f172ae8;border-bottom:1px solid var(--line);overflow:auto;scrollbar-width:none}.nav-wrap::-webkit-scrollbar{display:none}.nav{display:flex;position:relative;width:max-content;min-width:100%;max-width:850px;margin:auto}.nav button{border:0;background:none;color:var(--muted);font-size:.78rem;font-weight:750;padding:14px 17px;cursor:pointer;white-space:nowrap;transition:color .2s}.nav button.active{color:#fff}.nav-line{position:absolute;bottom:0;height:3px;background:var(--cyan);border-radius:3px 3px 0 0;box-shadow:0 0 10px #2ee6d6aa;transition:transform .22s,width .22s;pointer-events:none}main{max-width:900px;margin:auto;padding:18px 14px;min-height:70vh}.tab{display:none;gap:14px;flex-direction:column}.tab.active{display:flex;animation:enter .3s cubic-bezier(0.2,0.8,0.2,1)}@keyframes enter{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}.panel{background:var(--glass);border:1px solid var(--line);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);min-width:0;transition:transform .2s,box-shadow .2s}.panel:hover{transform:translateY(-2px);box-shadow:0 22px 45px -15px #000c}.panel-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}.panel-head h2{font-size:1rem;margin:0;font-weight:850}.muted{color:var(--muted)}.small{font-size:.75rem}.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:1px solid var(--line);border-radius:99px;padding:11px 18px;background:#ffffff09;color:#fff;font-weight:750;font-size:.82rem;cursor:pointer;text-decoration:none;min-height:42px;transition:all .2s}.primary{background:linear-gradient(135deg,var(--indigo),var(--cyan));color:#07121d;border-color:transparent;box-shadow:0 4px 15px rgba(46,230,214,.2)}.primary:hover{box-shadow:0 6px 20px rgba(46,230,214,.4);transform:translateY(-2px)}.ghost{background:transparent}.danger{border-color:#fb718555;color:#fecaca}.wide{width:100%}.btn:disabled{opacity:.45;cursor:not-allowed}.welcome h2{font-size:1.35rem;margin:0 0 6px}.chips{display:flex;gap:7px;flex-wrap:wrap;margin:10px 0 16px}.chip{font-size:.68rem;padding:5px 12px;border:1px solid var(--line);background:#ffffff0b;border-radius:99px;color:#dbeafe}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.activity{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:5px;border:1px solid var(--line);border-radius:20px;background:#ffffff05;color:#fff;padding:14px;cursor:pointer;min-height:82px;transition:all .2s}.activity:hover{background:#ffffff0a;transform:translateY(-2px)}.activity.selected{border-color:#2ee6d699;background:#2ee6d61b;box-shadow:0 0 15px rgba(46,230,214,.1)}.activity strong{font-size:.8rem}.activity span{font-size:.67rem;color:var(--muted)}.field{display:flex;flex-direction:column;gap:6px;margin:12px 0;font-size:.74rem;color:var(--muted);font-weight:700}input[type=text],input[type=number],input[type=url],select,textarea{width:100%;min-width:0;background:#020617aa;color:#fff;border:1px solid var(--line);border-radius:16px;padding:11px 16px;outline:none;transition:border-color .2s}select option{background:#0f172a;color:#fff}textarea{resize:vertical;min-height:120px}input:focus,select:focus,textarea:focus,button:focus-visible{outline:2px solid #2ee6d688;outline-offset:2px;border-color:var(--cyan)}.seg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin:10px 0}.seg button{padding:10px 5px;border-radius:14px;border:1px solid var(--line);background:#ffffff06;color:var(--muted);font-size:.73rem;font-weight:750;cursor:pointer;transition:all .2s}.seg button.active{color:#fff;background:#2ee6d61e;border-color:#2ee6d677;box-shadow:0 0 10px rgba(46,230,214,.15)}.slider-row{display:grid;grid-template-columns:65px minmax(75px,1fr) 42px;align-items:center;gap:10px;margin:13px 0}.slider-row label{font-size:.72rem;font-weight:750;color:var(--muted)}.slider-row output{font-size:.7rem;color:#e2e8f0;text-align:right;font-variant-numeric:tabular-nums}input[type=range]{width:100%;accent-color:var(--cyan)}.viz{width:100%;height:90px;display:block;background:#02061780;border:1px solid var(--line);border-radius:16px;margin-bottom:15px}.ring-wrap{position:relative;width:min(190px,60vw);aspect-ratio:1;margin:12px auto 20px}.ring{width:100%;height:100%;transform:rotate(-90deg)}.ring-bg,.ring-fg{fill:none;stroke-width:7}.ring-bg{stroke:#ffffff17}.ring-fg{stroke:url(#ringGrad);stroke-linecap:round;stroke-dasharray:339.292;stroke-dashoffset:0;transition:stroke-dashoffset .25s}.ring-text{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}.timer-display{font-size:clamp(2rem,8vw,2.5rem);font-weight:900;font-variant-numeric:tabular-nums}.timer-state{font-size:.68rem;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.08em}.metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.metric{padding:16px;border-radius:20px;background:#ffffff06;text-align:center}.metric strong{display:block;font-size:1.35rem;color:var(--cyan)}.metric span{font-size:.63rem;color:var(--muted);letter-spacing:.06em}.history-item{display:flex;justify-content:space-between;gap:10px;padding:12px 16px;border-radius:16px;background:#ffffff06;font-size:.76rem;transition:background .2s}.history-item:hover{background:#ffffff0c}.history-item span:last-child{color:var(--cyan);font-weight:800;white-space:nowrap}.notice{font-size:.7rem;color:var(--muted);line-height:1.55;border-left:3px solid var(--cyan);padding-left:12px;margin:10px 0;padding-top:4px;padding-bottom:4px}.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}.inline{display:flex;gap:8px;align-items:center}.inline>*{min-width:0}.checkline{display:flex;gap:8px;align-items:center;justify-content:center;color:var(--muted);font-size:.75rem;margin:10px 0}.checkline input{accent-color:var(--cyan)}#ytPlayerContainer{position:relative;width:100%;aspect-ratio:16/9;background:#000;border-radius:20px;overflow:hidden;display:none}#ytPlayerContainer iframe{position:absolute;inset:0;width:100%;height:100%}.pill{font-size:.65rem;padding:6px 12px;border:1px solid var(--line);border-radius:99px;color:var(--muted)}.reco{display:none;margin-top:12px;background:#2ee6d609;border-color:#2ee6d644;border-radius:20px}.reco-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.reco-grid b{font-size:.82rem}.reco-grid small{color:var(--muted);font-size:.6rem}.modal{position:fixed;inset:0;z-index:80;display:none;align-items:center;justify-content:center;background:#000c;padding:18px;backdrop-filter:blur(5px)}.modal.open{display:flex}.modal-card{width:100%;max-width:430px;background:#0f172a;border:1px solid var(--line);border-radius:28px;padding:24px;max-height:85dvh;overflow:auto;box-shadow:0 20px 50px rgba(0,0,0,0.8);animation:enter .2s ease}.modal-card h2{margin:0 0 8px;font-size:1.05rem}.toast-wrap{position:fixed;bottom:calc(18px + env(safe-area-inset-bottom));left:10px;right:10px;z-index:100;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none}.toast{background:#1e293b;border:1px solid var(--line);color:#fff;padding:11px 20px;border-radius:99px;font-size:.78rem;box-shadow:var(--shadow);max-width:95%;animation:enter .2s ease}.zen-mode .topbar,.zen-mode .nav-wrap,.zen-mode .bg-orbs{display:none}.zen-mode main{max-width:560px;min-height:85dvh;display:flex;justify-content:center;flex-direction:column}.zen-mode .tab:not(.active){}.zen-mode .tab.active>.panel:not(.zen-keep){display:none}.zen-mode .tab.active .zen-keep{display:block}.footer-note{text-align:center;color:#64748b;font-size:.65rem;padding:8px 0 18px}
+.binaural-header{display:flex;justify-content:space-between;align-items:center;background:rgba(255,255,255,0.03);padding:12px 16px;border-radius:16px;border:1px solid var(--line);margin-bottom:16px}.binaural-header h3{margin:0;font-size:0.95rem}.toggle-switch{position:relative;display:inline-block;width:48px;height:26px}.toggle-switch input{opacity:0;width:0;height:0}.slider-toggle{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:rgba(255,255,255,0.2);transition:.3s;border-radius:34px}.slider-toggle:before{position:absolute;content:"";height:20px;width:20px;left:3px;bottom:3px;background-color:white;transition:.3s;border-radius:50%}input:checked+.slider-toggle{background-color:var(--cyan)}input:checked+.slider-toggle:before{transform:translateX(22px)}.binaural-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;transition:opacity 0.3s,filter 0.3s;pointer-events:none;opacity:0.4;filter:grayscale(0.8)}.binaural-grid.active{pointer-events:auto;opacity:1;filter:grayscale(0)}.binaural-card{background:rgba(255,255,255,0.03);border:1px solid var(--line);border-radius:18px;padding:14px;cursor:pointer;text-align:left;transition:all 0.3s cubic-bezier(0.2,0.8,0.2,1)}.binaural-card:hover{background:rgba(255,255,255,0.08)}.binaural-card.selected{background:rgba(46,230,214,0.15);border-color:rgba(46,230,214,0.6);box-shadow:0 0 20px rgba(46,230,214,0.2)}.binaural-card .freq-title{display:block;font-size:0.85rem;font-weight:800;color:#fff;margin-bottom:4px}.binaural-card .freq-desc{display:block;font-size:0.65rem;color:var(--muted);line-height:1.3}.binaural-card.selected .freq-title{color:var(--cyan)}@keyframes softPulse{0%{box-shadow:0 0 0 0 rgba(46,230,214,0.4)}70%{box-shadow:0 0 0 10px rgba(46,230,214,0)}100%{box-shadow:0 0 0 0 rgba(46,230,214,0)}}#startSessionBtn{animation:softPulse 2.5s infinite}@media(min-width:600px){main{padding:24px 20px}.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.panel{padding:24px}}@media(max-width:380px){.topbar{padding-left:9px;padding-right:9px}.brand p{display:none}.status{font-size:.6rem;padding:5px 9px}.icon-btn{width:34px;height:34px}.panel{padding:16px}.nav button{padding:13px 13px}.slider-row{grid-template-columns:55px minmax(60px,1fr) 36px;gap:7px}.binaural-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="bg-orbs" aria-hidden="true"><span></span><span></span></div>
+<header class="topbar">
+ <div class="brand"><div class="brand-mark" aria-hidden="true">E</div><div><h1>Ekagrata</h1><p>Advanced Focus System</p></div></div>
+ <div class="top-actions"><span id="sessionStatus" class="status" aria-live="polite">Ready</span><button id="zenBtn" class="icon-btn" aria-label="Toggle Zen Mode" title="Zen Mode">◉</button><button id="settingsBtn" class="icon-btn" aria-label="Settings" title="Settings">⚙</button></div>
+</header>
+<div class="nav-wrap" id="mainNav"><nav class="nav" aria-label="Main navigation"><span class="nav-line"></span><button class="active" data-target="tab-dashboard">Dashboard</button><button data-target="tab-audio">Audio</button><button data-target="tab-timer">Timer</button><button data-target="tab-lecture">Lecture</button><button data-target="tab-stats">Stats</button></nav></div>
+<main>
+
+<section id="tab-dashboard" class="tab active">
+ <div class="panel welcome zen-keep"><h2 id="welcomeHeading">Welcome back.</h2><p class="muted small">Create a calm environment. Focus on one thing at a time.</p><div class="chips"><span class="chip" id="welcomeActivity">Deep Study</span><span class="chip" id="welcomeSound">Rain</span></div><button id="startSessionBtn" class="btn primary wide">▶ Start Focus Session</button></div>
+ <div class="panel"><div class="panel-head"><h2>Activity & Recommendation</h2><span class="pill">Rule-based</span></div><div id="activityGrid" class="grid"></div><label class="field">What are you working on?<input type="text" id="taskDesc" maxlength="160" placeholder="e.g. revise electrostatics"></label><div class="field">Current focus feeling</div><div class="seg" id="stimLevel"><button data-stim="low">Low</button><button data-stim="medium" class="active">Medium</button><button data-stim="high">High</button></div><button id="recoBtn" class="btn ghost wide">Get a recommendation</button><div id="recoCard" class="panel reco"><div class="reco-grid"><div><small>SOUND</small><br><b id="recoSound">Rain</b></div><div><small>VOLUME</small><br><b id="recoVolume">45%</b></div><div><small>SESSION</small><br><b id="recoDuration">25 min</b></div></div><p class="small" style="margin:12px 0"><b>Why this suggestion?</b> <span id="recoReasons"></span></p><button id="acceptRecoBtn" class="btn primary wide">Apply suggestion</button></div></div>
+ <div class="panel"><div class="panel-head"><h2>Quick controls</h2></div><div class="two-col"><button class="btn" data-goto="tab-audio">♫ Audio mixer</button><button class="btn" data-goto="tab-timer">◷ Timer & notes</button><button class="btn" data-goto="tab-lecture">▷ Lecture mode</button><button class="btn" data-goto="tab-stats">▥ Session stats</button></div></div>
+</section>
+
+<section id="tab-audio" class="tab">
+ <div class="panel">
+  <div class="panel-head"><h2>Ambient Sound Mixer</h2><span id="audioBadge" class="pill">Stopped</span></div>
+  <canvas id="viz" class="viz" aria-label="Audio spectrum visualizer"></canvas>
+  <p class="notice">Sounds are generated locally using the Web Audio API.</p>
+  <label class="field">Layer 1 sound<select id="layer1Select"><option value="rain">Rain-like noise</option><option value="forest">Forest-like ambience</option><option value="ocean">Ocean-like ambience</option><option value="brown">Brown noise</option><option value="white">White noise</option><option value="fireplace">Fireplace-like ambience</option><option value="none">Off</option></select></label>
+  <div class="slider-row"><label for="layer1Vol">Layer 1</label><input id="layer1Vol" type="range" min="0" max="100" value="45"><output id="layer1Out">45%</output></div>
+  <label class="field">Layer 2 sound<select id="layer2Select"><option value="none">Off</option><option value="rain">Rain-like noise</option><option value="forest">Forest-like ambience</option><option value="ocean">Ocean-like ambience</option><option value="brown">Brown noise</option><option value="white">White noise</option><option value="fireplace">Fireplace-like ambience</option></select></label>
+  <div class="slider-row"><label for="layer2Vol">Layer 2</label><input id="layer2Vol" type="range" min="0" max="100" value="0"><output id="layer2Out">0%</output></div>
+  <div class="slider-row"><label for="masterVol">Master</label><input id="masterVol" type="range" min="0" max="100" value="45"><output id="masterOut">45%</output></div>
+  <div class="two-col"><button id="playAudioBtn" class="btn primary">▶ Play mix</button><button id="stopAudioBtn" class="btn ghost">■ Stop audio</button></div>
+  <div class="two-col" style="margin-top:9px"><button class="btn" data-preset="rain">Rain preset</button><button class="btn" data-preset="deep">Deep work preset</button><button class="btn" data-preset="nature">Nature preset</button><button id="saveMixBtn" class="btn">Save current mix</button></div>
+  <label class="field">Saved mix<select id="savedMixSelect"><option value="">Choose saved mix</option></select></label><button id="loadMixBtn" class="btn ghost wide">Load saved mix</button>
+ </div>
+ <div class="panel">
+  <div class="binaural-header"><h3>Binaural Beats</h3><label class="toggle-switch"><input type="checkbox" id="binauralMasterToggle"><span class="slider-toggle"></span></label></div>
+  <p class="notice">Enable this to generate a low-frequency beat. Requires stereo headphones. Stop if it causes discomfort.</p>
+  <div class="binaural-grid" id="binauralGrid">
+    <button type="button" class="binaural-card selected" data-freq="2" data-label="delta"><span class="freq-title">Delta (2 Hz)</span><span class="freq-desc">Deep Sleep / Recovery</span></button>
+    <button type="button" class="binaural-card" data-freq="6" data-label="theta"><span class="freq-title">Theta (6 Hz)</span><span class="freq-desc">Deep Relaxation</span></button>
+    <button type="button" class="binaural-card" data-freq="10" data-label="alpha"><span class="freq-title">Alpha (10 Hz)</span><span class="freq-desc">Relaxed Focus / Flow</span></button>
+    <button type="button" class="binaural-card" data-freq="15" data-label="beta"><span class="freq-title">Beta (15 Hz)</span><span class="freq-desc">Active Concentration</span></button>
+    <button type="button" class="binaural-card" data-freq="40" data-label="gamma"><span class="freq-title">Gamma (40 Hz)</span><span class="freq-desc">Peak Cognition</span></button>
+  </div>
+  <div class="slider-row" style="margin-top:16px"><label for="binauralVol">Beat level</label><input type="range" id="binauralVol" min="0" max="100" value="15"><output id="binauralOut">15%</output></div>
+ </div>
+</section>
+
+<section id="tab-timer" class="tab">
+ <div class="panel zen-keep" style="text-align:center"><div class="panel-head" style="justify-content:center"><h2 id="timerPhaseLabel">Focus session</h2></div><div class="ring-wrap"><svg class="ring" viewBox="0 0 120 120" aria-hidden="true"><defs><linearGradient id="ringGrad"><stop offset="0%" stop-color="#2ee6d6"/><stop offset="100%" stop-color="#b06bff"/></linearGradient></defs><circle class="ring-bg" cx="60" cy="60" r="54"/><circle class="ring-fg" id="ringFg" cx="60" cy="60" r="54"/></svg><div class="ring-text"><div id="timerDisplay" class="timer-display">25:00</div><div id="timerState" class="timer-state">Ready</div></div></div><div class="seg" id="pomodoroMode"><button data-p="25" class="active">25 min</button><button data-p="50">50 min</button><button data-p="custom">Custom</button></div><div id="customTimerWrap" style="display:none"><label class="field">Custom focus duration (minutes)<input id="customMinutes" type="number" min="1" max="180" value="35"></label><button id="applyCustomBtn" class="btn wide">Apply custom duration</button></div><div class="two-col"><button id="timerPrimary" class="btn primary">Start</button><button id="timerReset" class="btn ghost">Reset</button></div><button id="timerSkip" class="btn ghost wide" style="margin-top:8px">Skip phase</button><label class="checkline"><input type="checkbox" id="autoNext"> Auto-start next phase</label></div>
+ <div class="panel"><div class="panel-head"><h2>Study Notes</h2><span id="noteStatus" class="pill">Saved locally</span></div><textarea id="notesArea" maxlength="30000" placeholder="Write formulas, doubts, or concepts here…"></textarea><div class="inline" style="justify-content:space-between;margin-top:9px"><span class="muted small">Autosaves on this device</span><button id="exportNoteBtn" class="btn ghost">Export TXT</button></div></div>
+</section>
+
+<section id="tab-lecture" class="tab">
+ <div class="panel"><div class="panel-head"><h2>Lecture Mode</h2><span class="pill">YouTube</span></div><p class="notice">Paste a public YouTube video URL. When playback starts, Ekagrata's ambient mix is lowered.</p><div class="inline"><input type="text" id="ytUrlInput" placeholder="YouTube video URL or ID" aria-label="YouTube URL"><button id="ytLoadBtn" class="btn primary">Load</button></div><div id="ytPlayerContainer" style="margin-top:12px"><div id="ytPlayer"></div></div><div class="two-col" style="margin-top:10px"><button id="duckToggleBtn" class="btn ghost">Ambient ducking: On</button><a href="https://m.youtube.com" target="_blank" rel="noopener noreferrer" class="btn ghost">Open YouTube</a></div><p id="ytStatus" class="small muted" style="margin-top:9px" aria-live="polite">No video loaded.</p></div>
+</section>
+
+<section id="tab-stats" class="tab">
+ <div class="panel"><div class="panel-head"><h2>Session Insights</h2><button id="exportHistoryBtn" class="btn ghost btn-sm">Export CSV</button></div><div class="metrics"><div class="metric"><strong id="statSessions">0</strong><span>COMPLETED FOCUS SESSIONS</span></div><div class="metric"><strong id="statMinutes">0</strong><span>COMPLETED FOCUS MINUTES</span></div></div><div style="margin-top:15px"><div class="panel-head"><h2>Last 7 days</h2><span class="pill">Completed minutes</span></div><div id="weeklyChart" style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:7px;align-items:end;height:130px;padding:8px 0"></div></div><div class="panel-head" style="margin-top:16px"><h2>Recent sessions</h2><button id="clearHistoryBtn" class="btn danger btn-sm">Clear history</button></div><ul id="historyList" style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:8px"></ul><p id="historyEmpty" class="muted small">Your completed focus sessions will appear here.</p></div>
+</section>
+</main>
+
+<div class="footer-note">Ekagrata stores notes, settings and session history locally on this device. It does not claim to measure brainwaves.</div>
+
+<div id="settingsModal" class="modal" role="dialog" aria-modal="true"><div class="modal-card"><div class="panel-head"><h2>Settings & data</h2><button id="closeSettings" class="icon-btn">×</button></div><label class="field">Your display name<input id="userName" type="text" maxlength="40"></label><label class="field">Short break length (minutes)<input id="breakMinutes" type="number" min="1" max="30" value="5"></label><label class="field">Long break every (focus sessions)<input id="longBreakEvery" type="number" min="2" max="8" value="4"></label><label class="field">Long break length (minutes)<input id="longBreakMinutes" type="number" min="5" max="45" value="15"></label><label class="checkline" style="justify-content:flex-start"><input type="checkbox" id="autoAudio"> Start ambient audio when focus starts</label><button id="saveSettings" class="btn primary wide">Save settings</button><hr style="border:0;border-top:1px solid var(--line);margin:18px 0"><button id="backupData" class="btn wide">Download data backup (JSON)</button><label class="field">Restore backup JSON<input id="restoreFile" type="file" accept=".json,application/json"></label><button id="restoreData" class="btn ghost wide">Restore backup</button></div></div>
+
+<div id="toasts" class="toast-wrap" aria-live="polite"></div>
+
+<script>
+(() => {
+'use strict';
+
+// ★ NEW — AUTO RESET (10 MINUTES) =========================================
+const AUTO_RESET_MS = 10 * 60 * 1000;
+const EK_RESET_KEY = 'ekagrataResetAt';
+const EK_ALL_KEYS = [
+  'ekagrata_history_v2',
+  'ekagrata_notes_v2',
+  'ekagrata_settings_v2',
+  'ekagrata_mixes_v2',
+  'ekagrata_timer_checkpoint_v2',
+  'ekagrata_notes'
+];
+
+(function bootstrapAutoReset() {
+  const resetAt = parseInt(localStorage.getItem(EK_RESET_KEY) || '0');
+  if (resetAt && Date.now() >= resetAt) {
+    EK_ALL_KEYS.forEach(k => localStorage.removeItem(k));
+    localStorage.removeItem(EK_RESET_KEY);
+  }
+  localStorage.setItem(EK_RESET_KEY, String(Date.now() + AUTO_RESET_MS));
+})();
+
+let __ekResetInProgress = false;
+function monitorEkReset() {
+  if (__ekResetInProgress) return;
+  const resetAt = parseInt(localStorage.getItem(EK_RESET_KEY) || '0');
+  if (resetAt && Date.now() >= resetAt) {
+    __ekResetInProgress = true;
+    EK_ALL_KEYS.forEach(k => localStorage.removeItem(k));
+    localStorage.removeItem(EK_RESET_KEY);
+    location.reload();
+  }
+}
+setInterval(monitorEkReset, 2000);
+
+function addEkResetIndicator() {
+  if (document.getElementById('ekAutoResetBadge')) return;
+  const el = document.createElement('div');
+  el.id = 'ekAutoResetBadge';
+  el.style.cssText = 'position:fixed;top:8px;right:8px;z-index:99998;'
+    + 'background:linear-gradient(180deg,rgba(224,64,64,0.95),rgba(100,20,20,0.95));'
+    + 'color:#fff;font-family:Inter,system-ui,sans-serif;font-size:0.7rem;letter-spacing:1.5px;'
+    + 'padding:7px 12px;border-radius:99px;border:1px solid #ff6060;'
+    + 'pointer-events:none;font-weight:800;'
+    + 'box-shadow:0 0 20px rgba(224,64,64,0.6);';
+  document.body.appendChild(el);
+  setInterval(function () {
+    const resetAt = parseInt(localStorage.getItem(EK_RESET_KEY) || '0');
+    if (!resetAt) { el.textContent = '⏱ RESETTING...'; return; }
+    const remaining = Math.max(0, Math.ceil((resetAt - Date.now()) / 1000));
+    const m = Math.floor(remaining / 60);
+    const s = remaining % 60;
+    el.textContent = '⏱ RESET ' + m + ':' + String(s).padStart(2, '0');
+  }, 500);
+}
+// ==========================================================================
+
+const $ = id => document.getElementById(id);
+const STORAGE = {history:'ekagrata_history_v2',notes:'ekagrata_notes_v2',settings:'ekagrata_settings_v2',mixes:'ekagrata_mixes_v2',checkpoint:'ekagrata_timer_checkpoint_v2'};
+const SOUND_LABELS={rain:'Rain-like ambience',forest:'Forest-like ambience',ocean:'Ocean-like ambience',brown:'Brown noise',white:'White noise',fireplace:'Fireplace-like ambience',none:'Off'};
+const ACTIVITIES=[
+ {id:'study',name:'Deep Study',desc:'Reading, revision, problem-solving',icon:'◈'},
+ {id:'lecture',name:'Lecture',desc:'Classes and recorded lessons',icon:'▷'},
+ {id:'writing',name:'Writing',desc:'Notes, essays and answers',icon:'✎'},
+ {id:'coding',name:'Coding',desc:'Building and debugging',icon:'⌘'},
+ {id:'reading',name:'Reading',desc:'Books and research',icon:'▤'},
+ {id:'relax',name:'Relax',desc:'A gentle reset',icon:'☾'}
+];
+const DEFAULT_SETTINGS={name:'',breakMinutes:5,longBreakEvery:4,longBreakMinutes:15,autoAudio:false,ducking:true};
+const safeParse=(key,fallback)=>{try{const v=JSON.parse(localStorage.getItem(key));return v??fallback}catch{return fallback}};
+const clamp=(n,min,max)=>Math.min(max,Math.max(min,Number(n)||0));
+const App={
+ activity:'study',stim:'medium',ducking:false,
+ binauralEnabled: false,
+ binauralFreq: 2,
+ settings:{...DEFAULT_SETTINGS,...safeParse(STORAGE.settings,{})},
+ history:Array.isArray(safeParse(STORAGE.history,[]))?safeParse(STORAGE.history,[]):[],
+ mixes:safeParse(STORAGE.mixes,{}),
+ timer:{phase:'focus',running:false,timeLeft:1500,total:1500,endAt:0,interval:null,focusMinutes:25,focusCount:0},
+ audio:{context:null,master:null,layer1:null,layer2:null,binaural:null,analyser:null,nodes:{},isPlaying:false,raf:0,duckFactor:1}
+};
+function persist(key,value){try{localStorage.setItem(key,JSON.stringify(value));return true}catch(e){toast('Could not save: device storage may be full or unavailable.');return false}}
+function toast(message){const el=document.createElement('div');el.className='toast';el.textContent=message;$('toasts').appendChild(el);setTimeout(()=>el.remove(),3200)}
+function switchTab(id){document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active',t.id===id));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.target===id));moveNavLine();if(id==='tab-audio')resizeViz();if(id==='tab-stats')renderHistory();if(document.body.classList.contains('zen-mode')){document.body.classList.remove('zen-mode');toast('Zen Mode closed to navigate.')}window.scrollTo({top:0,behavior:'smooth'})}
+function moveNavLine(){const active=document.querySelector('.nav button.active'),line=document.querySelector('.nav-line');if(!active)return;line.style.width=active.offsetWidth+'px';line.style.transform=`translateX(${active.offsetLeft}px)`}
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.target)));
+document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>switchTab(b.dataset.goto)));
+window.addEventListener('resize',moveNavLine);
+function renderActivities(){const grid=$('activityGrid');grid.innerHTML='';ACTIVITIES.forEach(a=>{const b=document.createElement('button');b.type='button';b.className='activity'+(a.id===App.activity?' selected':'');b.dataset.act=a.id;b.innerHTML=`<span aria-hidden="true">${a.icon}</span><strong>${a.name}</strong><span>${a.desc}</span>`;b.addEventListener('click',()=>{App.activity=a.id;grid.querySelectorAll('.activity').forEach(x=>x.classList.toggle('selected',x===b));$('welcomeActivity').textContent=a.name;});grid.appendChild(b)})}
+
+function initAudio(){if(App.audio.context)return true;const AC=window.AudioContext||window.webkitAudioContext;if(!AC){toast('Web Audio is not supported in this browser.');return false}try{const c=new AC();App.audio.context=c;App.audio.master=c.createGain();App.audio.layer1=c.createGain();App.audio.layer2=c.createGain();App.audio.binaural=c.createGain();App.audio.analyser=c.createAnalyser();App.audio.analyser.fftSize=256;App.audio.master.connect(App.audio.analyser);App.audio.analyser.connect(c.destination);App.audio.layer1.connect(App.audio.master);App.audio.layer2.connect(App.audio.master);App.audio.binaural.connect(App.audio.master);syncVolumes();return true}catch(e){toast('Could not start audio. Tap Play again or check browser support.');return false}}
+function stopNodes(key){const arr=App.audio.nodes[key]||[];arr.forEach(n=>{try{if(n.stop)n.stop()}catch{}try{n.disconnect()}catch{}});App.audio.nodes[key]=[]}
+function makeNoiseBuffer(kind){const c=App.audio.context,size=c.sampleRate*2,buffer=c.createBuffer(1,size,c.sampleRate),d=buffer.getChannelData(0);let last=0,b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;for(let i=0;i<size;i++){const w=Math.random()*2-1;if(kind==='white')d[i]=w;else if(kind==='brown'||kind==='rain'){last=(last+0.02*w)/1.02;d[i]=last*3.2}else{b0=.99886*b0+w*.0555179;b1=.99332*b1+w*.0750759;b2=.969*w+w*.1538520;b3=.8665*b3+w*.3104856;b4=.55*b4+w*.5329522;b5=-.7616*b5-w*.0168980;d[i]=(b0+b1+b2+b3+b4+b5+b6+w*.5362)*.11;b6=w*.115926}}return buffer}
+function playLayer(type,key){const dest=key==='layer1'?App.audio.layer1:App.audio.layer2;stopNodes(key);if(!type||type==='none')return;const c=App.audio.context,src=c.createBufferSource();src.buffer=makeNoiseBuffer(type);src.loop=true;const filter=c.createBiquadFilter();filter.type=type==='rain'?'highpass':(type==='ocean'||type==='fireplace'?'lowpass':'allpass');filter.frequency.value=type==='rain'?1400:type==='ocean'?450:type==='fireplace'?700:1000;const gain=c.createGain();gain.gain.value=1;src.connect(filter);filter.connect(gain);gain.connect(dest);src.start();App.audio.nodes[key]=[src,filter,gain]}
+
+function startBinauralNode() {
+  stopNodes('binaural');
+  if (!App.binauralEnabled || !App.audio.context) return;
+  const c = App.audio.context;
+  const merger = c.createChannelMerger(2);
+  const left = c.createOscillator();
+  const right = c.createOscillator();
+  left.type = right.type = 'sine';
+  left.frequency.value = 200;
+  right.frequency.value = 200 + App.binauralFreq;
+  left.connect(merger, 0, 0);
+  right.connect(merger, 0, 1);
+  merger.connect(App.audio.binaural);
+  left.start();
+  right.start();
+  App.audio.nodes.binaural = [left, right, merger];
+}
+
+function rampGain(node,target,seconds=.15){if(!node||!App.audio.context)return;const p=node.gain;p.cancelScheduledValues(App.audio.context.currentTime);p.setTargetAtTime(target,App.audio.context.currentTime,Math.max(.02,seconds/3))}
+function syncVolumes(){if(!App.audio.context)return;rampGain(App.audio.layer1,Number($('layer1Vol').value)/100);rampGain(App.audio.layer2,Number($('layer2Vol').value)/100);rampGain(App.audio.binaural,Number($('binauralVol').value)/100);const base=Number($('masterVol').value)/100;App.audio.duckFactor=App.ducking&&App.settings.ducking?.2:1;rampGain(App.audio.master,base*App.audio.duckFactor)}
+
+function startAudio(){
+  if(!initAudio())return;
+  const c=App.audio.context;
+  if(c.state==='suspended')c.resume().catch(()=>toast('Tap Play again to allow audio playback.'));
+  playLayer($('layer1Select').value,'layer1');
+  playLayer($('layer2Select').value,'layer2');
+  if (App.binauralEnabled) {
+    startBinauralNode();
+  } else {
+    stopNodes('binaural');
+  }
+  App.audio.isPlaying=true;
+  syncVolumes();
+  $('audioBadge').textContent='Playing';
+  $('playAudioBtn').textContent='↻ Restart mix';
+  resizeViz();
+  startViz();
+  if('mediaSession'in navigator&&'MediaMetadata'in window){
+    try{
+      navigator.mediaSession.metadata=new MediaMetadata({title:'Ekagrata Focus',artist:'Ambient mix'});
+      navigator.mediaSession.setActionHandler('pause',stopAudio)
+    }catch{}
+  }
+}
+
+function stopAudio(){
+  if(App.audio.context){
+    ['layer1','layer2','binaural'].forEach(stopNodes);
+    rampGain(App.audio.master,0,.2);
+    setTimeout(()=>{if(App.audio.context)rampGain(App.audio.master,Number($('masterVol').value)/100,0)},500);
+  }
+  App.audio.isPlaying=false;
+  $('audioBadge').textContent='Stopped';
+  $('playAudioBtn').textContent='▶ Play mix';
+  cancelAnimationFrame(App.audio.raf);
+  App.audio.raf=0;
+  const c=$('viz').getContext('2d');
+  c.clearRect(0,0,$('viz').width,$('viz').height);
+}
+
+function startViz(){
+  cancelAnimationFrame(App.audio.raf);
+  const draw=()=>{
+    if(!App.audio.isPlaying||document.hidden||!App.audio.analyser){App.audio.raf=0;return}
+    const canvas=$('viz'),c=canvas.getContext('2d'),d=new Uint8Array(App.audio.analyser.frequencyBinCount);
+    App.audio.analyser.getByteFrequencyData(d);
+    c.clearRect(0,0,canvas.width,canvas.height);
+    const barW=canvas.width/d.length;
+    for(let i=0;i<d.length;i++){
+      const h=(d[i]/255)*canvas.height;
+      c.fillStyle=`rgba(46,230,214,${.35+d[i]/400})`;
+      c.fillRect(i*barW,canvas.height-h,Math.max(1,barW-2),h)
+    }
+    App.audio.raf=requestAnimationFrame(draw)
+  };
+  App.audio.raf=requestAnimationFrame(draw)
+}
+
+function resizeViz(){
+  const c=$('viz');
+  if(!c)return;
+  const r=c.getBoundingClientRect(),dpr=Math.min(window.devicePixelRatio||1,2);
+  if(r.width){
+    c.width=Math.round(r.width*dpr);
+    c.height=Math.round(r.height*dpr);
+    const x=c.getContext('2d');
+    x.setTransform(dpr,0,0,dpr,0,0)
+  }
+  if(App.audio.isPlaying)startViz()
+}
+
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden)cancelAnimationFrame(App.audio.raf);
+  else if(App.audio.isPlaying)startViz()
+});
+
+function preset(name){
+  const p={rain:{one:'rain',two:'none',v1:48,v2:0,master:40},deep:{one:'brown',two:'rain',v1:30,v2:12,master:38},nature:{one:'forest',two:'ocean',v1:38,v2:20,master:35}}[name];
+  if(!p)return;
+  $('layer1Select').value=p.one;
+  $('layer2Select').value=p.two;
+  $('layer1Vol').value=p.v1;
+  $('layer2Vol').value=p.v2;
+  $('masterVol').value=p.master;
+  syncVolumeOutputs();
+  if(App.audio.isPlaying)startAudio();
+  updateWelcomeSound()
+}
+
+function syncVolumeOutputs(){
+  [['layer1Vol','layer1Out'],['layer2Vol','layer2Out'],['masterVol','masterOut'],['binauralVol','binauralOut']].forEach(([i,o])=>$(o).textContent=$(i).value+'%');
+  syncVolumes()
+}
+
+function updateWelcomeSound(){
+  $('welcomeSound').textContent=SOUND_LABELS[$('layer1Select').value]||'Ambient'
+}
+
+['layer1Vol','layer2Vol','masterVol','binauralVol'].forEach(id=>$(id).addEventListener('input',syncVolumeOutputs));
+['layer1Select','layer2Select'].forEach(id=>$(id).addEventListener('change',()=>{updateWelcomeSound();if(App.audio.isPlaying)startAudio()}));
+
+const binauralMasterToggle = $('binauralMasterToggle');
+const binauralGrid = $('binauralGrid');
+const binauralCards = document.querySelectorAll('.binaural-card');
+
+binauralMasterToggle.addEventListener('change', (e) => {
+  App.binauralEnabled = e.target.checked;
+  binauralGrid.classList.toggle('active', App.binauralEnabled);
+  if (App.audio.isPlaying) {
+    if (App.binauralEnabled) {
+      startBinauralNode();
+      toast('Binaural beats enabled.');
+    } else {
+      stopNodes('binaural');
+      toast('Binaural beats disabled.');
+    }
+  }
+});
+
+binauralCards.forEach(card => {
+  card.addEventListener('click', () => {
+    if (!App.binauralEnabled) {
+      toast('Turn on the switch above first to enable binaural beats.');
+      return;
+    }
+    binauralCards.forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    App.binauralFreq = parseInt(card.dataset.freq);
+    if (App.audio.isPlaying) {
+      startBinauralNode();
+    }
+  });
+});
+
+function refreshMixes(){const s=$('savedMixSelect'),chosen=s.value;s.innerHTML='<option value="">Choose saved mix</option>';Object.keys(App.mixes).forEach(name=>{const o=document.createElement('option');o.value=name;o.textContent=name;s.appendChild(o)});if(App.mixes[chosen])s.value=chosen}
+$('saveMixBtn').addEventListener('click',()=>{const name=prompt('Name this mix (up to 30 characters):');if(!name)return;const clean=name.trim().slice(0,30);if(!clean)return;App.mixes[clean]={layer1:$('layer1Select').value,layer2:$('layer2Select').value,layer1Vol:+$('layer1Vol').value,layer2Vol:+$('layer2Vol').value,masterVol:+$('masterVol').value,binauralEnabled:App.binauralEnabled,binauralFreq:App.binauralFreq,binauralVol:+$('binauralVol').value};persist(STORAGE.mixes,App.mixes);refreshMixes();$('savedMixSelect').value=clean;toast('Mix saved on this device.')});
+
+$('loadMixBtn').addEventListener('click',()=>{
+  const m=App.mixes[$('savedMixSelect').value];
+  if(!m)return toast('Choose a saved mix first.');
+  $('layer1Select').value=m.layer1;
+  $('layer2Select').value=m.layer2;
+  ['layer1Vol','layer2Vol','masterVol','binauralVol'].forEach((id,i)=>{
+    const k=['layer1Vol','layer2Vol','masterVol','binauralVol'][i];
+    if(m[k]!=null)$(id).value=m[k]
+  });
+  App.binauralEnabled = !!m.binauralEnabled;
+  App.binauralFreq = m.binauralFreq || 2;
+  binauralMasterToggle.checked = App.binauralEnabled;
+  binauralGrid.classList.toggle('active', App.binauralEnabled);
+  binauralCards.forEach(c => c.classList.toggle('selected', parseInt(c.dataset.freq) === App.binauralFreq));
+  syncVolumeOutputs();
+  updateWelcomeSound();
+  if(App.audio.isPlaying)startAudio();
+  toast('Mix loaded.')
+});
+
+$('playAudioBtn').addEventListener('click',startAudio);
+$('stopAudioBtn').addEventListener('click',stopAudio);
+document.querySelectorAll('[data-preset]').forEach(b=>b.addEventListener('click',()=>preset(b.dataset.preset)));
+
+function recommendation(){
+  const task=$('taskDesc').value.toLowerCase(),act=App.activity,stim=App.stim;
+  let sound='rain',vol=42,duration=25,reason='A moderate ambient layer can mask some background noise; adjust it to your preference.';
+  if(stim==='low'){sound='none';vol=0;reason='You selected low focus. Start with silence or very low stimulation, then adjust if needed.'}
+  else if(stim==='high'){sound='brown';vol=35;reason='You selected high focus. A low-volume, steady noise texture may be less distracting than changing music.'}
+  if(act==='lecture'){sound='none';vol=0;duration=45;reason='For lecture comprehension, try keeping competing audio off.'}
+  if(act==='relax'){sound='ocean';vol=28;duration=10;reason='A short, quiet reset may feel more comfortable than a loud or complex mix.'}
+  if(/read|book|article/.test(task)&&stim!=='low'){sound='rain';reason='Your task mentions reading. Try a simple, low-volume ambience and keep it only if it helps you.'}
+  if(/math|physics|chem|problem|equation|exam/.test(task)&&stim==='high'){sound='brown';reason='Your task sounds problem-solving heavy. Try steady, low-volume noise only if it does not compete with thinking.'}
+  $('recoSound').textContent=SOUND_LABELS[sound];
+  $('recoVolume').textContent=vol+'%';
+  $('recoDuration').textContent=duration+' min';
+  $('recoReasons').textContent=reason+' This is a preference-based rule, not a scientifically validated prediction.';
+  $('recoCard').style.display='block';
+  App.pendingReco={sound,vol,duration};
+}
+
+$('recoBtn').addEventListener('click',recommendation);
+document.querySelectorAll('#stimLevel button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#stimLevel button').forEach(x=>x.classList.toggle('active',x===b));App.stim=b.dataset.stim;recommendation()}));
+
+$('acceptRecoBtn').addEventListener('click',()=>{
+  const r=App.pendingReco;
+  if(!r)return;
+  $('layer1Select').value=r.sound;
+  $('layer1Vol').value=r.vol;
+  $('masterVol').value=Math.min(55,Math.max(20,r.vol));
+  App.binauralEnabled = false;
+  binauralMasterToggle.checked = false;
+  binauralGrid.classList.remove('active');
+  syncVolumeOutputs();
+  updateWelcomeSound();
+  App.timer.focusMinutes=r.duration;
+  if(App.timer.phase==='focus'&&!App.timer.running){
+    App.timer.total=r.duration*60;
+    App.timer.timeLeft=App.timer.total;
+    updateTimerUI()
+  }
+  $('recoCard').style.display='none';
+  if(App.audio.isPlaying)startAudio();
+  toast('Suggestion applied. You can still change every setting.')
+});
+
+function saveCheckpoint(){
+  if(__ekResetInProgress) return;  // ★ NEW — don't save during reset
+  persist(STORAGE.checkpoint,{phase:App.timer.phase,running:App.timer.running,timeLeft:App.timer.timeLeft,total:App.timer.total,endAt:App.timer.endAt,focusMinutes:App.timer.focusMinutes,focusCount:App.timer.focusCount,activity:App.activity,task:$('taskDesc').value})
+}
+function updateTimerUI(){const t=Math.max(0,Math.ceil(App.timer.timeLeft));$('timerDisplay').textContent=String(Math.floor(t/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0');const circumference=2*Math.PI*54,progress=App.timer.total?clamp(t/App.timer.total,0,1):0;$('ringFg').style.strokeDasharray=circumference;$('ringFg').style.strokeDashoffset=circumference*(1-progress);$('timerState').textContent=App.timer.running?(App.timer.phase==='focus'?'Focusing':'Break'):'Paused';$('timerPhaseLabel').textContent=App.timer.phase==='focus'?'Focus session':App.timer.phase==='longBreak'?'Long break':'Short break';$('sessionStatus').textContent=App.timer.running?String(Math.floor(t/60)).padStart(2,'0')+':'+String(t%60).padStart(2,'0'):'Ready';$('sessionStatus').classList.toggle('live',App.timer.running);$('timerPrimary').textContent=App.timer.running?'Ⅱ Pause':'▶ Start';saveCheckpoint()}
+function startTimer(){if(App.timer.running){App.timer.timeLeft=Math.max(0,Math.ceil((App.timer.endAt-Date.now())/1000));App.timer.running=false;clearInterval(App.timer.interval);updateTimerUI();return}if(App.timer.timeLeft<=0)App.timer.timeLeft=App.timer.total;App.timer.running=true;App.timer.endAt=Date.now()+App.timer.timeLeft*1000;if(App.timer.phase==='focus'&&App.settings.autoAudio&&!App.audio.isPlaying)startAudio();clearInterval(App.timer.interval);App.timer.interval=setInterval(tickTimer,250);updateTimerUI()}
+function tickTimer(){if(!App.timer.running)return;App.timer.timeLeft=Math.max(0,Math.ceil((App.timer.endAt-Date.now())/1000));updateTimerUI();if(App.timer.timeLeft<=0)completePhase()}
+function completePhase(){clearInterval(App.timer.interval);App.timer.interval=null;const wasFocus=App.timer.phase==='focus';App.timer.running=false;if(wasFocus){const minutes=Math.max(1,Math.round(App.timer.total/60));App.history.push({id:crypto.randomUUID?crypto.randomUUID():String(Date.now()),date:new Date().toISOString(),minutes,activity:App.activity,task:$('taskDesc').value.trim().slice(0,160),completed:true});App.timer.focusCount++;persist(STORAGE.history,App.history);renderHistory();toast('Focus session completed. Take a break.')}else toast('Break complete. Ready when you are.');if(wasFocus){App.timer.phase=App.timer.focusCount%App.settings.longBreakEvery===0?'longBreak':'break';App.timer.total=(App.timer.phase==='longBreak'?App.settings.longBreakMinutes:App.settings.breakMinutes)*60}else{App.timer.phase='focus';App.timer.total=App.timer.focusMinutes*60}App.timer.timeLeft=App.timer.total;updateTimerUI();if($('autoNext').checked)startTimer()}
+function resetTimer(){clearInterval(App.timer.interval);App.timer.interval=null;App.timer.running=false;App.timer.phase='focus';App.timer.total=App.timer.focusMinutes*60;App.timer.timeLeft=App.timer.total;updateTimerUI()}
+$('timerPrimary').addEventListener('click',startTimer);$('timerReset').addEventListener('click',resetTimer);$('timerSkip').addEventListener('click',()=>{if(confirm('Skip the current phase? A focus session is recorded only when its timer completes.'))completePhase()});
+document.querySelectorAll('#pomodoroMode button').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('#pomodoroMode button').forEach(x=>x.classList.toggle('active',x===b));const custom=b.dataset.p==='custom';$('customTimerWrap').style.display=custom?'block':'none';if(!custom&&!App.timer.running){App.timer.focusMinutes=Number(b.dataset.p);App.timer.phase='focus';App.timer.total=App.timer.focusMinutes*60;App.timer.timeLeft=App.timer.total;updateTimerUI()}}));
+$('applyCustomBtn').addEventListener('click',()=>{const n=clamp($('customMinutes').value,1,180);$('customMinutes').value=n;App.timer.focusMinutes=n;if(!App.timer.running){App.timer.phase='focus';App.timer.total=n*60;App.timer.timeLeft=App.timer.total;updateTimerUI()}toast('Custom focus duration set to '+n+' minutes.')});
+$('startSessionBtn').addEventListener('click',()=>{switchTab('tab-timer');if(App.timer.phase!=='focus'&&!App.timer.running)resetTimer();if(!App.timer.running)startTimer();if(App.settings.autoAudio&&!App.audio.isPlaying)startAudio()});
+
+function restoreCheckpoint(){
+    const cp=safeParse(STORAGE.checkpoint,null);
+    if(!cp||!Number.isFinite(cp.timeLeft)||!Number.isFinite(cp.total))return;
+    if(cp.running && Number.isFinite(cp.endAt)){
+        const left=Math.max(0,Math.ceil((cp.endAt-Date.now())/1000));
+        if(left>0){
+            App.timer.phase=['focus','break','longBreak'].includes(cp.phase)?cp.phase:'focus';
+            App.timer.total=clamp(cp.total,1,10800);
+            App.timer.timeLeft=left;
+            App.timer.endAt=cp.endAt;
+            App.timer.focusMinutes=clamp(cp.focusMinutes||25,1,180);
+            App.timer.focusCount=clamp(cp.focusCount||0,0,100000);
+            App.activity=ACTIVITIES.some(a=>a.id===cp.activity)?cp.activity:'study';
+            $('taskDesc').value=cp.task||'';
+            App.timer.running=true;
+            App.timer.interval=setInterval(tickTimer,250);
+            toast('Timer restored from its last checkpoint.');
+        } else {
+            App.timer.phase=['focus','break','longBreak'].includes(cp.phase)?cp.phase:'focus';
+            App.timer.total=clamp(cp.total,1,10800);
+            App.timer.timeLeft=0;
+            App.timer.running=false;
+            toast('Previous timer completed while you were away.');
+        }
+    } else {
+        App.timer.phase=['focus','break','longBreak'].includes(cp.phase)?cp.phase:'focus';
+        App.timer.total=clamp(cp.total,1,10800);
+        App.timer.timeLeft=clamp(cp.timeLeft,0,App.timer.total);
+        App.timer.focusMinutes=clamp(cp.focusMinutes||25,1,180);
+        App.timer.focusCount=clamp(cp.focusCount||0,0,100000);
+    }
+}
+
+$('notesArea').value=(()=>{try{return localStorage.getItem(STORAGE.notes)||localStorage.getItem('ekagrata_notes')||''}catch{return ''}})();
+let noteSaveTimer;
+$('notesArea').addEventListener('input',()=>{$('noteStatus').textContent='Saving…';clearTimeout(noteSaveTimer);noteSaveTimer=setTimeout(()=>{try{localStorage.setItem(STORAGE.notes,$('notesArea').value);$('noteStatus').textContent='Saved locally'}catch{$('noteStatus').textContent='Save failed';toast('Notes could not be saved. Export a copy to keep them safe.')}},250)});
+$('exportNoteBtn').addEventListener('click',()=>download('Ekagrata_Notes.txt',$('notesArea').value,'text/plain;charset=utf-8'));
+function download(name,content,type){const blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+
+function renderHistory(){const valid=App.history.filter(h=>h&&Number.isFinite(Number(h.minutes)));$('statSessions').textContent=valid.length;$('statMinutes').textContent=valid.reduce((s,h)=>s+Number(h.minutes),0);const list=$('historyList');list.innerHTML='';valid.slice(-30).reverse().forEach(h=>{const li=document.createElement('li');li.className='history-item';const left=document.createElement('span');const date=new Date(h.date);left.textContent=(h.activity||'study').toUpperCase()+' · '+(Number.isNaN(date.getTime())?'Date unavailable':date.toLocaleString([], {month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'}))+(h.task?' · '+h.task:'');const right=document.createElement('span');right.textContent=Number(h.minutes)+' min';li.append(left,right);list.appendChild(li)});$('historyEmpty').style.display=valid.length?'none':'block';renderWeekly(valid)}
+function renderWeekly(history){const el=$('weeklyChart');el.innerHTML='';const now=new Date();const days=[];for(let i=6;i>=0;i--){const d=new Date(now);d.setDate(now.getDate()-i);d.setHours(0,0,0,0);const next=new Date(d);next.setDate(d.getDate()+1);const mins=history.filter(h=>{const t=new Date(h.date);return !Number.isNaN(t.getTime())&&t>=d&&t<next}).reduce((s,h)=>s+Number(h.minutes),0);days.push({date:d,mins})}const max=Math.max(25,...days.map(d=>d.mins));days.forEach(d=>{const col=document.createElement('div');col.style.cssText='height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:5px;min-width:0';const val=document.createElement('span');val.textContent=d.mins?d.mins+'m':'';val.style.cssText='font-size:.58rem;color:var(--muted);height:13px';const bar=document.createElement('div');bar.style.cssText=`width:70%;max-width:28px;height:${Math.max(3,d.mins/max*82)}px;background:${d.mins?'linear-gradient(180deg,var(--cyan),var(--indigo))':'#ffffff18'};border-radius:6px 6px 3px 3px;transition:height .5s ease`;bar.title=d.mins+' completed minutes';const day=document.createElement('span');day.textContent=d.date.toLocaleDateString(undefined,{weekday:'short'});day.style.cssText='font-size:.58rem;color:var(--muted)';col.append(val,bar,day);el.appendChild(col)})}
+$('clearHistoryBtn').addEventListener('click',()=>{if(!confirm('Delete all saved session history from this device? This cannot be undone unless you have a backup.'))return;App.history=[];persist(STORAGE.history,App.history);renderHistory();toast('Session history cleared.')});
+$('exportHistoryBtn').addEventListener('click',()=>{const rows=[['date','minutes','activity','task','completed'],...App.history.map(h=>[h.date,h.minutes,h.activity,h.task||'',h.completed!==false])];const csv=rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');download('Ekagrata_Sessions.csv',csv,'text/csv;charset=utf-8')});
+
+let ytPlayer=null,ytApiReady=false,pendingVideoId=null;
+window.onYouTubeIframeAPIReady=()=>{ytApiReady=true;if(pendingVideoId)createYT(pendingVideoId)};
+function parseVideoId(input){const s=input.trim();if(/^[a-zA-Z0-9_-]{11}$/.test(s))return s;try{const u=new URL(s);if(!['youtube.com','www.youtube.com','m.youtube.com','youtu.be','www.youtube-nocookie.com','youtube-nocookie.com'].includes(u.hostname))return null;if(u.hostname.includes('youtu.be'))return u.pathname.split('/').filter(Boolean)[0]?.slice(0,11)||null;if(u.pathname==='/watch')return u.searchParams.get('v');const parts=u.pathname.split('/').filter(Boolean);const i=parts.findIndex(p=>['embed','shorts','live','v'].includes(p));return i>=0?parts[i+1]?.slice(0,11)||null:null}catch{return null}}
+function loadYT(){const id=parseVideoId($('ytUrlInput').value);if(!id||! /^[\w-]{11}$/.test(id)){toast('Enter a valid YouTube video URL or 11-character video ID.');return}$('ytPlayerContainer').style.display='block';$('ytStatus').textContent='Loading video…';pendingVideoId=id;if(ytApiReady)createYT(id);else if(window.YT&&window.YT.Player){ytApiReady=true;createYT(id)}else toast('YouTube player is still loading. Try Load again in a moment.')}
+function createYT(id){if(!window.YT||!YT.Player){$('ytStatus').textContent='YouTube player could not load. Check your connection or content blockers.';return}if(ytPlayer){ytPlayer.loadVideoById(id);return}try{ytPlayer=new YT.Player('ytPlayer',{width:'100%',height:'100%',videoId:id,playerVars:{playsinline:1,rel:0},events:{onReady:()=>{$('ytStatus').textContent='Video ready. Press play in the player.'},onStateChange:e=>{if(e.data===1){$('ytStatus').textContent='Lecture playing.';setDucking(true)}else{if(App.ducking)setDucking(false);$('ytStatus').textContent=e.data===0?'Lecture ended.':e.data===2?'Lecture paused.':'Player ready.'}},onError:()=>{$('ytStatus').textContent='Video unavailable or embedding is restricted. Try another video.';if(App.ducking)setDucking(false)}}})}catch{$('ytStatus').textContent='Could not initialize YouTube player.'}}
+function setDucking(enable){
+    App.ducking=!!enable;
+    $('duckToggleBtn').textContent='Ambient ducking: '+(App.settings.ducking?'On':'Off');
+    if(App.audio.context)syncVolumes();
+    if(enable&&App.settings.ducking&&App.audio.isPlaying)$('audioBadge').textContent='Lowered for lecture';
+    else if(App.audio.isPlaying)$('audioBadge').textContent='Playing'
+}
+$('ytLoadBtn').addEventListener('click',loadYT);$('ytUrlInput').addEventListener('keydown',e=>{if(e.key==='Enter')loadYT()});
+$('duckToggleBtn').addEventListener('click',()=>{
+    App.settings.ducking=!App.settings.ducking;
+    persist(STORAGE.settings,App.settings);
+    setDucking(App.ducking);
+    toast('Ambient ducking '+(App.settings.ducking?'enabled':'disabled')+'.')
+});
+
+function openSettings(){fillSettings();$('settingsModal').classList.add('open');$('userName').focus()}
+function closeSettings(){$('settingsModal').classList.remove('open')}
+$('settingsBtn').addEventListener('click',openSettings);$('closeSettings').addEventListener('click',closeSettings);$('settingsModal').addEventListener('click',e=>{if(e.target===$('settingsModal'))closeSettings()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSettings()});
+function fillSettings(){const s=App.settings;$('userName').value=s.name||'';$('breakMinutes').value=s.breakMinutes;$('longBreakEvery').value=s.longBreakEvery;$('longBreakMinutes').value=s.longBreakMinutes;$('autoAudio').checked=!!s.autoAudio}
+$('saveSettings').addEventListener('click',()=>{App.settings={name:$('userName').value.trim().slice(0,40),breakMinutes:clamp($('breakMinutes').value,1,30),longBreakEvery:clamp($('longBreakEvery').value,2,8),longBreakMinutes:clamp($('longBreakMinutes').value,5,45),autoAudio:$('autoAudio').checked,ducking:App.settings.ducking};persist(STORAGE.settings,App.settings);$('welcomeHeading').textContent=App.settings.name?'Welcome back, '+App.settings.name+'.':'Welcome back.';if(App.timer.phase==='break'&&!App.timer.running){App.timer.total=App.settings.breakMinutes*60;App.timer.timeLeft=App.timer.total;updateTimerUI()}if(App.timer.phase==='longBreak'&&!App.timer.running){App.timer.total=App.settings.longBreakMinutes*60;App.timer.timeLeft=App.timer.total;updateTimerUI()}syncVolumes();closeSettings();toast('Settings saved locally.')});
+function backup(){const data={format:'ekagrata-backup-v1',createdAt:new Date().toISOString(),history:App.history,notes:$('notesArea').value,settings:App.settings,mixes:App.mixes};download('Ekagrata_Backup.json',JSON.stringify(data,null,2),'application/json;charset=utf-8')}
+$('backupData').addEventListener('click',backup);
+$('restoreData').addEventListener('click',async()=>{const file=$('restoreFile').files[0];if(!file)return toast('Choose a JSON backup file first.');try{const d=JSON.parse(await file.text());if(d.format!=='ekagrata-backup-v1'||!Array.isArray(d.history)||typeof d.notes!=='string'||typeof d.settings!=='object'||typeof d.mixes!=='object')throw Error('Unexpected backup format');if(!confirm('Restore this backup? Current local notes, settings, mixes and history will be replaced.'))return;App.history=d.history.filter(h=>h&&Number.isFinite(Number(h.minutes)));App.settings={...DEFAULT_SETTINGS,...d.settings};App.mixes=d.mixes;persist(STORAGE.history,App.history);persist(STORAGE.settings,App.settings);persist(STORAGE.mixes,App.mixes);localStorage.setItem(STORAGE.notes,d.notes);$('notesArea').value=d.notes;fillSettings();refreshMixes();renderHistory();$('welcomeHeading').textContent=App.settings.name?'Welcome back, '+App.settings.name+'.':'Welcome back.';toast('Backup restored.')}catch(e){toast('Backup could not be restored: '+(e.message||'invalid file'))}});
+$('zenBtn').addEventListener('click',()=>{const enabled=document.body.classList.toggle('zen-mode');$('zenBtn').setAttribute('aria-pressed',String(enabled));toast(enabled?'Zen Mode on. Use the button again to exit.':'Zen Mode off.')});
+
+// ★ NEW — guard beforeunload during reset
+window.addEventListener('beforeunload',()=>{
+  if(__ekResetInProgress) return;
+  if(App.timer.running){App.timer.timeLeft=Math.max(0,Math.ceil((App.timer.endAt-Date.now())/1000));saveCheckpoint()}
+});
+
+function init(){
+  addEkResetIndicator();  // ★ NEW — show countdown badge
+  renderActivities();refreshMixes();syncVolumeOutputs();restoreCheckpoint();updateTimerUI();renderHistory();fillSettings();
+  $('welcomeHeading').textContent=App.settings.name?'Welcome back, '+App.settings.name+'.':'Welcome back.';
+  updateWelcomeSound();moveNavLine();
+  if(!('AudioContext'in window||'webkitAudioContext'in window))$('playAudioBtn').disabled=true;
+}
+
+init();
+})();
+</script>
+</body>
+                                      </html>
