@@ -329,6 +329,54 @@ button { touch-action: manipulation; font-family: inherit; }
 </div>
 
 <script>
+// ========== AUTO RESET (3 MINUTES) ==========
+const AUTO_RESET_MS = 3 * 60 * 1000;
+const PLAB_RESET_KEY = 'plab_reset_at';
+
+(function bootstrapAutoReset() {
+  const resetAt = parseInt(localStorage.getItem(PLAB_RESET_KEY) || '0');
+  if (resetAt && Date.now() >= resetAt) {
+    localStorage.removeItem('plab_file_cache_v2');
+    localStorage.removeItem(PLAB_RESET_KEY);
+  }
+  localStorage.setItem(PLAB_RESET_KEY, String(Date.now() + AUTO_RESET_MS));
+})();
+
+let __plabResetInProgress = false;
+function monitorPlabReset() {
+  if (__plabResetInProgress) return;
+  const resetAt = parseInt(localStorage.getItem(PLAB_RESET_KEY) || '0');
+  if (resetAt && Date.now() >= resetAt) {
+    __plabResetInProgress = true;
+    localStorage.removeItem('plab_file_cache_v2');
+    localStorage.removeItem(PLAB_RESET_KEY);
+    location.reload();
+  }
+}
+setInterval(monitorPlabReset, 2000);
+
+function addPlabResetIndicator() {
+  if (document.getElementById('plabAutoResetBadge')) return;
+  const el = document.createElement('div');
+  el.id = 'plabAutoResetBadge';
+  el.style.cssText = 'position:fixed;top:8px;right:8px;z-index:99998;'
+    + 'background:linear-gradient(180deg,rgba(224,64,64,0.95),rgba(100,20,20,0.95));'
+    + 'color:#fff;font-family:-apple-system,system-ui,sans-serif;font-size:0.7rem;letter-spacing:1px;'
+    + 'padding:6px 10px;border-radius:99px;border:1px solid #ff6060;'
+    + 'pointer-events:none;font-weight:800;'
+    + 'box-shadow:0 0 15px rgba(224,64,64,0.5);';
+  document.body.appendChild(el);
+  setInterval(function () {
+    const resetAt = parseInt(localStorage.getItem(PLAB_RESET_KEY) || '0');
+    if (!resetAt) { el.textContent = '⏱ RESETTING...'; return; }
+    const remaining = Math.max(0, Math.ceil((resetAt - Date.now()) / 1000));
+    const m = Math.floor(remaining / 60);
+    const s = remaining % 60;
+    el.textContent = '⏱ RESET ' + m + ':' + String(s).padStart(2, '0');
+  }, 500);
+}
+// ===========================================
+
 const CHAPTERS = {
   '11': {
     physics: { name: 'Physics', chapters: [
@@ -1563,7 +1611,8 @@ window.addEventListener('popstate', () => { window.goBack(); history.pushState(n
 history.pushState(null, '', location.href);
 
 updateBreadcrumb();
+addPlabResetIndicator(); // 👈 Indicator start ho gaya
 </script>
 
 </body>
-</html>
+  </html>
