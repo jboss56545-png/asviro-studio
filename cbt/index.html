@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=5.0,viewport-fit=cover">
 <meta name="theme-color" content="#0b0d12">
 <meta name="mobile-web-app-capable" content="yes">
-<title>Ambition CBT Mode</title>
+<title>CBT Test Studio</title>
 
 <!-- ===== PWA SETUP ===== -->
 <link rel="manifest" href="/manifest.json" />
@@ -31,9 +31,6 @@ a{color:var(--accent-2);text-decoration:none}
 .appbar-title{font-weight:700;font-size:16px;text-align:center;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:16px}
 .logo-dot{width:11px;height:11px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));box-shadow:0 0 16px rgba(139,92,246,.7)}
-.ambition-brand{gap:10px;letter-spacing:-.02em}.ambition-mark{width:34px;height:34px;display:grid;place-items:center;border-radius:11px;background:var(--card-2);border:1px solid var(--border);flex-shrink:0}.ambition-mark svg{width:25px;height:25px;display:block}.brand-light{font-weight:500;color:var(--muted);letter-spacing:0}
-.analysis-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}.analysis-stat{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:14px}.analysis-stat .value{font-size:23px;font-weight:850;line-height:1.2}.analysis-stat .label{font-size:11px;color:var(--muted);margin-top:5px}.chart-wrap{width:100%;overflow:hidden}.history-chart{display:block;width:100%;height:auto;min-height:150px}.chart-note{font-size:11px;color:var(--muted);margin-top:8px}.history-record{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 0;border-bottom:1px solid var(--border)}.history-record:last-child{border-bottom:0}.history-record .record-name{font-weight:700;font-size:13px}.history-record .record-meta{font-size:11px;color:var(--muted);margin-top:3px}.history-record .record-score{text-align:right;font-weight:800;white-space:nowrap}.history-record .record-pct{font-size:11px;color:var(--muted);font-weight:600}
-@media(min-width:620px){.analysis-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .icon-btn{width:var(--tap);height:var(--tap);border-radius:12px;display:flex;align-items:center;justify-content:center;background:var(--card);border:1px solid var(--border);font-size:17px;transition:.16s;flex-shrink:0}
 .icon-btn:active{transform:scale(.93)}
 @media(hover:hover){.icon-btn:hover{background:var(--card-2)}}
@@ -259,18 +256,20 @@ window.MathJax = {
 <section id="screen-home" class="screen active">
   <div class="wrap">
     <header class="appbar">
-      <div class="logo ambition-brand"><span class="ambition-mark" aria-hidden="true"><svg viewBox="0 0 40 40" role="img"><path d="M20 3 37 33H29L20 17 11 33H3Z" fill="url(#ambitionGrad)"/><path d="M20 22 26 33H14Z" fill="#0b0d12"/><defs><linearGradient id="ambitionGrad" x1="4" y1="3" x2="36" y2="36"><stop stop-color="#60a5fa"/><stop offset="1" stop-color="#a855f7"/></linearGradient></defs></svg></span><span>Ambition <span class="brand-light">CBT Mode</span></span></div>
+      <div class="logo"><span class="logo-dot"></span> CBT Test Studio</div>
       <button type="button" class="icon-btn" id="btnOpenSettings" title="Settings">⚙️</button>
     </header>
     <div class="hero">
-      <h1>Your CUET preparation, one test at a time.</h1>
-      <p>Practice CUET UG with AI tests or your own PDFs, photos and question papers. Track every score and improve with clear analysis.</p>
+      <h1>Practice like it's the real exam.</h1>
+      <p>Extract questions from PDFs, photos, and scanned papers — real CBT interface with instant analysis.</p>
     </div>
     <div id="resumeBanner"></div>
-    <h2 class="section-title">Choose your CUET practice mode</h2>
+    <h2 class="section-title">Choose your exam</h2>
     <div class="exam-grid" id="examGrid"></div>
-    <div id="analysisWrap"></div>
     <div id="historyWrap"></div>
+    <footer class="appfooter">
+      <a href="./index.html">← Back to HabitTracker Pro</a>
+    </footer>
   </div>
 </section>
 
@@ -422,8 +421,8 @@ window.MathJax = {
 <script>
 "use strict";
 
-// ========== AUTO RESET (5 MINUTES) ==========
-const AUTO_RESET_MS = 5 * 60 * 1000;
+// ========== AUTO RESET (8 MINUTES) ==========
+const AUTO_RESET_MS = 8 * 60 * 1000;
 const CBT_RESET_KEY = 'cbt_reset_at';
 const CBT_STORAGE_KEYS = [
   'cbt_theme',
@@ -522,11 +521,18 @@ var EXAM_DATA={
     "Hindi Language Proficiency (हिन्दी)":["वर्णमाला एवं संधि, समास","उपसर्ग एवं प्रत्यय","पर्यायवाची, विलोम एवं अनेकार्थी शब्द","शब्द शुद्धि एवं वाक्य शुद्धि","मुहावरे एवं लोकोक्तियाँ","वाक्यांश के लिए एक शब्द","संज्ञा, सर्वनाम, विशेषण, क्रिया एवं अव्यय","कारक, काल एवं वाच्य","अपठित गद्यांश (Comprehension)","विराम चिन्ह"]
   }}
 };
-EXAM_DATA = { CUET: EXAM_DATA.CUET };
 
 /* ============ MARKING SCHEMES ============ */
 var MARKING_SCHEMES = {
-  CUET: { correct: 5, wrong: -1, label: 'Correct +5 | Wrong -1' }
+  CUET:   { correct: 5,  wrong: -1,    label: 'Correct +5  |  Wrong -1' },
+  JEE:    { correct: 4,  wrong: -1,    label: 'Correct +4  |  Wrong -1' },
+  NEET:   { correct: 4,  wrong: -1,    label: 'Correct +4  |  Wrong -1' },
+  NDA:    { correct: 4,  wrong: -1.33, label: 'Correct +4  |  Wrong -1.33' },
+  SSC:    { correct: 2,  wrong: -0.5,  label: 'Correct +2  |  Wrong -0.5' },
+  UPSC:   { correct: 2,  wrong: -0.66, label: 'Correct +2  |  Wrong -0.66' },
+  Boards: { correct: 1,  wrong: 0,     label: 'Correct +1  |  No Negative' },
+  CTET:   { correct: 1,  wrong: 0,     label: 'Correct +1  |  No Negative' },
+  PTET:   { correct: 3,  wrong: 0,     label: 'Correct +3  |  No Negative' }
 };
 function getMarking(exam){
   return MARKING_SCHEMES[exam] || { correct: 1, wrong: 0, label: 'Correct +1  |  No Negative' };
@@ -651,41 +657,10 @@ var uploadMode='extract';
 var T=null,timerHandle=null,autosaveHandle=null;
 
 /* ============ HOME ============ */
-function renderHome(){var grid=$('examGrid');grid.innerHTML='';Object.keys(EXAM_DATA).forEach(function(key){var ex=EXAM_DATA[key];var mk=getMarking(key);var b=document.createElement('button');b.type='button';b.className='exam-card';b.setAttribute('data-exam',key);b.innerHTML='<div class="emoji">'+ex.icon+'</div><div class="name">CUET UG</div><div class="sub">Practice • PYQs • PDF Question Banks</div><div class="sub" style="color:var(--accent);font-weight:700;margin-top:2px">'+esc(mk.label)+'</div>';grid.appendChild(b)});renderResumeBanner();renderHistory()}
+function renderHome(){var grid=$('examGrid');grid.innerHTML='';Object.keys(EXAM_DATA).forEach(function(key){var ex=EXAM_DATA[key];var mk=getMarking(key);var b=document.createElement('button');b.type='button';b.className='exam-card';b.setAttribute('data-exam',key);b.innerHTML='<div class="emoji">'+ex.icon+'</div><div class="name">'+esc(key)+'</div><div class="sub">'+esc(ex.full)+'</div><div class="sub" style="color:var(--accent);font-weight:700;margin-top:2px">'+esc(mk.label)+'</div>';grid.appendChild(b)});renderResumeBanner();renderHistory()}
 function bindExamGrid(){var grid=$('examGrid');if(!grid)return;grid.addEventListener('click',function(e){var target=e.target;while(target&&target!==grid){if(target.classList&&target.classList.contains('exam-card')){var key=target.getAttribute('data-exam');if(key){e.preventDefault();e.stopPropagation();openExam(key)}return}target=target.parentNode}},false)}
 function renderResumeBanner(){var saved=LS.get(K.ACTIVE,null);var host=$('resumeBanner');if(!saved||saved.submitted){host.innerHTML='';return}var answered=saved.answers.filter(function(a){return a!==null&&a!==undefined}).length;host.innerHTML='<div class="resume"><div><div class="rt">⏸ Unfinished: '+esc(saved.name)+'</div><div class="rs">'+answered+' / '+saved.questions.length+' answered</div></div><div class="btn-row"><button type="button" class="btn primary small" id="btnResume">Resume</button><button type="button" class="btn small" id="btnDiscard">Discard</button></div></div>';$('btnResume').onclick=function(){T=saved;$('testTitle').textContent=T.name;showScreen('screen-test');startTimers();renderQuestion();renderPalette()};$('btnDiscard').onclick=function(){LS.del(K.ACTIVE);host.innerHTML=''}}
-function renderHistory(){
-  var hist=LS.get(K.HISTORY,[]),host=$('historyWrap'),analysis=$('analysisWrap');
-  if(!Array.isArray(hist))hist=[];
-  var valid=hist.filter(function(h){return h&&typeof h.pct==='number';});
-  if(!valid.length){
-    analysis.innerHTML='<h2 class="section-title">Your Exam Analytics</h2><div class="card"><p class="muted small" style="margin:0">Your score trend, accuracy and test records will appear here after your first CUET test.</p></div>';
-    host.innerHTML='';return;
-  }
-  var avg=Math.round(valid.reduce(function(a,h){return a+h.pct;},0)/valid.length);
-  var best=valid.reduce(function(a,h){return h.pct>a.pct?h:a;},valid[0]);
-  var totalQ=valid.reduce(function(a,h){return a+(Number(h.total)||0);},0);
-  var points=valid.slice(0,12).reverse(),W=600,H=210,L=38,R=14,Tp=18,B=34,innerW=W-L-R,innerH=H-Tp-B;
-  function x(i){return points.length===1?L+innerW/2:L+i*innerW/(points.length-1)}
-  function y(v){return Tp+innerH-(Math.max(0,Math.min(100,Number(v)||0))/100)*innerH}
-  var svg='<svg class="history-chart" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="CUET test score percentage trend">';
-  [0,25,50,75,100].forEach(function(v){svg+='<line x1="'+L+'" y1="'+y(v)+'" x2="'+(W-R)+'" y2="'+y(v)+'" stroke="var(--border)" stroke-width="1"/><text x="'+(L-8)+'" y="'+(y(v)+4)+'" fill="var(--muted)" font-size="10" text-anchor="end">'+v+'</text>'});
-  if(points.length>1){svg+='<polyline fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" points="'+points.map(function(p,i){return x(i)+','+y(p.pct)}).join(' ')+'"/>'}
-  points.forEach(function(p,i){svg+='<circle cx="'+x(i)+'" cy="'+y(p.pct)+'" r="4.5" fill="var(--accent-2)" stroke="var(--card)" stroke-width="2"/><text x="'+x(i)+'" y="'+(H-12)+'" fill="var(--muted)" font-size="10" text-anchor="middle">'+(i+1)+'</text>'});
-  svg+='</svg>';
-  analysis.innerHTML='<h2 class="section-title">Your Exam Analytics</h2><div class="analysis-grid">'+
-    '<div class="analysis-stat"><div class="value">'+valid.length+'</div><div class="label">Tests completed</div></div>'+
-    '<div class="analysis-stat"><div class="value">'+avg+'%</div><div class="label">Average score</div></div>'+
-    '<div class="analysis-stat"><div class="value">'+best.pct+'%</div><div class="label">Best score</div></div>'+
-    '<div class="analysis-stat"><div class="value">'+totalQ+'</div><div class="label">Questions across tests</div></div>'+
-    '</div><div class="card"><h3 style="margin-bottom:4px">Score trend</h3><p class="muted small" style="margin:0 0 8px">Latest '+points.length+' tests · percentage score (0–100)</p><div class="chart-wrap">'+svg+'</div><div class="chart-note">Points run from older to newer tests. Records are saved on this device.</div></div>';
-  var html='<h2 class="section-title">All Test Records</h2><div class="card">';
-  valid.slice(0,500).forEach(function(h,i){
-    var title=h.name||('CUET Test '+(valid.length-i));
-    html+='<div class="history-record"><div style="min-width:0"><div class="record-name">'+esc(title)+'</div><div class="record-meta">'+esc(h.date||'Date unavailable')+' · '+(Number(h.total)||0)+' questions'+(h.subject?' · '+esc(h.subject):'')+'</div></div><div class="record-score">'+fmtMarks(Number(h.score)||0)+'/'+fmtMarks(Number(h.maxMarks)||Number(h.total)||0)+'<div class="record-pct">'+Number(h.pct||0)+'%</div></div></div>';
-  });
-  html+='</div>';host.innerHTML=html;
-}
+function renderHistory(){var hist=LS.get(K.HISTORY,[]);var host=$('historyWrap');if(!hist.length){host.innerHTML='';return}var html='<h2 class="section-title">Recent Tests</h2>';hist.slice(0,5).forEach(function(h){var maxM=h.maxMarks||h.total;var mkTag=h.markingLabel?('<span class="muted small"> • '+esc(h.markingLabel)+'</span>'):'';html+='<div class="hist-item"><div>'+esc(h.name)+'<div class="muted small">'+esc(h.date)+' • '+h.total+' questions'+mkTag+'</div></div><div class="hp">'+fmtMarks(h.score)+'/'+fmtMarks(maxM)+' • '+h.pct+'%</div></div>'});host.innerHTML=html}
 function openExam(key){state.exam=key;var ex=EXAM_DATA[key];if(!ex)return;$('examTitle').textContent=ex.icon+' '+ex.full;showScreen('screen-exam')}
 
 /* ============ SETUP ============ */
@@ -704,7 +679,7 @@ function renderTimerChips(){var opts=[{k:'up',t:'⏱ Count Up'},{k:'down',t:'⏳
 function getRequestedCount(){if(state.count==='Custom'){var v=parseInt($('customNum').value,10);if(isNaN(v)||v<1)v=10;return Math.min(200,v)}return state.count}
 
 /* ============ AI TEST ============ */
-function startAITest(){if(!state.subject){dialog({title:'Pick a subject',message:'Please select a subject first.'});return}var count=getRequestedCount();var chapters=state.chapters.length?state.chapters:['__FULL__'];var cfg={exam:state.exam,subject:state.subject,chapters:chapters,count:count,difficulty:state.difficulty};var prompt=buildPromptAI(cfg);function attempt(){showLoader('AI is generating questions…',state.exam+' • '+state.subject+' • '+count+' questions',attempt);aiCall(prompt,{source:'ambition-cuet-cbt',mode:'ai',expectsJSON:true}).then(function(text){var list;try{list=normaliseList(safeParseJSON(text))}catch(e){throw new Error('Could not parse AI response. Try again.')}if(!list.length)throw new Error('AI returned no usable questions.');var fresh=dedupeQuestions(list);if(!fresh.length)fresh=list;fresh=fresh.map(shuffleOptions);addSeen(fresh.map(function(q){return q._h||hashStr(String(q.q))}));addRecentQ(fresh);hideLoader();launchTest({name:state.exam+' • '+state.subject,exam:state.exam,subject:state.subject,source:'ai',questions:fresh.slice(0,count),timerMode:state.timerMode,limitSec:state.timerMode==='down'?(parseInt($('timerMinutes').value,10)||15)*60:0})}).catch(function(err){showLoader('Could not generate questions',err.message||'Unknown',attempt)})}attempt()}
+function startAITest(){if(!state.subject){dialog({title:'Pick a subject',message:'Please select a subject first.'});return}var count=getRequestedCount();var chapters=state.chapters.length?state.chapters:['__FULL__'];var cfg={exam:state.exam,subject:state.subject,chapters:chapters,count:count,difficulty:state.difficulty};var prompt=buildPromptAI(cfg);function attempt(){showLoader('AI is generating questions…',state.exam+' • '+state.subject+' • '+count+' questions',attempt);aiCall(prompt,{source:'cbt-test-studio',mode:'ai',expectsJSON:true}).then(function(text){var list;try{list=normaliseList(safeParseJSON(text))}catch(e){throw new Error('Could not parse AI response. Try again.')}if(!list.length)throw new Error('AI returned no usable questions.');var fresh=dedupeQuestions(list);if(!fresh.length)fresh=list;fresh=fresh.map(shuffleOptions);addSeen(fresh.map(function(q){return q._h||hashStr(String(q.q))}));addRecentQ(fresh);hideLoader();launchTest({name:state.exam+' • '+state.subject,exam:state.exam,subject:state.subject,source:'ai',questions:fresh.slice(0,count),timerMode:state.timerMode,limitSec:state.timerMode==='down'?(parseInt($('timerMinutes').value,10)||15)*60:0})}).catch(function(err){showLoader('Could not generate questions',err.message||'Unknown',attempt)})}attempt()}
 
 function shuffleOptions(q){var opts=q.options.slice();var correctText=opts[q.ans];for(var i=opts.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=opts[i];opts[i]=opts[j];opts[j]=t}var newAns=opts.indexOf(correctText);if(newAns<0)newAns=0;q.options=opts;q.ans=newAns;return q}
 
@@ -759,7 +734,7 @@ function handleImageUpload(file){
     progressBar.style.width='35%';progressText.textContent='AI is reading image and extracting questions…';
     var subjectName = state.subject || '';
     var promptText = 'Extract ALL valid MCQ questions from the attached image. Subject context: '+subjectName+'. STRICT RULES: 1. Do NOT generate or invent any new questions on your own — ONLY extract questions and options exactly as visible in the image. 2. Copy all 4 options accurately and set "ans" to the exact 0-based index (0=A/1, 1=B/2, 2=C/3, 3=D/4) of the 100% correct option after verifying carefully. 3. Use LaTeX for any math expressions. Return ONLY a JSON array (no prose, no markdown).';
-    var ctx = {source:'ambition-cuet-cbt', mode:'image-extract', expectsJSON:true, fileName:file.name, subject:subjectName, image:{data:b64, mime:mime}};
+    var ctx = {source:'cbt-test-studio', mode:'image-extract', expectsJSON:true, fileName:file.name, subject:subjectName, image:{data:b64, mime:mime}};
 
     return aiCall(promptText, ctx).then(function(raw){
       progressBar.style.width='80%';progressText.textContent='Parsing response…';
@@ -863,7 +838,7 @@ function handleScannedPdf(file, isNotesMode, onProgress){
         ? 'These are '+batch.length+' page(s) of handwritten/printed NOTES. Generate MCQs from the CONCEPTS shown. Ensure the correct option index "ans" (0,1,2,3) is 100% accurate. Use LaTeX for math. Return ONLY JSON array.'
         : 'These are '+batch.length+' page(s) of a SCANNED exam paper. Extract ALL valid MCQs visible on these pages. STRICT RULES: 1. Do NOT generate or invent any new questions on your own — ONLY extract questions and options exactly as printed in the scanned pages. 2. Copy all 4 options accurately and set "ans" to the exact 0-based index (0=A/1, 1=B/2, 2=C/3, 3=D/4) of the 100% correct option (use answer key if visible, otherwise solve and verify carefully). 3. Use LaTeX for math. Return ONLY JSON array.';
       var ctx = {
-        source:'ambition-cuet-cbt',
+        source:'cbt-test-studio',
         mode: aiMode,
         expectsJSON:true,
         subject: subjectName,
@@ -983,7 +958,7 @@ function handleFileUpload(file){
           setTimeout(function(){
             var prompt=isNotesMode?buildPromptNotes(chunk,perChunk,state.subject||''):buildPromptExtract(chunk,perChunk,state.subject||'',recent.slice(-8));
             var mode=isNotesMode?'notes':'extract';
-            aiCall(prompt,{source:'ambition-cuet-cbt',mode:mode,expectsJSON:true})
+            aiCall(prompt,{source:'cbt-test-studio',mode:mode,expectsJSON:true})
             .then(function(raw){
               var list=[];
               try{list=normaliseList(safeParseJSON(raw))}catch(e){console.warn('Chunk '+(i+1)+' parse failed:',e.message)}
@@ -1101,12 +1076,12 @@ function doSubmit(){
   }
   var hist=LS.get(K.HISTORY,[]);
   hist.unshift({
-    name:result.name,date:result.date,exam:'CUET',subject:result.subject||'',
-    score:marksObtained,maxMarks:maxMarks,total:questions.length,pct:pct,
-    correctCount:correctCount,wrongCount:wrongCount,skippedCount:skippedCount,
-    elapsed:result.elapsed,markingLabel:mk.label
+    name:result.name,date:result.date,
+    score:marksObtained,maxMarks:maxMarks,
+    total:questions.length,pct:pct,
+    markingLabel:mk.label
   });
-  LS.set(K.HISTORY,hist.slice(0,500));
+  LS.set(K.HISTORY,hist.slice(0,25));
   LS.del(K.ACTIVE);
   renderResult(result);
   showScreen('screen-result');
@@ -1195,7 +1170,7 @@ function renderResult(r){
 function downloadResult(r){
   var lines=[];var letters=['A','B','C','D','E','F','G','H'];
   var mk=r.marking||getMarking(r.exam);
-  lines.push('===== AMBITION CBT MODE =====');lines.push('');
+  lines.push('===== CBT TEST STUDIO =====');lines.push('');
   lines.push('Test: '+r.name);
   lines.push('Exam: '+(r.exam||'—'));
   lines.push('Date: '+r.date);
@@ -1205,7 +1180,7 @@ function downloadResult(r){
   lines.push('Time: '+fmtTime(r.elapsed));
   lines.push('');lines.push('--- REVIEW ---');lines.push('');
   r.details.forEach(function(d,i){var q=d.q;lines.push('Q'+(i+1)+'. '+q.q);lines.push('Topic: '+(q.topic||'General')+' | Diff: '+(q.diff||'medium')+' | Marks: '+fmtMarks(d.marks));q.options.forEach(function(opt,oi){var tag='';if(oi===q.ans)tag=' <-- CORRECT';if(oi===d.user&&oi!==q.ans)tag=' <-- your answer (wrong)';if(oi===d.user&&oi===q.ans)tag=' <-- your answer (correct)';lines.push('  '+letters[oi]+') '+opt+tag)});if(d.user<0)lines.push('  >> Not answered.');if(q.explain)lines.push('  Explanation: '+q.explain);lines.push('')});
-  var blob=new Blob([lines.join('\n')],{type:'text/plain;charset=utf-8'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='Ambition_CUET_Result_'+r.name.replace(/[^\w\d]+/g,'_').slice(0,40)+'_'+Date.now()+'.txt';document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(url)},2000)
+  var blob=new Blob([lines.join('\n')],{type:'text/plain;charset=utf-8'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='CBT_Result_'+r.name.replace(/[^\w\d]+/g,'_').slice(0,40)+'_'+Date.now()+'.txt';document.body.appendChild(a);a.click();document.body.removeChild(a);setTimeout(function(){URL.revokeObjectURL(url)},2000)
 }
 
 /* ============ SETTINGS ============ */
@@ -1259,22 +1234,17 @@ function wireEvents(){
   el=$('btnResultHome');if(el)el.onclick=function(){renderHome();showScreen('screen-home')};
   document.addEventListener('keydown',function(e){if(!$('screen-test').classList.contains('active'))return;if(e.target&&(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA'))return;if(e.key==='ArrowRight')goNext();else if(e.key==='ArrowLeft')goPrev();else if(e.key==='m'||e.key==='M')toggleMark();else if(e.key==='1'||e.key==='2'||e.key==='3'||e.key==='4'){var idx=parseInt(e.key,10)-1;if(T&&T.questions[T.cur]&&idx<T.questions[T.cur].options.length){T.answers[T.cur]=idx;T.visited[T.cur]=true;LS.set(K.ACTIVE,T);renderQuestion()}}});
   
-  // GUARD: Do not save active test during reset
+  // ADDED: Guard to prevent saving active test if auto-reset is happening
   window.addEventListener('beforeunload',function(e){
     if(__cbtResetInProgress) return;
-    if(T&&!T.submitted){
-      LS.set(K.ACTIVE,T);
-      e.preventDefault();
-      e.returnValue='';
-      return '';
-    }
+    if(T&&!T.submitted){LS.set(K.ACTIVE,T);e.preventDefault();e.returnValue='';return ''}
   });
 }
 
 (function init(){
-  addCbtResetIndicator(); // ★ ADDED: Indicator
+  addCbtResetIndicator(); // ADDED: Start the 8-minute countdown badge
   
-  try{var params=new URLSearchParams(window.location.search);var uname=params.get('name');if(uname){var logo=document.querySelector('.logo');localStorage.setItem('cbt_user_name',uname)}}catch(e){}
+  try{var params=new URLSearchParams(window.location.search);var uname=params.get('name');if(uname){var logo=document.querySelector('.logo');if(logo)logo.innerHTML='<span class="logo-dot"></span> CBT Studio — '+decodeURIComponent(uname);localStorage.setItem('cbt_user_name',uname)}}catch(e){}
   var theme=LS.raw(K.THEME,'dark');applyTheme(theme);
   wireEvents();renderHome();bindExamGrid();showScreen('screen-home');
   IDB.open().catch(function(){});
@@ -1292,4 +1262,4 @@ function wireEvents(){
 })();
 </script>
 </body>
-  </html>
+</html>
