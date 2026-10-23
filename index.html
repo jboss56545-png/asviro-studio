@@ -143,10 +143,13 @@
       background: rgba(13, 23, 41, 0.7); display: flex; flex-direction: column; 
       transition: transform 0.3s var(--ease-out), border-color 0.3s; 
     }
+    
     /* Glow effect following cursor */
     .product-card::before { 
       content: ""; position: absolute; inset: 0; opacity: 0; transition: opacity 0.3s;
       background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(103,232,249,.1), transparent 40%); 
+      pointer-events: none; /* ✅ FIX: Ye line click hone se rok rahi thi */
+      border-radius: var(--radius);
     }
     .product-card:hover::before { opacity: 1; }
     .product-card:hover { transform: translateY(-8px); border-color: rgba(103,232,249,.4); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
@@ -156,7 +159,7 @@
     .product-card h3 { font-size: 1.5rem; margin: 15px 0 10px; }
     .product-card p { color: var(--muted); font-size: .9rem; margin: 0 0 25px; line-height: 1.5; }
     .product-foot { margin-top: auto; display: flex; align-items: center; justify-content: space-between; }
-    .text-link { color: #bde9ff; font-weight: 700; font-size: .9rem; display: inline-flex; gap: 8px; align-items: center; transition: color 0.2s; }
+    .text-link { color: #bde9ff; font-weight: 700; font-size: .9rem; display: inline-flex; gap: 8px; align-items: center; transition: color 0.2s; position: relative; z-index: 10; /* ✅ Added z-index to ensure it's clickable */ }
     .text-link:hover { color: var(--cyan); }
     
     /* Contact */
@@ -168,13 +171,13 @@
     input:focus, textarea:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(103,232,249,0.1); }
 
     /* =========================================================
-       🚀 NEW: PAPER-PLANE FLIGHT BUTTON ANIMATION
+       🚀 PAPER-PLANE FLIGHT BUTTON ANIMATION
        ========================================================= */
     .plane-btn {
       position: relative;
       width: 100%;
       overflow: hidden;
-      height: 50px; /* Fixed height to prevent layout shift */
+      height: 50px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -209,10 +212,9 @@
       transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
     }
 
-    /* 1. Loading State */
     .plane-btn.is-loading {
-      pointer-events: none; /* Prevent duplicate clicks */
-      background: var(--blue); /* Subtle muted background during flight */
+      pointer-events: none;
+      background: var(--blue);
       box-shadow: none;
     }
 
@@ -232,13 +234,12 @@
       100% { opacity: 0; transform: translateX(80px) translateY(-40px) scale(0.8) rotate(30deg); }
     }
 
-    /* 2. Success State */
     .plane-btn.is-success {
       pointer-events: none;
-      background: #10b981 !important; /* Success Green */
+      background: #10b981 !important;
       color: #05101f;
       box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
-      transform: scale(1) !important; /* Override magnetic */
+      transform: scale(1) !important;
     }
 
     .plane-btn.is-success .plane-btn-text {
@@ -251,10 +252,9 @@
       transform: scale(1);
     }
 
-    /* 3. Error State */
     .plane-btn.is-error {
       pointer-events: none;
-      background: #ef4444 !important; /* Red */
+      background: #ef4444 !important;
       color: #fff;
       transform: scale(1) !important;
     }
@@ -264,7 +264,6 @@
       transform: translateY(0);
     }
 
-    /* Accessibility: Reduced Motion */
     @media (prefers-reduced-motion: reduce) {
       .plane-btn.is-loading .plane-btn-icon {
         animation: none;
@@ -335,7 +334,6 @@
         <div class="orbit"></div>
         <div class="float-chip chip-one"><span style="color:var(--cyan)">✦</span> Thoughtful by design<strong style="display:block; margin-top:4px; font-size:0.9rem; color:#fff;">Built around people</strong></div>
         
-        <!-- 3D Tilt Card -->
         <div class="core-card" id="tiltCard">
           <div class="visual-logo">
             <img src="./logo.png" alt="ASVIRO Logo">
@@ -459,16 +457,11 @@
           <div><label style="font-size:0.85rem; color:#c5d3e8; font-weight:600;">What is this about?</label><input type="text" id="subject" placeholder="Project, feedback..." required></div>
           <div><label style="font-size:0.85rem; color:#c5d3e8; font-weight:600;">Your message</label><textarea id="message" rows="4" placeholder="Tell us a little about it..." required></textarea></div>
           
-          <!-- 🚀 UPDATED BUTTON STRUCTURE -->
           <button class="btn btn-primary magnetic plane-btn" type="submit" id="submitBtn">
             <span class="plane-btn-text" id="btnText">Prepare message ↗</span>
-            
-            <!-- Paper Plane Icon -->
             <svg class="plane-btn-icon" id="btnPlane" viewBox="0 0 24 24" fill="currentColor">
               <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
             </svg>
-            
-            <!-- Checkmark Icon -->
             <svg class="plane-btn-check" id="btnCheck" viewBox="0 0 24 24">
               <path d="M20 6L9 17l-5-5"/>
             </svg>
@@ -538,11 +531,10 @@
       card.style.setProperty('--mouse-y', `${y}px`);
     }
 
-    // 🌟 Magnetic Buttons Effect (Updated to skip when loading/success)
+    // 🌟 Magnetic Buttons Effect
     const magneticButtons = document.querySelectorAll('.magnetic');
     magneticButtons.forEach(btn => {
       btn.addEventListener('mousemove', (e) => {
-        // Prevent magnetic effect if button is currently animating a state
         if (btn.classList.contains('is-loading') || btn.classList.contains('is-success') || btn.classList.contains('is-error')) return;
         
         const rect = btn.getBoundingClientRect();
@@ -583,7 +575,6 @@
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      // Prevent duplicate clicks
       if (btn.classList.contains('is-loading') || btn.classList.contains('is-success')) return;
 
       const name = document.getElementById('name').value;
@@ -591,7 +582,6 @@
       const subject = document.getElementById('subject').value;
       const message = document.getElementById('message').value;
 
-      // 1. Set Loading State & Trigger Plane Animation
       btn.classList.remove('is-success', 'is-error');
       btn.classList.add('is-loading');
       btn.setAttribute('aria-busy', 'true');
@@ -606,9 +596,7 @@
           body: JSON.stringify({ name, email, _subject: `[ASVIRO STUDIO] ${subject}`, message })
         });
 
-        // 2. Success State
         if (response.ok) {
-          // Wait for the plane animation to finish (1.2s) before showing success
           setTimeout(() => {
             btn.classList.remove('is-loading');
             btn.classList.add('is-success');
@@ -616,10 +604,9 @@
             btnText.textContent = "Sent";
             
             status.textContent = "Message sent successfully! We'll get back to you soon.";
-            status.style.color = "#10b981"; // Success green
+            status.style.color = "#10b981";
             form.reset();
 
-            // Reset button to idle state after 4 seconds
             resetTimeout = setTimeout(() => {
               btn.classList.remove('is-success');
               btnText.textContent = "Prepare message ↗";
@@ -629,7 +616,6 @@
           throw new Error("API Failed");
         }
       } catch (error) {
-        // 3. Error State
         setTimeout(() => {
           btn.classList.remove('is-loading');
           btn.classList.add('is-error');
@@ -637,12 +623,10 @@
           btnText.textContent = "Retry";
           
           status.textContent = "Failed to send. Opening email app...";
-          status.style.color = "#ef4444"; // Error red
+          status.style.color = "#ef4444";
           
-          // Fallback to mailto
           window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent("[ASVIRO] " + subject)}&body=${encodeURIComponent("Name: " + name + "\n\n" + message)}`;
 
-          // Reset button to idle state after 3 seconds
           resetTimeout = setTimeout(() => {
             btn.classList.remove('is-error');
             btnText.textContent = "Prepare message ↗";
