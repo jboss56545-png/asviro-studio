@@ -12,7 +12,8 @@
   <meta property="og:description" content="Thoughtful digital products, focus systems and next-generation experiences built for real life.">
   <meta property="og:image" content="https://asviro.studio/og-image.png">
   
-  <link rel="icon" type="image/svg+xml" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0%25" stop-color="%2367e8f9"/><stop offset="55%25" stop-color="%237bb7ff"/><stop offset="100%25" stop-color="%233478f6"/></linearGradient></defs><rect width="64" height="64" rx="17" fill="url(%23g)"/><path d="M17.5 46.5 32 16.5 46.5 46.5M24 37.5h16" stroke="%2306101f" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>'>
+  <!-- ✅ FAVICON LOGO UPDATE (Browser tab icon) -->
+  <link rel="icon" type="image/png" href="./logo.png">
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,8 +37,11 @@
     .scroll-progress { position: absolute; left: 0; bottom: -1px; height: 3px; width: 0%; background: linear-gradient(90deg, var(--cyan), var(--blue-strong)); transition: width .1s linear; }
     nav { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
     .brand { display: inline-flex; align-items: center; gap: 11px; font-weight: 800; letter-spacing: .13em; font-size: .88rem; }
-    .brand-mark { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 12px; background: linear-gradient(135deg, var(--cyan), var(--blue-strong)); box-shadow: 0 0 25px rgba(70,155,255,.35); flex-shrink: 0; }
-    .brand-mark svg { width: 24px; height: 24px; display: block; }
+    
+    /* ✅ NAVBAR LOGO STYLE */
+    .brand-mark { width: 38px; height: 38px; display: grid; place-items: center; border-radius: 12px; flex-shrink: 0; overflow: hidden; }
+    .brand-mark img { width: 100%; height: 100%; object-fit: contain; }
+    
     .brand span small { display: block; color: var(--muted); letter-spacing: .24em; font-size: .57rem; font-weight: 600; margin-top: -3px; }
     .nav-links { display: flex; align-items: center; gap: 26px; color: #c1cde1; font-size: .9rem; }
     .nav-links a { position: relative; padding: 4px 0; }
@@ -63,8 +67,11 @@
     .orbit { position: absolute; width: min(100%, 430px); aspect-ratio: 1; border: 1px solid rgba(103,174,255,.2); border-radius: 50%; animation: spin 36s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .core-card { width: min(100%, 365px); border: 1px solid rgba(145,189,255,.26); border-radius: 28px; background: linear-gradient(145deg, rgba(21,41,70,.9), rgba(8,15,28,.94)); padding: 24px; position: relative; z-index: 2; }
-    .visual-logo { width: 78px; height: 78px; border-radius: 24px; display: grid; place-items: center; background: linear-gradient(135deg, var(--cyan), #559bff 70%); }
-    .visual-logo svg { width: 48px; height: 48px; }
+    
+    /* ✅ HERO CENTER LOGO STYLE */
+    .visual-logo { width: 78px; height: 78px; border-radius: 24px; display: grid; place-items: center; background: transparent; overflow: hidden; }
+    .visual-logo img { width: 100%; height: 100%; object-fit: contain; }
+    
     .float-chip { position: absolute; z-index: 4; border: 1px solid rgba(144,190,255,.25); border-radius: 14px; padding: 12px 15px; background: rgba(10,20,37,.88); font-size: .78rem; }
     .chip-one { top: 13%; right: -2%; }
     .chip-two { bottom: 11%; left: -2%; }
@@ -120,8 +127,9 @@
   <div class="nav-wrap" id="navWrap">
     <nav class="container" aria-label="Main navigation">
       <a class="brand" href="#home" aria-label="ASVIRO STUDIO home">
+        <!-- ✅ NAVBAR MEIN LOGO -->
         <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="M17.5 46.5 32 16.5 46.5 46.5M24 37.5h16" stroke="#06101f" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <img src="./logo.png" alt="ASVIRO Logo">
         </span>
         <span>ASVIRO <small>STUDIO</small></span>
       </a>
@@ -151,8 +159,9 @@
         <div class="orbit"></div>
         <div class="float-chip chip-one">✦ Thoughtful by design<strong>Built around people</strong></div>
         <div class="core-card">
+          <!-- ✅ HERO CARD MEIN BADA LOGO -->
           <div class="visual-logo">
-            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="M17.5 46.5 32 16.5 46.5 46.5M24 37.5h16" stroke="#06101f" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <img src="./logo.png" alt="ASVIRO Logo">
           </div>
           <h2 style="margin-top:20px; font-size:1.5rem;">Build with intent.</h2>
           <p style="color:var(--muted); font-size:0.9rem;">From the first idea to the finished experience.</p>
@@ -167,10 +176,6 @@
         <p class="section-sub">A growing collection of digital experiences built around focus, consistency, and personal progress.</p>
       </div>
       
-      <!-- ========================================== -->
-      <!-- SAARE LINKS ACTIVE HAI (Coming soon hataya gaya) -->
-      <!-- MAAN LO AAPNE FOLDER UPLOAD NHI KIA, TOH 404 AAYEGA -->
-      <!-- ========================================== -->
       <div class="products-grid" id="productsGrid">
         
         <!-- 1. HABIT TRACKER -->
@@ -180,7 +185,7 @@
           <h3>Habit Tracker</h3>
           <p>A personal system for tracking daily priorities, building streaks, reflecting on progress, and staying consistent over time.</p>
           <div class="product-foot">
-            <a class="text-link" href="./habit-tracker/" target="_blank" rel="noopener noreferrer">Open live demo ↗</a>
+            <a class="text-link" href="./habit-tracker/index.html" target="_blank" rel="noopener noreferrer">Open live demo ↗</a>
             <span class="project-note">Web app</span>
           </div>
         </article>
@@ -192,7 +197,7 @@
           <h3>Ekagrata</h3>
           <p>A focus-first experience designed to help reduce distractions and create more intentional work and study sessions.</p>
           <div class="product-foot">
-            <a class="text-link" href="./ekagrata/" target="_blank" rel="noopener noreferrer">Open Ekagrata ↗</a>
+            <a class="text-link" href="./ekagrata/index.html" target="_blank" rel="noopener noreferrer">Open Ekagrata ↗</a>
             <span class="project-note">Focus system</span>
           </div>
         </article>
@@ -204,19 +209,20 @@
           <h3>Winter Arc</h3>
           <p>A structured challenge experience built around daily quests, milestones, and visual progress through a focused season.</p>
           <div class="product-foot">
-            <a class="text-link" href="./winter-arc/" target="_blank" rel="noopener noreferrer">Enter Winter Arc ↗</a>
+            <a class="text-link" href="./winter-arc/index.html" target="_blank" rel="noopener noreferrer">Enter Winter Arc ↗</a>
             <span class="project-note">Progress system</span>
           </div>
         </article>
 
-        <!-- 4. CBT -->
+        <!-- 4. CBT (FIXED LINK) -->
         <article class="product-card">
           <div class="product-icon">▤</div>
           <span class="product-tag">Wellness · CBT</span>
           <h3>CBT</h3>
           <p>A dedicated wellness tool for cognitive behavioral therapy exercises and mental-health tracking inside the ASVIRO ecosystem.</p>
           <div class="product-foot">
-            <a class="text-link" href="./cbt/" target="_blank" rel="noopener noreferrer">Open CBT Tool ↗</a>
+            <!-- ✅ Yahan /index.html add kar diya gaya hai -->
+            <a class="text-link" href="./cbt/index.html" target="_blank" rel="noopener noreferrer">Open CBT Tool ↗</a>
             <span class="project-note">Wellness tool</span>
           </div>
         </article>
@@ -228,7 +234,7 @@
           <h3>Practical Lab</h3>
           <p>An interactive lab space for exploring practical tools and project experiences inside the existing product ecosystem.</p>
           <div class="product-foot">
-            <a class="text-link" href="./practical-lab/" target="_blank" rel="noopener noreferrer">Open Practical Lab ↗</a>
+            <a class="text-link" href="./practical-lab/index.html" target="_blank" rel="noopener noreferrer">Open Practical Lab ↗</a>
             <span class="project-note">Live link</span>
           </div>
         </article>
@@ -283,8 +289,9 @@
   <footer>
     <div class="container footer-inner">
       <a class="brand" href="#home">
+        <!-- ✅ FOOTER MEIN LOGO -->
         <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="M17.5 46.5 32 16.5 46.5 46.5M24 37.5h16" stroke="#06101f" stroke-width="5.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <img src="./logo.png" alt="ASVIRO Logo">
         </span>
         <span>ASVIRO <small>STUDIO</small></span>
       </a>
