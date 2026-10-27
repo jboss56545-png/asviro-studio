@@ -6,11 +6,11 @@
   <meta name="theme-color" content="#070b14">
   <meta name="description" content="ASVIRO STUDIO builds thoughtful digital products, focus systems and next-generation experiences.">
   
-  <link rel="canonical" href="https://asviro.studio/">
+  <link rel="canonical" href="https://asviro-studio.vercel.app/">
   <meta property="og:type" content="website">
   <meta property="og:title" content="ASVIRO STUDIO — Ideas into Intelligent Experiences">
   <meta property="og:description" content="Thoughtful digital products, focus systems and next-generation experiences built for real life.">
-  <meta property="og:image" content="https://asviro.studio/og-image.png">
+  <meta property="og:image" content="https://asviro-studio.vercel.app/og-image.png">
   
   <link rel="icon" type="image/png" href="./logo.png">
   
@@ -74,16 +74,24 @@
     
     .brand span small { display: block; color: var(--muted); letter-spacing: .24em; font-size: .57rem; font-weight: 600; margin-top: -3px; }
     .nav-links { display: flex; align-items: center; gap: 26px; color: #c1cde1; font-size: .9rem; }
-    .nav-links a { position: relative; padding: 4px 0; }
+    .nav-links a { position: relative; padding: 4px 0; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--cyan); }
     .nav-links a::after { content: ""; position: absolute; left: 0; bottom: 0; width: 100%; height: 2px; border-radius: 2px; background: linear-gradient(90deg, var(--cyan), var(--blue)); transform: scaleX(0); transform-origin: left; transition: transform .3s var(--ease-out); }
     .nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
 
-    .nav-cta, .btn { display: inline-flex; justify-content: center; align-items: center; gap: 9px; border: 1px solid transparent; border-radius: 999px; padding: 12px 18px; font-weight: 700; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
+    .nav-cta, .btn { display: inline-flex; justify-content: center; align-items: center; gap: 9px; border: 1px solid transparent; border-radius: 999px; padding: 12px 20px; font-weight: 700; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s; }
     .nav-cta, .btn-primary { color: #05101f; background: linear-gradient(110deg, var(--cyan), #7bb7ff 55%, #6e8cff); background-size: 160% 100%; box-shadow: 0 8px 28px rgba(58,135,255,.18); }
     .nav-cta:hover, .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 35px rgba(58,135,255,.4); }
     .btn-secondary { color: var(--text); border-color: rgba(132,174,255,.27); background: rgba(16,30,52,.52); }
     .btn-secondary:hover { border-color: var(--cyan); background: rgba(22,43,74,.8); transform: translateY(-2px); }
     .menu-toggle { display: none; border: 1px solid var(--line); color: var(--text); background: var(--panel); border-radius: 12px; width: 44px; height: 44px; cursor: pointer; }
+
+    /* Reveal Animations */
+    .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s var(--ease-out); }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.3s; }
 
     /* Hero */
     .hero { min-height: 660px; display: grid; grid-template-columns: 1.08fr .92fr; align-items: center; gap: 48px; padding-block: 86px 78px; }
@@ -114,6 +122,12 @@
     h2.section-title { font-size: clamp(2rem, 4vw, 3.15rem); letter-spacing: -.055em; line-height: 1.08; margin: 10px 0 0; }
     .section-sub { max-width: 430px; color: var(--muted); margin: 0; }
 
+    /* Filters */
+    .filter-container { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; }
+    .filter-btn { background: rgba(13, 23, 41, 0.6); border: 1px solid var(--line); color: var(--muted); padding: 8px 16px; border-radius: 999px; font-size: 0.85rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; }
+    .filter-btn:hover { border-color: rgba(103,232,249,0.4); color: var(--text); }
+    .filter-btn.active { background: rgba(103,232,249,0.1); border-color: var(--cyan); color: var(--cyan); }
+
     /* 🌟 PREMIUM PRODUCT CARDS */
     .products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
     .product-card { 
@@ -123,6 +137,7 @@
       transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
       backdrop-filter: blur(10px); z-index: 1;
     }
+    .product-card.hidden { display: none; }
     .product-card::before { 
       content: ""; position: absolute; inset: 0; z-index: -1; opacity: 0; transition: opacity 0.4s;
       background: radial-gradient(600px circle at var(--mouse-x) var(--mouse-y), rgba(103,232,249,0.08), transparent 40%); 
@@ -139,10 +154,26 @@
     .text-link { color: #bde9ff; font-weight: 700; font-size: .9rem; display: inline-flex; gap: 8px; align-items: center; transition: color 0.2s; position: relative; z-index: 10; }
     .text-link:hover { color: var(--cyan); }
 
-    .manifesto { border: 1px solid rgba(117,173,255,.16); border-radius: 28px; padding: clamp(26px, 5vw, 55px); background: linear-gradient(120deg, rgba(13,25,44,.9), rgba(9,15,27,.84)); display: grid; grid-template-columns: .9fr 1.1fr; gap: 40px; align-items: center; }
+    /* Services Grid */
+    .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+    .service-card { background: rgba(13, 23, 41, 0.6); border: 1px solid var(--line); border-radius: var(--radius); padding: 30px; transition: transform 0.3s; }
+    .service-card:hover { transform: translateY(-5px); border-color: rgba(103,232,249,0.3); }
+    .service-card h3 { font-size: 1.3rem; margin: 0 0 10px; color: var(--text); }
+    .service-card p { color: var(--muted); font-size: 0.95rem; margin-bottom: 20px; }
+
+    /* Process Grid */
+    .process-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 40px; }
+    .process-step { position: relative; }
+    .process-num { font-size: 3rem; font-weight: 900; color: rgba(103,232,249,0.1); line-height: 1; margin-bottom: 10px; font-family: monospace; }
+    .process-step h4 { font-size: 1.1rem; margin: 0 0 8px; color: var(--text); }
+    .process-step p { color: var(--muted); font-size: 0.9rem; margin: 0; }
+
+    /* About / Manifesto */
+    .manifesto { border: 1px solid rgba(117,173,255,.16); border-radius: 28px; padding: clamp(26px, 5vw, 55px); background: linear-gradient(120deg, rgba(13,25,44,.9), rgba(9,15,27,.84)); display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
     .principles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 22px; }
     .principle { border: 1px solid rgba(117,173,255,.13); border-radius: 14px; padding: 13px; background: rgba(4,10,20,.28); font-size: .84rem; }
 
+    /* Contact */
     .contact-grid { display: grid; grid-template-columns: .85fr 1.15fr; gap: 40px; align-items: start; }
     .email-box { display: flex; align-items: center; justify-content: space-between; margin-top: 25px; padding: 15px; border: 1px solid rgba(132,174,255,.19); border-radius: 12px; background: rgba(4,10,20,.55); font-family: monospace; font-size: 1rem; cursor: pointer; transition: all 0.3s; }
     .email-box:hover { border-color: var(--cyan); background: rgba(4,10,20,.8); }
@@ -150,11 +181,12 @@
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
     
     label { display: block; font-size:0.85rem; color:#c5d3e8; font-weight:600; margin-bottom: 5px; }
-    input, textarea { width: 100%; color: var(--text); border: 1px solid rgba(132,174,255,.15); border-radius: 12px; background: rgba(4,10,20,.6); padding: 14px 16px; outline: none; margin-bottom: 15px; transition: border 0.3s; }
-    input:focus, textarea:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(103,232,249,0.1); }
+    input, textarea, select { width: 100%; color: var(--text); border: 1px solid rgba(132,174,255,.15); border-radius: 12px; background: rgba(4,10,20,.6); padding: 14px 16px; outline: none; margin-bottom: 15px; transition: border 0.3s; font-family: inherit; font-size: 0.95rem;}
+    select { appearance: none; background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2367e8f9%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"); background-repeat: no-repeat; background-position: right 15px top 50%; background-size: 12px auto; }
+    input:focus, textarea:focus, select:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(103,232,249,0.1); }
 
     /* =========================================================
-       🚀 PAPER-PLANE FLIGHT ANIMATION (FIXED SENT STATE)
+       🚀 PAPER-PLANE FLIGHT ANIMATION
        ========================================================= */
     .plane-btn {
       position: relative; width: 100%; overflow: hidden; height: 52px;
@@ -198,7 +230,7 @@
       100% { opacity: 0; transform: translateX(80px) translateY(-40px) scale(0.8) rotate(30deg); }
     }
 
-    /* Success State (Fixed to show "Sent" alongside Checkmark) */
+    /* Success State */
     .plane-btn.is-success {
       pointer-events: none; background: #10b981 !important; box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
     }
@@ -226,15 +258,20 @@
     }
     /* ========================================================= */
 
-    footer { border-top: 1px solid rgba(123,166,255,.12); padding: 25px 0 30px; }
-    .footer-inner { display: flex; align-items: center; justify-content: space-between; color: #8192ad; font-size: .8rem; }
+    footer { border-top: 1px solid rgba(123,166,255,.12); padding: 40px 0 30px; }
+    .footer-inner { display: flex; align-items: center; justify-content: space-between; color: #8192ad; font-size: .85rem; flex-wrap: wrap; gap: 20px; }
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a:hover { color: var(--cyan); }
 
+    /* Responsive */
     @media (max-width: 900px) {
       .hero, .manifesto, .contact-grid { grid-template-columns: 1fr; text-align: center; }
-      .hero-actions { justify-content: center; }
+      .hero-actions, .filter-container { justify-content: center; }
       .products-grid { grid-template-columns: 1fr 1fr; }
+      .process-grid { grid-template-columns: 1fr 1fr; }
       .section-head { flex-direction: column; align-items: flex-start; }
       .footer-inner { flex-direction: column; gap: 15px; text-align: center; }
+      .footer-links { justify-content: center; }
       .chip-one { right: 5%; top: 5%; }
       .chip-two { left: 5%; bottom: 5%; }
     }
@@ -245,7 +282,7 @@
       .nav-cta { display: none; }
       .nav-links { display: none; position: absolute; top: 68px; left: 0; right: 0; background: var(--bg); padding: 20px; flex-direction: column; border-bottom: 1px solid var(--line); }
       .nav-links.open { display: flex; }
-      .products-grid, .form-row { grid-template-columns: 1fr; }
+      .products-grid, .process-grid, .form-row { grid-template-columns: 1fr; }
       .product-card { min-height: auto; padding: 24px; }
       .float-chip { display: none; }
       h1 { font-size: clamp(2.2rem, 10vw, 3.5rem); }
@@ -263,28 +300,31 @@
         <span>ASVIRO <small>STUDIO</small></span>
       </a>
       <div class="nav-links" id="navLinks">
+        <a href="#home">Home</a>
         <a href="#products">Products</a>
-        <a href="#studio">Studio</a>
+        <a href="#services">Services</a>
+        <a href="#about">About</a>
         <a href="#contact">Contact</a>
       </div>
-      <a class="nav-cta" href="#contact">Let's talk ↗</a>
+      <a class="nav-cta" href="#contact">Start a Project ↗</a>
       <button class="menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
     </nav>
     <div class="scroll-progress" id="scrollProgress"></div>
   </div>
 
   <main>
+    <!-- HERO SECTION -->
     <section class="container hero" id="home">
-      <div>
+      <div class="reveal active">
         <div class="eyebrow"><span class="pulse"></span> Independent digital product studio</div>
-        <h1>Ideas into<br><span class="gradient-text">Intelligent</span><br>Experiences.</h1>
-        <p class="hero-copy">We turn ambitious ideas into useful digital products — thoughtfully designed tools that help people focus, build consistency, and move forward.</p>
+        <h1>Building Digital<br><span class="gradient-text">Experiences</span><br>That Move Ideas.</h1>
+        <p class="hero-copy">Explore thoughtfully designed web apps, productivity systems and digital experiences built under ASVIRO STUDIO.</p>
         <div class="hero-actions">
-          <a class="btn btn-primary" href="#products">Explore our products ↘</a>
-          <a class="btn btn-secondary" href="#studio">Discover the studio</a>
+          <a class="btn btn-primary" href="#products">Explore Our Work ↘</a>
+          <a class="btn btn-secondary" href="#contact">Build With ASVIRO</a>
         </div>
       </div>
-      <div class="hero-visual">
+      <div class="hero-visual reveal active delay-2">
         <div class="orbit"></div>
         <div class="float-chip chip-one">✦ Thoughtful by design<strong>Built around people</strong></div>
         <div class="core-card">
@@ -298,80 +338,166 @@
       </div>
     </section>
 
+    <!-- PRODUCTS SECTION -->
     <section class="container" id="products">
-      <div class="section-head">
-        <div><div class="kicker">Selected products</div><h2 class="section-title">Made to move you<br>forward.</h2></div>
+      <div class="section-head reveal">
+        <div>
+          <div class="kicker">Featured Projects</div>
+          <h2 class="section-title">Made to move you<br>forward.</h2>
+        </div>
         <p class="section-sub">A growing collection of digital experiences built around focus, consistency, and personal progress.</p>
       </div>
       
+      <!-- Filter Tabs -->
+      <div class="filter-container reveal delay-1">
+        <button class="filter-btn active" onclick="filterProjects('all')">All Projects</button>
+        <button class="filter-btn" onclick="filterProjects('productivity')">Productivity</button>
+        <button class="filter-btn" onclick="filterProjects('focus')">Focus & Wellness</button>
+        <button class="filter-btn" onclick="filterProjects('experiments')">Experiments</button>
+      </div>
+
       <div class="products-grid" id="productsGrid">
         
-        <article class="product-card" onmousemove="trackMouse(event, this)">
+        <article class="product-card reveal delay-1" data-category="productivity" onmousemove="trackMouse(event, this)">
           <div class="product-icon">◷</div>
           <span class="product-tag">Habits · Productivity</span>
           <h3>Habit Tracker</h3>
           <p>A personal system for tracking daily priorities, building streaks, reflecting on progress, and staying consistent over time.</p>
           <div class="product-foot">
             <a class="text-link" href="./habit-tracker/index.html" target="_blank" rel="noopener noreferrer">Open live demo ↗</a>
-            <span class="project-note">Web app</span>
+            <span class="project-note" style="font-size:0.75rem; color:var(--muted);">Web app</span>
           </div>
         </article>
 
-        <article class="product-card" onmousemove="trackMouse(event, this)">
+        <article class="product-card reveal delay-2" data-category="focus" onmousemove="trackMouse(event, this)">
           <div class="product-icon">◎</div>
           <span class="product-tag">Focus · Deep work</span>
           <h3>Ekagrata</h3>
           <p>A focus-first experience designed to help reduce distractions and create more intentional work and study sessions.</p>
           <div class="product-foot">
             <a class="text-link" href="./ekagrata/index.html" target="_blank" rel="noopener noreferrer">Open Ekagrata ↗</a>
-            <span class="project-note">Focus system</span>
+            <span class="project-note" style="font-size:0.75rem; color:var(--muted);">Focus system</span>
           </div>
         </article>
 
-        <article class="product-card" onmousemove="trackMouse(event, this)">
+        <article class="product-card reveal delay-3" data-category="productivity" onmousemove="trackMouse(event, this)">
           <div class="product-icon">❄</div>
           <span class="product-tag">Challenge · Progress</span>
           <h3>Winter Arc</h3>
           <p>A structured challenge experience built around daily quests, milestones, and visual progress through a focused season.</p>
           <div class="product-foot">
             <a class="text-link" href="./winter-arc/index.html" target="_blank" rel="noopener noreferrer">Enter Winter Arc ↗</a>
-            <span class="project-note">Progress system</span>
+            <span class="project-note" style="font-size:0.75rem; color:var(--muted);">Progress system</span>
           </div>
         </article>
 
-        <article class="product-card" onmousemove="trackMouse(event, this)">
+        <article class="product-card reveal delay-1" data-category="focus" onmousemove="trackMouse(event, this)">
           <div class="product-icon">▤</div>
           <span class="product-tag">Wellness · CBT</span>
-          <h3>CBT</h3>
+          <h3>CBT Mode</h3>
           <p>A dedicated wellness tool for cognitive behavioral therapy exercises and mental-health tracking inside the ASVIRO ecosystem.</p>
           <div class="product-foot">
             <a class="text-link" href="./cbt/index.html" target="_blank" rel="noopener noreferrer">Open CBT Tool ↗</a>
-            <span class="project-note">Wellness tool</span>
+            <span class="project-note" style="font-size:0.75rem; color:var(--muted);">Wellness tool</span>
           </div>
         </article>
 
-        <article class="product-card" onmousemove="trackMouse(event, this)">
+        <article class="product-card reveal delay-2" data-category="experiments" onmousemove="trackMouse(event, this)">
           <div class="product-icon">⌘</div>
           <span class="product-tag">Interactive · Experiments</span>
           <h3>Practical Lab</h3>
           <p>An interactive lab space for exploring practical tools and project experiences inside the existing product ecosystem.</p>
           <div class="product-foot">
             <a class="text-link" href="./practical-lab/index.html" target="_blank" rel="noopener noreferrer">Open Practical Lab ↗</a>
-            <span class="project-note">Live link</span>
+            <span class="project-note" style="font-size:0.75rem; color:var(--muted);">Live link</span>
           </div>
         </article>
 
       </div>
     </section>
 
-    <section class="container" id="studio">
-      <div class="manifesto">
+    <!-- SERVICES SECTION -->
+    <section class="container" id="services">
+      <div class="section-head reveal">
+        <div>
+          <div class="kicker">Client Services</div>
+          <h2 class="section-title">What We Build.</h2>
+        </div>
+        <p class="section-sub">Professional web development and design services tailored for businesses, creators, and educators.</p>
+      </div>
+
+      <div class="services-grid">
+        <div class="service-card reveal delay-1">
+          <div class="product-icon" style="margin-bottom: 15px;"><i class="fa-solid fa-briefcase"></i></div>
+          <h3>Business Websites</h3>
+          <p>Clean, professional websites for local businesses, tuition centers, and agencies to establish their online presence.</p>
+          <a href="#contact" class="text-link">Start a Project ↗</a>
+        </div>
+        <div class="service-card reveal delay-2">
+          <div class="product-icon" style="margin-bottom: 15px;"><i class="fa-solid fa-rocket"></i></div>
+          <h3>Landing Pages</h3>
+          <p>High-converting single-page websites for product launches, events, or specific marketing campaigns.</p>
+          <a href="#contact" class="text-link">Start a Project ↗</a>
+        </div>
+        <div class="service-card reveal delay-3">
+          <div class="product-icon" style="margin-bottom: 15px;"><i class="fa-solid fa-user-tie"></i></div>
+          <h3>Portfolio Websites</h3>
+          <p>Sleek, modern personal websites for developers, designers, freelancers, and students to showcase their work.</p>
+          <a href="#contact" class="text-link">Start a Project ↗</a>
+        </div>
+        <div class="service-card reveal delay-1">
+          <div class="product-icon" style="margin-bottom: 15px;"><i class="fa-solid fa-code"></i></div>
+          <h3>Web Applications</h3>
+          <p>Custom, responsive web apps built around your specific workflow, productivity, or data-tracking needs.</p>
+          <a href="#contact" class="text-link">Start a Project ↗</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROCESS SECTION -->
+    <section class="container" id="process">
+      <div class="section-head reveal">
+        <div>
+          <div class="kicker">How We Work</div>
+          <h2 class="section-title">A simple, proven process.</h2>
+        </div>
+        <p class="section-sub">From the first conversation to the final deployment, we keep it transparent and straightforward.</p>
+      </div>
+
+      <div class="process-grid">
+        <div class="process-step reveal delay-1">
+          <div class="process-num">01</div>
+          <h4>Understand</h4>
+          <p>We discuss your goals, requirements, and target audience to align on the project vision.</p>
+        </div>
+        <div class="process-step reveal delay-2">
+          <div class="process-num">02</div>
+          <h4>Plan & Design</h4>
+          <p>We map out the user experience, structure the layout, and decide on the visual direction.</p>
+        </div>
+        <div class="process-step reveal delay-3">
+          <div class="process-num">03</div>
+          <h4>Build & Test</h4>
+          <p>The website is developed with clean code, thoroughly tested for bugs, and optimized for mobile.</p>
+        </div>
+        <div class="process-step reveal delay-1">
+          <div class="process-num">04</div>
+          <h4>Deploy & Handover</h4>
+          <p>We launch the site live, provide you with the necessary accounts, and hand over control.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT SECTION -->
+    <section class="container" id="about">
+      <div class="manifesto reveal">
         <div>
           <div class="kicker">The studio mindset</div>
           <h2>Useful beats<br><span class="gradient-text">unnecessary.</span></h2>
         </div>
         <div>
           <p style="color:var(--muted);">ASVIRO STUDIO is an independent digital-product brand with a simple belief: technology should make meaningful progress feel clearer, more approachable, and easier to sustain.</p>
+          <p style="color:var(--muted);">We explore ideas, shape them into practical experiences, and keep improving through thoughtful design and real-world use. Whether it's a productivity tool or a client website, the goal is always clarity and utility.</p>
           <div class="principles">
             <div class="principle"><span style="color:var(--cyan);">✦</span> Intentional design</div>
             <div class="principle"><span style="color:var(--cyan);">⌁</span> Practical utility</div>
@@ -382,14 +508,19 @@
       </div>
     </section>
 
+    <!-- CONTACT SECTION -->
     <section class="container" id="contact">
-      <div class="section-head">
-        <div><div class="kicker">Start a conversation</div><h2 class="section-title">Have an idea?<br>Let's shape it.</h2></div>
-      </div>
-      <div class="contact-grid">
+      <div class="section-head reveal">
         <div>
+          <div class="kicker">Start a conversation</div>
+          <h2 class="section-title">Have an idea?<br>Let's shape it.</h2>
+        </div>
+      </div>
+      
+      <div class="contact-grid">
+        <div class="reveal delay-1">
           <h3 style="font-size:1.45rem; margin:12px 0;">Good things start with a conversation.</h3>
-          <p style="color:var(--muted);">Share what you're building, what you're curious about, or how you'd like to collaborate.</p>
+          <p style="color:var(--muted);">Share what you're building, what you're curious about, or how you'd like to collaborate. Whether it's a business website or a complex web app, we'll take it from there.</p>
           
           <div class="email-box" id="emailBox" title="Click to copy">
             <span id="emailDisplay">asvirostudio@gmail.com</span>
@@ -397,17 +528,49 @@
           </div>
         </div>
         
-        <form class="contact-form" id="contactForm">
+        <form class="contact-form reveal delay-2" id="contactForm">
           <div class="form-row">
-            <div><label>Your name</label><input type="text" id="name" name="name" placeholder="Name" required></div>
-            <div><label>Email address</label><input type="email" id="email" name="email" placeholder="you@example.com" required></div>
+            <div>
+              <label>Your name *</label>
+              <input type="text" id="name" name="name" placeholder="John Doe" required>
+            </div>
+            <div>
+              <label>Email address *</label>
+              <input type="email" id="email" name="email" placeholder="john@example.com" required>
+            </div>
           </div>
-          <div><label>What is this about?</label><input type="text" id="subject" name="subject" placeholder="Project, feedback..." required></div>
-          <div><label>Your message</label><textarea id="message" name="message" rows="4" placeholder="Tell us a little about it..." required></textarea></div>
+          
+          <div class="form-row">
+            <div>
+              <label>Project Type</label>
+              <select id="projectType" name="projectType">
+                <option value="Website">Business Website</option>
+                <option value="Landing Page">Landing Page</option>
+                <option value="Portfolio">Portfolio Website</option>
+                <option value="Web App">Web Application</option>
+                <option value="Redesign">Website Redesign</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            <div>
+              <label>Budget Range (Optional)</label>
+              <select id="budget" name="budget">
+                <option value="Not Sure">Not Sure Yet</option>
+                <option value="Under ₹5k">Under ₹5,000</option>
+                <option value="₹5k - ₹15k">₹5,000 - ₹15,000</option>
+                <option value="₹15k+">₹15,000+</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label>Project details *</label>
+            <textarea id="message" name="message" rows="4" placeholder="Tell us about your goals, features you need, and any references..." required></textarea>
+          </div>
           
           <!-- 🚀 PAPER-PLANE BUTTON -->
           <button class="plane-btn" type="submit" id="submitBtn">
-            <span class="plane-btn-text" id="btnText">Prepare message ↗</span>
+            <span class="plane-btn-text" id="btnText">Send Message ↗</span>
             <svg class="plane-btn-icon" id="btnPlane" viewBox="0 0 24 24" fill="currentColor">
               <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
             </svg>
@@ -430,19 +593,41 @@
         </span>
         <span>ASVIRO <small>STUDIO</small></span>
       </a>
+      <div class="footer-links">
+        <a href="#products">Products</a>
+        <a href="#services">Services</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </div>
       <span>© <span id="year"></span> ASVIRO STUDIO. All rights reserved.</span>
     </div>
   </footer>
 
   <script>
+    // Setup Year
     document.getElementById("year").textContent = new Date().getFullYear();
     
     // Mobile menu toggle
     const menuToggle = document.getElementById('menuToggle');
     const navLinks = document.getElementById('navLinks');
     menuToggle.addEventListener('click', () => navLinks.classList.toggle('open'));
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => navLinks.classList.remove('open'));
+    });
 
-    // Spotlight Mouse Tracking
+    // Scroll Reveal Animation
+    const revealElements = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+    revealElements.forEach(el => revealObserver.observe(el));
+
+    // Spotlight Mouse Tracking on Cards
     function trackMouse(e, card) {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;
@@ -451,7 +636,32 @@
       card.style.setProperty('--mouse-y', `${y}px`);
     }
 
-    // Copy Email
+    // Project Filtering Logic
+    function filterProjects(category) {
+      // Update active button
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if(btn.textContent.toLowerCase().includes(category) || (category === 'all' && btn.textContent.includes('All'))) {
+          btn.classList.add('active');
+        }
+      });
+
+      // Filter cards
+      const cards = document.querySelectorAll('.product-card');
+      cards.forEach(card => {
+        if (category === 'all' || card.dataset.category === category) {
+          card.classList.remove('hidden');
+          // Small animation reset for smooth reveal
+          card.style.animation = 'none';
+          card.offsetHeight; // trigger reflow
+          card.style.animation = 'modalPop 0.4s ease forwards';
+        } else {
+          card.classList.add('hidden');
+        }
+      });
+    }
+
+    // Copy Email Logic
     const emailBox = document.getElementById('emailBox');
     const copyText = document.getElementById('copyText');
     emailBox.addEventListener('click', () => {
@@ -467,7 +677,7 @@
     // =========================================================
     // 🚀 CONTACT FORM (WEB3FORMS)
     // =========================================================
-    const WEB3FORMS_ACCESS_KEY = "3fd8bee8-6a41-4afe-8432-f6d2321cb3e5"; // ✅ Aapki key yahan hai
+    const WEB3FORMS_ACCESS_KEY = "3fd8bee8-6a41-4afe-8432-f6d2321cb3e5"; // ✅ Verified Key
     const FORM_ENDPOINT = "https://api.web3forms.com/submit";
 
     const form = document.getElementById('contactForm');
@@ -483,10 +693,11 @@
 
       const name = document.getElementById('name').value;
       const email = document.getElementById('email').value;
-      const subject = document.getElementById('subject').value;
+      const projectType = document.getElementById('projectType').value;
+      const budget = document.getElementById('budget').value;
       const message = document.getElementById('message').value;
 
-      // 1. Trigger Animation
+      // Trigger Animation
       btn.classList.remove('is-success', 'is-error');
       btn.classList.add('is-loading');
       btn.setAttribute('aria-busy', 'true');
@@ -499,8 +710,8 @@
             access_key: WEB3FORMS_ACCESS_KEY,
             name: name,
             email: email,
-            subject: subject,
-            message: message,
+            subject: `New Project Enquiry: ${projectType} (${budget})`,
+            message: `Project Type: ${projectType}\nBudget: ${budget}\n\nMessage:\n${message}`,
             from_name: "ASVIRO Website"
         };
 
@@ -512,7 +723,7 @@
 
         const data = await response.json();
 
-        // 2. Success State
+        // Success State
         if (response.ok && data.success) {
           setTimeout(() => {
             btn.classList.remove('is-loading');
@@ -526,14 +737,14 @@
 
             resetTimeout = setTimeout(() => {
               btn.classList.remove('is-success');
-              btnText.textContent = "Prepare message ↗";
+              btnText.textContent = "Send Message ↗";
             }, 4000);
           }, 1200);
         } else {
           throw new Error(data.message || "API Failed");
         }
       } catch (error) {
-        // 3. Error State
+        // Error State
         setTimeout(() => {
           btn.classList.remove('is-loading');
           btn.classList.add('is-error');
@@ -543,11 +754,12 @@
           status.textContent = "Failed to send. Opening email app...";
           status.style.color = "#ef4444";
           
-          window.location.href = `mailto:asvirostudio@gmail.com?subject=${encodeURIComponent("[ASVIRO] " + subject)}&body=${encodeURIComponent("Name: " + name + "\n\n" + message)}`;
+          // Fallback mailto
+          window.location.href = `mailto:asvirostudio@gmail.com?subject=${encodeURIComponent("Enquiry: " + projectType)}&body=${encodeURIComponent("Name: " + name + "\nProject: " + projectType + "\nBudget: " + budget + "\n\n" + message)}`;
 
           resetTimeout = setTimeout(() => {
             btn.classList.remove('is-error');
-            btnText.textContent = "Prepare message ↗";
+            btnText.textContent = "Send Message ↗";
             status.textContent = "";
           }, 3000);
         }, 1000);
